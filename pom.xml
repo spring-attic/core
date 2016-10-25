@@ -42,49 +42,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<!--<dependencyManagement>-->
-		<!--<dependencies>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud</groupId>-->
-				<!--<artifactId>spring-cloud-stream</artifactId>-->
-				<!--<version>${spring-cloud-stream.version}</version>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud.stream.app</groupId>-->
-				<!--<artifactId>app-starters-annotation-common</artifactId>-->
-				<!--<version>1.1.0.BUILD-SNAPSHOT</version>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud.stream.app</groupId>-->
-				<!--<artifactId>app-starters-time-common</artifactId>-->
-				<!--<version>1.1.0.BUILD-SNAPSHOT</version>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud.stream.app</groupId>-->
-				<!--<artifactId>app-starters-trigger-common</artifactId>-->
-				<!--<version>1.1.0.BUILD-SNAPSHOT</version>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud.stream.app</groupId>-->
-				<!--<artifactId>app-starters-trigger-one-common</artifactId>-->
-				<!--<version>1.1.0.BUILD-SNAPSHOT</version>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud</groupId>-->
-				<!--<artifactId>spring-cloud-stream-test-support</artifactId>-->
-				<!--<version>${spring-cloud-stream.version}</version>-->
-				<!--<scope>test</scope>-->
-			<!--</dependency>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.integration</groupId>-->
-				<!--<artifactId>spring-integration-test</artifactId>-->
-				<!--<version>${spring-integration.version}</version>-->
-				<!--<scope>test</scope>-->
-			<!--</dependency>-->
-		<!--</dependencies>-->
-
-	<!--</dependencyManagement>-->
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -126,59 +83,6 @@
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 	</dependencies>
-	<!--<dependencyManagement>-->
-		<!--<dependencies>-->
-			<!--<dependency>-->
-				<!--<groupId>org.springframework.cloud.stream.app</groupId>-->
-				<!--<artifactId>spring-cloud-stream-app-dependencies</artifactId>-->
-				<!--<version>1.0.3.BUILD-SNAPSHOT</version>-->
-				<!--<type>pom</type>-->
-				<!--<scope>import</scope>-->
-			<!--</dependency>-->
-		<!--</dependencies>-->
-	<!--</dependencyManagement>-->
-
-	<!--<dependencies>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-stream</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.boot</groupId>-->
-			<!--<artifactId>spring-boot-configuration-processor</artifactId>-->
-			<!--<optional>true</optional>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>com.jayway.jsonpath</groupId>-->
-			<!--<artifactId>json-path</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.integration</groupId>-->
-			<!--<artifactId>spring-integration-xml</artifactId>-->
-			<!--<exclusions>-->
-				<!--<exclusion>-->
-					<!--<groupId>commons-logging</groupId>-->
-					<!--<artifactId>commons-logging</artifactId>-->
-				<!--</exclusion>-->
-			<!--</exclusions>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-stream-test-support</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-stream-test-support-internal</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.integration</groupId>-->
-			<!--<artifactId>spring-integration-test</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.boot</groupId>-->
-			<!--<artifactId>spring-boot-starter-logging</artifactId>-->
-		<!--</dependency>-->
-	<!--</dependencies>-->
 
 	<build>
 		<pluginManagement>

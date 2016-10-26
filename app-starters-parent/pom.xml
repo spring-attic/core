@@ -18,8 +18,8 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.cloud.stream.app.plugin</groupId>
-				<artifactId>spring-cloud-stream-app-documentation-maven-plugin</artifactId>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-app-starter-doc-maven-plugin</artifactId>
 				<version>1.0.0.BUILD-SNAPSHOT</version>
 				<executions>
 					<execution>

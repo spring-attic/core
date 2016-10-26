@@ -30,7 +30,7 @@
 	<modules>
 		<module>core-dependencies</module>
 		<module>common</module>
-		<module>app-starters-parent</module>
+		<module>app-starter-parent</module>
 	</modules>
 
 	<dependencyManagement>

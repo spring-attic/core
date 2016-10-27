@@ -78,6 +78,17 @@
 				<artifactId>app-starters-file-common</artifactId>
 				<version>1.1.0.BUILD-SNAPSHOT</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud.stream.app</groupId>
+				<artifactId>app-starters-ftp-common</artifactId>
+				<version>1.1.0.BUILD-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud.stream.app</groupId>
+				<artifactId>app-starters-test-support</artifactId>
+				<version>1.1.0.BUILD-SNAPSHOT</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -119,6 +130,12 @@
 			<dependency>
 				<groupId>org.springframework.integration</groupId>
 				<artifactId>spring-integration-file</artifactId>
+				<version>${spring-integration.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-ftp</artifactId>
 				<version>${spring-integration.version}</version>
 			</dependency>
 

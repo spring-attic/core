@@ -18,6 +18,8 @@
 		<module>app-starters-trigger-one-common</module>
 		<module>app-starters-trigger-unlimited-common</module>
 		<module>app-starters-file-common</module>
+		<module>app-starters-ftp-common</module>
+		<module>app-starters-test-support</module>
 	</modules>
 
 </project>

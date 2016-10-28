@@ -30,7 +30,6 @@
 	<modules>
 		<module>core-dependencies</module>
 		<module>common</module>
-		<module>app-starters-parent</module>
 	</modules>
 
 	<dependencyManagement>
@@ -87,9 +86,23 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<pluginManagement>
-			<plugins>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-app-starter-doc-maven-plugin</artifactId>
+                    <version>1.0.0.BUILD-SNAPSHOT</version>
+                    <executions>
+                        <execution>
+                            <id>generate-documentation</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>generate-documentation</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<configuration>
@@ -102,48 +115,58 @@
 						<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.springframework.cloud.stream.app.plugin</groupId>
-					<artifactId>spring-cloud-stream-app-maven-plugin</artifactId>
-					<version>${scs-app-maven-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>app-gen</id>
-							<phase>install</phase>
-							<goals>
-								<goal>generate-app</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<javaVersion>1.7</javaVersion>
-						<bootVersion>${bootVersion}</bootVersion>
-						<applicationType>stream</applicationType>
-						<additionalBoms>
-							<bom>
-								<name>app-starters-core-dependencies</name>
-								<groupId>org.springframework.cloud.stream.app</groupId>
-								<artifactId>app-starters-core-dependencies</artifactId>
-								<version>1.1.0.BUILD-SNAPSHOT</version>
-							</bom>
-						</additionalBoms>
-						<binders>
-							<kafka/>
-							<rabbit/>
-						</binders>
-						<additionalGlobalDependencies>
-							<dependency>
-								<groupId>org.springframework.cloud</groupId>
-								<artifactId>spring-cloud-starter-config</artifactId>
-							</dependency>
-						</additionalGlobalDependencies>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-	<profiles>
+    <profiles>
+        <profile>
+            <id>generateApps</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.springframework.cloud.stream.app.plugin</groupId>
+                            <artifactId>spring-cloud-stream-app-maven-plugin</artifactId>
+                            <version>${scs-app-maven-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>app-gen</id>
+                                    <phase>install</phase>
+                                    <goals>
+                                        <goal>generate-app</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <javaVersion>1.7</javaVersion>
+                                <bootVersion>${bootVersion}</bootVersion>
+                                <applicationType>stream</applicationType>
+                                <additionalBoms>
+                                    <bom>
+                                        <name>app-starters-core-dependencies</name>
+                                        <groupId>org.springframework.cloud.stream.app</groupId>
+                                        <artifactId>app-starters-core-dependencies</artifactId>
+                                        <version>1.1.0.BUILD-SNAPSHOT</version>
+                                    </bom>
+                                </additionalBoms>
+                                <binders>
+                                    <kafka/>
+                                    <rabbit/>
+                                </binders>
+                                <additionalGlobalDependencies>
+                                    <dependency>
+                                        <groupId>org.springframework.cloud</groupId>
+                                        <artifactId>spring-cloud-starter-config</artifactId>
+                                    </dependency>
+                                </additionalGlobalDependencies>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
 		<profile>
 			<id>spring</id>
 			<repositories>

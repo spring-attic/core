@@ -21,7 +21,6 @@
 
 	<properties>
 		<scs-app-maven-plugin.version>1.2.2.RELEASE</scs-app-maven-plugin.version>
-		<spring-integration.version>4.3.4.RELEASE</spring-integration.version>
 		<bomsWithHigherPrecedence/>
 		<bootVersion>1.4.1.RELEASE</bootVersion>
 		<kafka.version>0.10.1.0</kafka.version>

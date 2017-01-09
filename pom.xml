@@ -20,12 +20,13 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.2.RELEASE</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.3.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
 		<bomsWithHigherPrecedence/>
 		<bootVersion>1.4.1.RELEASE</bootVersion>
 		<kafka.version>0.10.1.0</kafka.version>
 		<spring-kafka-version>1.1.1.RELEASE</spring-kafka-version>
 		<spring-integration-kafka-version>2.1.0.RELEASE</spring-integration-kafka-version>
+		<app-starters-core-dependencis.version>1.1.2.BUILD-SNAPSHOT</app-starters-core-dependencis.version>
 	</properties>
 
 	<modules>
@@ -153,7 +154,7 @@
                                         <name>app-starters-core-dependencies</name>
                                         <groupId>org.springframework.cloud.stream.app</groupId>
                                         <artifactId>app-starters-core-dependencies</artifactId>
-                                        <version>${project.version}</version>
+                                        <version>${app-starters-core-dependencis.version}</version>
                                     </bom>
                                 </additionalBoms>
                                 <binders>

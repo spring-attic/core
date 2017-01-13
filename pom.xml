@@ -20,7 +20,7 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.3.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.3.RELEASE</scs-app-maven-plugin.version>
 		<bomsWithHigherPrecedence/>
 		<bootVersion>1.4.1.RELEASE</bootVersion>
 		<kafka-10.version>0.10.1.0</kafka-10.version>

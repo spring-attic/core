@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-build</artifactId>
-		<version>1.3.1.M1</version>
+		<version>1.3.1.BUILD-SNAPSHOT</version>
 		<relativePath />
 	</parent>
 	<scm>
@@ -23,9 +23,9 @@
 		<scs-app-maven-plugin.version>1.2.3.RELEASE</scs-app-maven-plugin.version>
 		<bomsWithHigherPrecedence/>
 		<bootVersion>1.5.1.RELEASE</bootVersion>
-		<kafka-10.version>0.10.1.0</kafka-10.version>
-		<spring-kafka-10-version>1.1.1.RELEASE</spring-kafka-10-version>
-		<spring-integration-kafka-10-version>2.1.0.RELEASE</spring-integration-kafka-10-version>
+		<kafka-09.version>0.9.0.1</kafka-09.version>
+		<spring-kafka-09-version>1.0.5.RELEASE</spring-kafka-09-version>
+		<spring-integration-kafka-09-version>2.0.1.RELEASE</spring-integration-kafka-09-version>
 		<app-starters-core-dependencies.version>1.1.3.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
@@ -161,31 +161,31 @@
                                     </bom>
                                 </additionalBoms>
                                 <binders>
-                                    <kafka-09/>
-									<kafka-10>
+                                    <kafka-10/>
+									<kafka-09>
 										<forceDependencies>
 											<dependency>
 												<groupId>org.springframework.kafka</groupId>
 												<artifactId>spring-kafka</artifactId>
-												<version>${spring-kafka-10-version}</version>
+												<version>${spring-kafka-09-version}</version>
 											</dependency>
 											<dependency>
 												<groupId>org.springframework.integration</groupId>
 												<artifactId>spring-integration-kafka</artifactId>
-												<version>${spring-integration-kafka-10-version}</version>
+												<version>${spring-integration-kafka-09-version}</version>
 											</dependency>
 											<dependency>
 												<groupId>org.apache.kafka</groupId>
 												<artifactId>kafka-clients</artifactId>
-												<version>${kafka-10.version}</version>
+												<version>${kafka-09.version}</version>
 											</dependency>
 											<dependency>
 												<groupId>org.apache.kafka</groupId>
 												<artifactId>kafka_2.11</artifactId>
-												<version>${kafka-10.version}</version>
+												<version>${kafka-09.version}</version>
 											</dependency>
 										</forceDependencies>
-									</kafka-10>
+									</kafka-09>
                                     <rabbit/>
                                 </binders>
 								<additionalGlobalDependencies>

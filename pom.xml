@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.cloud.stream.app</groupId>
 	<artifactId>app-starters-build</artifactId>
-	<version>1.1.3.BUILD-SNAPSHOT</version>
+	<version>1.1.3.M1</version>
 	<packaging>pom</packaging>
 	<name>app-starters-build</name>
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-build</artifactId>
-		<version>1.3.1.BUILD-SNAPSHOT</version>
+		<version>1.3.1.M1</version>
 		<relativePath />
 	</parent>
 	<scm>
@@ -26,7 +26,7 @@
 		<kafka-09.version>0.9.0.1</kafka-09.version>
 		<spring-kafka-09-version>1.0.5.RELEASE</spring-kafka-09-version>
 		<spring-integration-kafka-09-version>2.0.1.RELEASE</spring-integration-kafka-09-version>
-		<app-starters-core-dependencies.version>1.1.3.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
+		<app-starters-core-dependencies.version>1.1.3.M1</app-starters-core-dependencies.version>
 	</properties>
 
 	<modules>
@@ -39,7 +39,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-core-dependencies</artifactId>
-				<version>1.1.3.BUILD-SNAPSHOT</version>
+				<version>1.1.3.M1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

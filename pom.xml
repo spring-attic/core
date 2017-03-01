@@ -26,7 +26,7 @@
 		<kafka-09.version>0.9.0.1</kafka-09.version>
 		<spring-kafka-09-version>1.0.5.RELEASE</spring-kafka-09-version>
 		<spring-integration-kafka-09-version>2.0.1.RELEASE</spring-integration-kafka-09-version>
-		<app-starters-core-dependencies.version>1.2.0.M1</app-starters-core-dependencies.version>
+		<app-starters-core-dependencies.version>1.2.0.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
 	<modules>

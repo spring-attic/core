@@ -20,13 +20,14 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.3.RELEASE</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.4.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
 		<bomsWithHigherPrecedence/>
 		<bootVersion>1.5.1.RELEASE</bootVersion>
 		<kafka-09.version>0.9.0.1</kafka-09.version>
 		<spring-kafka-09-version>1.0.5.RELEASE</spring-kafka-09-version>
 		<spring-integration-kafka-09-version>2.0.1.RELEASE</spring-integration-kafka-09-version>
 		<app-starters-core-dependencies.version>1.2.0.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
+		<app-metadata-maven-plugin-version>1.0.0.BUILD-SNAPSHOT</app-metadata-maven-plugin-version>
 	</properties>
 
 	<modules>
@@ -194,6 +195,22 @@
 										<artifactId>spring-cloud-starter-config</artifactId>
 									</dependency>
 								</additionalGlobalDependencies>
+								<additionalPlugins>
+									<plugin>
+										<groupId>org.springframework.cloud</groupId>
+										<artifactId>spring-cloud-app-starter-metadata-maven-plugin</artifactId>
+										<version>${app-metadata-maven-plugin-version}</version>
+										<executions>
+											<execution>
+												<id>aggregate-metadata</id>
+												<phase>compile</phase>
+												<goals>
+													<goal>aggregate-metadata</goal>
+												</goals>
+											</execution>
+										</executions>
+									</plugin>
+								</additionalPlugins>
                             </configuration>
                         </plugin>
                     </plugins>

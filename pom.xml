@@ -13,10 +13,10 @@
 		<relativePath />
 	</parent>
 	<scm>
-		<connection>scm:git:git://github.com/spring-cloud/spring-cloud-stream-app-starters.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/spring-cloud/spring-cloud-stream-app-starters.git
+		<connection>scm:git:git://github.com/spring-cloud-stream-app-starters/core.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/spring-cloud-stream-app-starters/core.git
 		</developerConnection>
-		<url>https://github.com/spring-cloud/spring-cloud-stream-app-starters</url>
+		<url>https://github.com/spring-cloud-stream-app-starters/core</url>
 	</scm>
 
 	<properties>

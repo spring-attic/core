@@ -20,10 +20,13 @@ import org.hibernate.validator.constraints.NotBlank;
 /**
  * Common properties for remote servers (e.g. (S)FTP).
  *
+ * @deprecated - properties are flattened.
+ *
  * @author David Turanski
  * @author Gary Russell
  *
  */
+@Deprecated
 public abstract class AbstractRemoteServerProperties {
 
 	/**

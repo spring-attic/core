@@ -23,9 +23,12 @@ import org.springframework.expression.Expression;
 import org.springframework.integration.file.support.FileExistsMode;
 
 /**
+ * @deprecated - properties are flattened.
+ *
  * @author Gary Russell
  *
  */
+@Deprecated
 public abstract class AbstractRemoteFileSinkProperties extends AbstractRemoteFileProperties {
 
 	/**

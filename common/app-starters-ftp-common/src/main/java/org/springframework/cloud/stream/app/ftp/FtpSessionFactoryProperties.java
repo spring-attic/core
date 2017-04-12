@@ -22,6 +22,7 @@ import org.hibernate.validator.constraints.Range;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.stream.app.file.remote.AbstractRemoteServerProperties;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * FTP {@code SessionFactory} properties.
@@ -30,6 +31,7 @@ import org.springframework.cloud.stream.app.file.remote.AbstractRemoteServerProp
  * @author Gary Russell
  */
 @ConfigurationProperties("ftp.factory")
+@Validated
 public class FtpSessionFactoryProperties extends AbstractRemoteServerProperties {
 
 	/**

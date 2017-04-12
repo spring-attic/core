@@ -26,8 +26,10 @@ import javax.validation.constraints.Min;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.stream.app.time.DateFormat;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties("trigger")
+@Validated
 public class TriggerPropertiesMaxMessagesDefaultUnlimited implements TriggerProperties {
 
     /***

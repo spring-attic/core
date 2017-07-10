@@ -48,7 +48,7 @@ public class TriggerConfiguration {
 		pollerMetadata.setTrigger(trigger);
 		// the default is 1 since a source might return
 		// a non-null and non-interruptible value every time it is invoked
-		pollerMetadata.setMaxMessagesPerPoll(this.triggerProperties.getMaxMessages() > -1
+		pollerMetadata.setMaxMessagesPerPoll(this.triggerProperties.getMaxMessages() >= -1
 				? this.triggerProperties.getMaxMessages()
 				: 1);
 		return pollerMetadata;

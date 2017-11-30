@@ -19,8 +19,8 @@ package org.springframework.cloud.stream.app.file;
 import java.util.Collections;
 
 import org.springframework.integration.dsl.IntegrationFlowBuilder;
-import org.springframework.integration.dsl.support.Transformers;
 import org.springframework.integration.file.splitter.FileSplitter;
+import org.springframework.integration.file.transformer.FileToByteArrayTransformer;
 import org.springframework.integration.transformer.StreamTransformer;
 import org.springframework.messaging.MessageHeaders;
 
@@ -44,7 +44,7 @@ public class FileUtils {
 		case contents:
 			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
 					"application/octet-stream"))
-					.transform(Transformers.fileToByteArray());
+					.transform(new FileToByteArrayTransformer());
 			break;
 		case lines:
 			Boolean withMarkers = fileConsumerProperties.getWithMarkers();

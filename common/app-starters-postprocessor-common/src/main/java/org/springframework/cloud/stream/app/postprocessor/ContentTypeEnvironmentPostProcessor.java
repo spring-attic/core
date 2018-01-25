@@ -22,6 +22,8 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -33,8 +35,15 @@ import java.util.Properties;
  * @author Chris Schaefer
  */
 public class ContentTypeEnvironmentPostProcessor implements EnvironmentPostProcessor {
-	private String[] channelNames = { Source.OUTPUT, Sink.INPUT };
-	private String contentType = "application/octet-stream";
+	private Map<String, String> channelMap = createChannelMap();
+
+	private Map<String, String> createChannelMap() {
+		Map<String, String> channelMap = new HashMap<>();
+		channelMap.put(Sink.INPUT, "application/octet-stream");
+		channelMap.put(Source.OUTPUT, "application/octet-stream");
+
+		return channelMap;
+	}
 
 	protected static final String PROPERTY_SOURCE_KEY_NAME = ContentTypeEnvironmentPostProcessor.class.getName();
 	protected static final String CONTENT_TYPE_PROPERTY_PREFIX = "spring.cloud.stream.bindings.";
@@ -44,28 +53,23 @@ public class ContentTypeEnvironmentPostProcessor implements EnvironmentPostProce
 		super();
 	}
 
-	protected ContentTypeEnvironmentPostProcessor(String[] channelNames) {
-		this.channelNames = channelNames;
+	protected ContentTypeEnvironmentPostProcessor(Map<String, String> channelMap) {
+		this.channelMap = channelMap;
 	}
 
-	protected ContentTypeEnvironmentPostProcessor(String contentType) {
-		this.contentType = contentType;
-	}
-
-	protected ContentTypeEnvironmentPostProcessor(String[] channelNames, String contentType) {
-		this.channelNames = channelNames;
-		this.contentType = contentType;
+	protected ContentTypeEnvironmentPostProcessor(String channelName, String contentType) {
+		channelMap.put(channelName, contentType);
 	}
 
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment configurableEnvironment, SpringApplication springApplication) {
 		Properties properties = new Properties();
 
-		for (String channelName : channelNames) {
-			String propertyKey = CONTENT_TYPE_PROPERTY_PREFIX + channelName + CONTENT_TYPE_PROPERTY_SUFFIX;
+		for (Map.Entry<String, String> channel : channelMap.entrySet()) {
+			String propertyKey = CONTENT_TYPE_PROPERTY_PREFIX + channel.getKey() + CONTENT_TYPE_PROPERTY_SUFFIX;
 
 			if (!configurableEnvironment.containsProperty(propertyKey)) {
-				properties.setProperty(propertyKey, contentType);
+				properties.setProperty(propertyKey, channel.getValue());
 			}
 		}
 

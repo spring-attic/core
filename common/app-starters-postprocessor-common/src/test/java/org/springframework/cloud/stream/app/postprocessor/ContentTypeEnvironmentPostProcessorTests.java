@@ -27,6 +27,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.Assert.assertNotNull;
@@ -39,7 +41,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ContentTypeEnvironmentPostProcessorTests {
 	@Test
-	public void testPostProcessorContentType() {
+	public void testPostProcessorDefaults() {
 		ConfigurableEnvironment configurableEnvironment = getEnvironment();
 
 		PropertySource propertySource = configurableEnvironment.getPropertySources()
@@ -80,8 +82,8 @@ public class ContentTypeEnvironmentPostProcessorTests {
 	}
 
 	@Test
-	public void testConfigureChannelName() {
-		ConfigurableEnvironment configurableEnvironment = getEnvironment(new CustomChannelName());
+	public void testConfigureCustomChannel() {
+		ConfigurableEnvironment configurableEnvironment = getEnvironment(new CustomChannel());
 
 		PropertySource propertySource = configurableEnvironment.getPropertySources()
 				.get(ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME);
@@ -96,43 +98,18 @@ public class ContentTypeEnvironmentPostProcessorTests {
 				.equals("application/octet-stream"));
 	}
 
-	public static class CustomChannelName extends ContentTypeEnvironmentPostProcessor {
-		private static final String[] CHANNEL_NAMES = { "myChannelName" };
+	public static class CustomChannel extends ContentTypeEnvironmentPostProcessor {
+		private static final String CHANNEL_NAME = "myChannelName";
+		private static final String CONTENT_TYPE = "application/octet-stream";
 
-		public CustomChannelName() {
-			super(CHANNEL_NAMES);
-		}
-	}
-
-	@Test
-	public void testConfigureChannelNameCustomContentType() {
-		ConfigurableEnvironment configurableEnvironment = getEnvironment(new CustomChannelNameCustomContentType());
-
-		PropertySource propertySource = configurableEnvironment.getPropertySources()
-				.get(ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME);
-
-		assertNotNull("Property source " + ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME + " is null",
-				propertySource);
-
-		assertTrue("imageChannel contentType property key not found",
-				propertySource.containsProperty(getContentTypeProperty("imageChannel")));
-
-		assertTrue("Unexpected imageChannel content type", propertySource.getProperty(getContentTypeProperty("imageChannel"))
-				.equals("image/gif"));
-	}
-
-	public static class CustomChannelNameCustomContentType extends ContentTypeEnvironmentPostProcessor {
-		private static final String CONTENT_TYPE = "image/gif";
-		private static final String[] CHANNEL_NAMES = { "imageChannel" };
-
-		public CustomChannelNameCustomContentType() {
-			super(CHANNEL_NAMES, CONTENT_TYPE);
+		public CustomChannel() {
+			super(CHANNEL_NAME, CONTENT_TYPE);
 		}
 	}
 
 	@Test
 	public void testConfigureDefaultChannelsCustomContentType() {
-		ConfigurableEnvironment configurableEnvironment = getEnvironment(new DefaultChannelsCustomContentType());
+		ConfigurableEnvironment configurableEnvironment = getEnvironment(new DefaultChannelsCustomContentTypes());
 
 		PropertySource propertySource = configurableEnvironment.getPropertySources()
 				.get(ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME);
@@ -150,14 +127,22 @@ public class ContentTypeEnvironmentPostProcessorTests {
 				propertySource.containsProperty(getContentTypeProperty(Sink.INPUT)));
 
 		assertTrue("Unexpected input content type", propertySource.getProperty(getContentTypeProperty(Sink.INPUT))
-				.equals("image/jpeg"));
+				.equals("image/gif"));
 	}
 
-	public static class DefaultChannelsCustomContentType extends ContentTypeEnvironmentPostProcessor {
-		private static final String CONTENT_TYPE = "image/jpeg";
+	public static class DefaultChannelsCustomContentTypes extends ContentTypeEnvironmentPostProcessor {
+		private static Map<String, String> CHANNEL_MAP = createChannelMap();
 
-		public DefaultChannelsCustomContentType() {
-			super(CONTENT_TYPE);
+		private static Map<String, String> createChannelMap() {
+			Map<String, String> channelMap = new HashMap<>();
+			channelMap.put(Source.OUTPUT, "image/jpeg");
+			channelMap.put(Sink.INPUT, "image/gif");
+
+			return channelMap;
+		}
+
+		public DefaultChannelsCustomContentTypes() {
+			super(CHANNEL_MAP);
 		}
 	}
 
@@ -203,6 +188,9 @@ public class ContentTypeEnvironmentPostProcessorTests {
 
 		environmentPostProcessor.postProcessEnvironment(context.getEnvironment(), springApplication);
 
-		return context.getEnvironment();
+		ConfigurableEnvironment configurableEnvironment = context.getEnvironment();
+		context.close();
+
+		return configurableEnvironment;
 	}
 }

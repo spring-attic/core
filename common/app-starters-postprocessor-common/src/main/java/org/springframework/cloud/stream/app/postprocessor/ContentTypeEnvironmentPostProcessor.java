@@ -57,6 +57,12 @@ public class ContentTypeEnvironmentPostProcessor implements EnvironmentPostProce
 		this.channelMap = channelMap;
 	}
 
+	protected ContentTypeEnvironmentPostProcessor(String contentType) {
+		for (Map.Entry<String, String> channel : channelMap.entrySet()) {
+			channel.setValue(contentType);
+		}
+	}
+
 	protected ContentTypeEnvironmentPostProcessor(String channelName, String contentType) {
 		channelMap.put(channelName, contentType);
 	}

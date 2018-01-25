@@ -130,6 +130,37 @@ public class ContentTypeEnvironmentPostProcessorTests {
 				.equals("image/gif"));
 	}
 
+	@Test
+	public void testConfigureDefaultChannelsSameContentType() {
+		ConfigurableEnvironment configurableEnvironment = getEnvironment(new ChannelSameContentType());
+
+		PropertySource propertySource = configurableEnvironment.getPropertySources()
+				.get(ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME);
+
+		assertNotNull("Property source " + ContentTypeEnvironmentPostProcessor.PROPERTY_SOURCE_KEY_NAME + " is null",
+				propertySource);
+
+		assertTrue("Output contentType property key not found",
+				propertySource.containsProperty(getContentTypeProperty(Source.OUTPUT)));
+
+		assertTrue("Unexpected output content type", propertySource.getProperty(getContentTypeProperty(Source.OUTPUT))
+				.equals("image/jpeg"));
+
+		assertTrue("Input contentType property key not found",
+				propertySource.containsProperty(getContentTypeProperty(Sink.INPUT)));
+
+		assertTrue("Unexpected input content type", propertySource.getProperty(getContentTypeProperty(Sink.INPUT))
+				.equals("image/jpeg"));
+	}
+
+	public static class ChannelSameContentType extends ContentTypeEnvironmentPostProcessor {
+		private static final String CONTENT_TYPE = "image/jpeg";
+
+		public ChannelSameContentType() {
+			super(CONTENT_TYPE);
+		}
+	}
+
 	public static class DefaultChannelsCustomContentTypes extends ContentTypeEnvironmentPostProcessor {
 		private static Map<String, String> CHANNEL_MAP = createChannelMap();
 

@@ -156,7 +156,7 @@
                                 </execution>
                             </executions>
                             <configuration>
-                                <javaVersion>1.7</javaVersion>
+                                <javaVersion>1.8</javaVersion>
                                 <bootVersion>${bootVersion}</bootVersion>
                                 <applicationType>stream</applicationType>
                                 <additionalBoms>
@@ -168,7 +168,7 @@
                                     </bom>
                                 </additionalBoms>
                                 <binders>
-                                    <kafka-1.0.0/>
+                                    <kafka/>
                                     <rabbit/>
                                 </binders>
 								<additionalGlobalDependencies>

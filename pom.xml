@@ -168,7 +168,7 @@
                                     </bom>
                                 </additionalBoms>
                                 <binders>
-                                    <kafka-10/>
+                                    <kafka-1.0.0/>
                                     <rabbit/>
                                 </binders>
 								<additionalGlobalDependencies>

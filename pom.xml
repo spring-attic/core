@@ -24,7 +24,6 @@
 		<app-starters-docs-plugin.version>2.0.0.BUILD-SNAPSHOT</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>1.0.0.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
-		<bootVersion>2.0.0.BUILD-SNAPSHOT</bootVersion>
 		<app-starters-core-dependencies.version>2.0.0.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
@@ -157,7 +156,7 @@
                             </executions>
                             <configuration>
                                 <javaVersion>1.8</javaVersion>
-                                <bootVersion>${bootVersion}</bootVersion>
+                                <bootVersion>${spring-boot.version}</bootVersion>
                                 <applicationType>stream</applicationType>
                                 <additionalBoms>
                                     <bom>

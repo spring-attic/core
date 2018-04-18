@@ -55,7 +55,7 @@ public class SpringCloudStreamMicrometerCommonTags {
 	public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 		return registry -> registry.config()
 				.commonTags("clusterName", clusterName)
-				.commonTags("stream", streamName)
+				.commonTags("streamName", streamName)
 				.commonTags("applicationName", applicationName)
 				.commonTags("applicationType", applicationType)
 				.commonTags("instanceIndex", instanceIndex)

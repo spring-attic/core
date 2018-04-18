@@ -55,7 +55,7 @@ public class SpringCloudStreamMicrometerCommonTagsTest {
 		assertNotNull("The jvm.memory.committed meter mast be present in SpringBoot apps!", m);
 
 		assertThat(m.getId().getTag("clusterName"), is("myCluster"));
-		assertThat(m.getId().getTag("stream"), is("myStream"));
+		assertThat(m.getId().getTag("streamName"), is("myStream"));
 		assertThat(m.getId().getTag("applicationName"), is("myApp"));
 		assertThat(m.getId().getTag("instanceIndex"), is("666"));
 		assertThat(m.getId().getTag("applicationType"), is("source"));

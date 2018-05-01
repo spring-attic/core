@@ -20,6 +20,7 @@
 		<module>app-starters-file-common</module>
 		<module>app-starters-ftp-common</module>
 		<module>app-starters-test-support</module>
+		<module>app-starters-micrometer-common</module>
 	</modules>
 
 </project>

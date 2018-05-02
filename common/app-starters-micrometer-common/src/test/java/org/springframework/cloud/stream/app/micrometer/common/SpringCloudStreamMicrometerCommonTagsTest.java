@@ -15,57 +15,64 @@
  */
 package org.springframework.cloud.stream.app.micrometer.common;
 
-import io.micrometer.core.instrument.Meter;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
  * @author Christian Tzolov
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(
-		classes = SpringCloudStreamMicrometerCommonTagsTest.AutoconfigurationApplication.class)
-@TestPropertySource(properties = { "spring.cloud.dataflow.cluster.name=myCluster",
-		"spring.cloud.dataflow.stream.name=myStream",
-		"spring.cloud.dataflow.stream.app.label=myApp",
-		"instance.index=666",
-		"spring.cloud.application.guid=666guid",
-		"spring.cloud.dataflow.stream.app.type=source" })
+@RunWith(Enclosed.class)
 public class SpringCloudStreamMicrometerCommonTagsTest {
 
-	@Autowired
-	private SimpleMeterRegistry simpleMeterRegistry;
+	public static class TestDefaultTagValues extends AbstractMicrometerTagTest {
 
-	@Test
-	public void testCommonTagsPropertiesWired() {
-		assertNotNull(simpleMeterRegistry);
-		Meter m = simpleMeterRegistry.find("jvm.memory.committed").meter();
-		assertNotNull("The jvm.memory.committed meter mast be present in SpringBoot apps!", m);
-
-		assertThat(m.getId().getTag("clusterName"), is("myCluster"));
-		assertThat(m.getId().getTag("streamName"), is("myStream"));
-		assertThat(m.getId().getTag("applicationName"), is("myApp"));
-		assertThat(m.getId().getTag("instanceIndex"), is("666"));
-		assertThat(m.getId().getTag("applicationType"), is("source"));
-		assertThat(m.getId().getTag("applicationGuid"), is("666guid"));
+		@Test
+		public void testDefaultTagValues() {
+			assertThat(meter.getId().getTag("streamName"), is("unknown"));
+			assertThat(meter.getId().getTag("applicationName"), is("unknown"));
+			assertThat(meter.getId().getTag("instanceIndex"), is("0"));
+			assertThat(meter.getId().getTag("applicationType"), is("unknown"));
+			assertThat(meter.getId().getTag("applicationGuid"), is("unknown"));
+		}
 	}
 
-	@SpringBootApplication
-	public static class AutoconfigurationApplication {
-		public static void main(String[] args) {
-			SpringApplication.run(AutoconfigurationApplication.class, args);
+	@TestPropertySource(properties = {
+			"spring.cloud.dataflow.stream.name=myStream",
+			"spring.cloud.dataflow.stream.app.label=myApp",
+			"instance.index=666",
+			"spring.cloud.application.guid=666guid",
+			"spring.cloud.dataflow.stream.app.type=source" })
+	public static class TestPresetTagValues extends AbstractMicrometerTagTest {
+
+		@Test
+		public void testPresetTagValues() {
+			assertThat(meter.getId().getTag("streamName"), is("myStream"));
+			assertThat(meter.getId().getTag("applicationName"), is("myApp"));
+			assertThat(meter.getId().getTag("instanceIndex"), is("666"));
+			assertThat(meter.getId().getTag("applicationType"), is("source"));
+			assertThat(meter.getId().getTag("applicationGuid"), is("666guid"));
+		}
+	}
+
+	@TestPropertySource(properties = { "management.metrics.cloud.stream.app.common.tags.enabled=false" })
+	public static class TestDisabledTagValues extends AbstractMicrometerTagTest {
+
+		@Test
+		public void testDefaultTagValues() {
+			assertThat(meter.getId().getTag("streamName"), is(nullValue()));
+			assertThat(meter.getId().getTag("applicationName"), is(nullValue()));
+			assertThat(meter.getId().getTag("instanceIndex"), is(nullValue()));
+			assertThat(meter.getId().getTag("applicationType"), is(nullValue()));
+			assertThat(meter.getId().getTag("applicationGuid"), is(nullValue()));
 		}
 	}
 }

@@ -20,6 +20,7 @@ import io.micrometer.core.instrument.config.MeterFilter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,13 +29,13 @@ import org.springframework.context.annotation.Configuration;
  * instance index and guids. Later are necessary to allow discrimination and aggregation of app metrics by external
  * metrics collection and visualizaiton tools.
  *
+ * Use the management.metrics.cloud.stream.app.common.tags.enabled=false property to disable inserting those tags.
+ *
  * @author Christian Tzolov
  */
 @Configuration
+@ConditionalOnProperty(name = "management.metrics.cloud.stream.app.common.tags.enabled", havingValue = "true", matchIfMissing = true)
 public class SpringCloudStreamMicrometerCommonTags {
-
-	@Value("${spring.cloud.dataflow.cluster.name:default}")
-	private String clusterName;
 
 	@Value("${spring.cloud.dataflow.stream.name:unknown}")
 	private String streamName;
@@ -42,7 +43,7 @@ public class SpringCloudStreamMicrometerCommonTags {
 	@Value("${spring.cloud.dataflow.stream.app.label:unknown}")
 	private String applicationName;
 
-	@Value("${instance.index:unknown}")
+	@Value("${instance.index:0}")
 	private String instanceIndex;
 
 	@Value("${spring.cloud.application.guid:unknown}")
@@ -54,7 +55,6 @@ public class SpringCloudStreamMicrometerCommonTags {
 	@Bean
 	public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 		return registry -> registry.config()
-				.commonTags("clusterName", clusterName)
 				.commonTags("streamName", streamName)
 				.commonTags("applicationName", applicationName)
 				.commonTags("applicationType", applicationType)

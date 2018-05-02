@@ -31,13 +31,13 @@ import org.springframework.context.annotation.Profile;
  * Tags are set only if the "cloud" Spring profile is set. The "cloud" profile is activated automatically when an
  * application is deployed in CF: https://docs.cloudfoundry.org/buildpacks/java/configuring-service-connections/spring-service-bindings.html#cloud-profiles
  *
- * Use the management.metrics.cloud.stream.app.cf.tags.enabled=false property to disable inserting those tags.
+ * Use the spring.cloud.stream.app.metrics.cf.tags.enabled=false property to disable inserting those tags.
  *
  * @author Christian Tzolov
  */
 @Configuration
 @Profile("cloud")
-@ConditionalOnProperty(name = "management.metrics.cloud.stream.app.cf.tags.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "spring.cloud.stream.app.metrics.cf.tags.enabled", havingValue = "true", matchIfMissing = true)
 public class CloudFoundryMicrometerCommonTags {
 
 	@Value("${vcap.application.org_name:default}")
@@ -64,12 +64,12 @@ public class CloudFoundryMicrometerCommonTags {
 	@Bean
 	public MeterRegistryCustomizer<MeterRegistry> cloudFoundryMetricsCommonTags() {
 		return registry -> registry.config()
-				.commonTags("cf_org_name", organizationName)
-				.commonTags("cf_space_id", spaceId)
-				.commonTags("cf_space_name", spaceName)
-				.commonTags("cf_app_id", applicationId)
-				.commonTags("cf_app_name", applicationName)
-				.commonTags("cf_app_version", applicationVersion)
-				.commonTags("cf_instance_index", instanceIndex);
+				.commonTags("cf.org.name", organizationName)
+				.commonTags("cf.space.id", spaceId)
+				.commonTags("cf.space.name", spaceName)
+				.commonTags("cf.app.id", applicationId)
+				.commonTags("cf.app.name", applicationName)
+				.commonTags("cf.app.version", applicationVersion)
+				.commonTags("cf.instance.index", instanceIndex);
 	}
 }

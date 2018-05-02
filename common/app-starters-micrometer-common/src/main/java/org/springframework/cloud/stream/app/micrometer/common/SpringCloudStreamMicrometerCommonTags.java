@@ -29,12 +29,12 @@ import org.springframework.context.annotation.Configuration;
  * instance index and guids. Later are necessary to allow discrimination and aggregation of app metrics by external
  * metrics collection and visualizaiton tools.
  *
- * Use the management.metrics.cloud.stream.app.common.tags.enabled=false property to disable inserting those tags.
+ * Use the spring.cloud.stream.app.metrics.common.tags.enabled=false property to disable inserting those tags.
  *
  * @author Christian Tzolov
  */
 @Configuration
-@ConditionalOnProperty(name = "management.metrics.cloud.stream.app.common.tags.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "spring.cloud.stream.app.metrics.common.tags.enabled", havingValue = "true", matchIfMissing = true)
 public class SpringCloudStreamMicrometerCommonTags {
 
 	@Value("${spring.cloud.dataflow.stream.name:unknown}")
@@ -55,11 +55,11 @@ public class SpringCloudStreamMicrometerCommonTags {
 	@Bean
 	public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 		return registry -> registry.config()
-				.commonTags("streamName", streamName)
-				.commonTags("applicationName", applicationName)
-				.commonTags("applicationType", applicationType)
-				.commonTags("instanceIndex", instanceIndex)
-				.commonTags("applicationGuid", applicationGuid);
+				.commonTags("stream.name", streamName)
+				.commonTags("application.name", applicationName)
+				.commonTags("application.type", applicationType)
+				.commonTags("instance.index", instanceIndex)
+				.commonTags("application.guid", applicationGuid);
 	}
 
 	/**

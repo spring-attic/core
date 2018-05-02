@@ -37,11 +37,11 @@ public class SpringCloudStreamMicrometerCommonTagsTest {
 
 		@Test
 		public void testDefaultTagValues() {
-			assertThat(meter.getId().getTag("streamName"), is("unknown"));
-			assertThat(meter.getId().getTag("applicationName"), is("unknown"));
-			assertThat(meter.getId().getTag("instanceIndex"), is("0"));
-			assertThat(meter.getId().getTag("applicationType"), is("unknown"));
-			assertThat(meter.getId().getTag("applicationGuid"), is("unknown"));
+			assertThat(meter.getId().getTag("stream.name"), is("unknown"));
+			assertThat(meter.getId().getTag("application.name"), is("unknown"));
+			assertThat(meter.getId().getTag("instance.index"), is("0"));
+			assertThat(meter.getId().getTag("application.type"), is("unknown"));
+			assertThat(meter.getId().getTag("application.guid"), is("unknown"));
 		}
 	}
 
@@ -55,24 +55,24 @@ public class SpringCloudStreamMicrometerCommonTagsTest {
 
 		@Test
 		public void testPresetTagValues() {
-			assertThat(meter.getId().getTag("streamName"), is("myStream"));
-			assertThat(meter.getId().getTag("applicationName"), is("myApp"));
-			assertThat(meter.getId().getTag("instanceIndex"), is("666"));
-			assertThat(meter.getId().getTag("applicationType"), is("source"));
-			assertThat(meter.getId().getTag("applicationGuid"), is("666guid"));
+			assertThat(meter.getId().getTag("stream.name"), is("myStream"));
+			assertThat(meter.getId().getTag("application.name"), is("myApp"));
+			assertThat(meter.getId().getTag("instance.index"), is("666"));
+			assertThat(meter.getId().getTag("application.type"), is("source"));
+			assertThat(meter.getId().getTag("application.guid"), is("666guid"));
 		}
 	}
 
-	@TestPropertySource(properties = { "management.metrics.cloud.stream.app.common.tags.enabled=false" })
+	@TestPropertySource(properties = { "spring.cloud.stream.app.metrics.common.tags.enabled=false" })
 	public static class TestDisabledTagValues extends AbstractMicrometerTagTest {
 
 		@Test
 		public void testDefaultTagValues() {
-			assertThat(meter.getId().getTag("streamName"), is(nullValue()));
-			assertThat(meter.getId().getTag("applicationName"), is(nullValue()));
-			assertThat(meter.getId().getTag("instanceIndex"), is(nullValue()));
-			assertThat(meter.getId().getTag("applicationType"), is(nullValue()));
-			assertThat(meter.getId().getTag("applicationGuid"), is(nullValue()));
+			assertThat(meter.getId().getTag("stream.name"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.name"), is(nullValue()));
+			assertThat(meter.getId().getTag("instance.index"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.type"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.guid"), is(nullValue()));
 		}
 	}
 }

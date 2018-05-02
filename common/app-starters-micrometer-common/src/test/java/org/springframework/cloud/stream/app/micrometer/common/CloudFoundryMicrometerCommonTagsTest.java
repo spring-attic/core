@@ -36,13 +36,13 @@ public class CloudFoundryMicrometerCommonTagsTest {
 	public static class ActiveCloudProfileDefaultValues extends AbstractMicrometerTagTest {
 		@Test
 		public void testDefaultTagValues() {
-			assertThat(meter.getId().getTag("cf_org_name"), is("default"));
-			assertThat(meter.getId().getTag("cf_space_id"), is("unknown"));
-			assertThat(meter.getId().getTag("cf_space_name"), is("unknown"));
-			assertThat(meter.getId().getTag("cf_app_name"), is("unknown"));
-			assertThat(meter.getId().getTag("cf_app_id"), is("unknown"));
-			assertThat(meter.getId().getTag("cf_app_version"), is("unknown"));
-			assertThat(meter.getId().getTag("cf_instance_index"), is("0"));
+			assertThat(meter.getId().getTag("cf.org.name"), is("default"));
+			assertThat(meter.getId().getTag("cf.space.id"), is("unknown"));
+			assertThat(meter.getId().getTag("cf.space.name"), is("unknown"));
+			assertThat(meter.getId().getTag("cf.app.name"), is("unknown"));
+			assertThat(meter.getId().getTag("cf.app.id"), is("unknown"));
+			assertThat(meter.getId().getTag("cf.app.version"), is("unknown"));
+			assertThat(meter.getId().getTag("cf.instance.index"), is("0"));
 		}
 	}
 
@@ -59,13 +59,13 @@ public class CloudFoundryMicrometerCommonTagsTest {
 
 		@Test
 		public void testPresetTagValues() {
-			assertThat(meter.getId().getTag("cf_org_name"), is("PivotalOrg"));
-			assertThat(meter.getId().getTag("cf_space_id"), is("SpringSpaceId"));
-			assertThat(meter.getId().getTag("cf_space_name"), is("SpringSpace"));
-			assertThat(meter.getId().getTag("cf_app_name"), is("App666"));
-			assertThat(meter.getId().getTag("cf_app_id"), is("666guid"));
-			assertThat(meter.getId().getTag("cf_app_version"), is("2.0"));
-			assertThat(meter.getId().getTag("cf_instance_index"), is("123"));
+			assertThat(meter.getId().getTag("cf.org.name"), is("PivotalOrg"));
+			assertThat(meter.getId().getTag("cf.space.id"), is("SpringSpaceId"));
+			assertThat(meter.getId().getTag("cf.space.name"), is("SpringSpace"));
+			assertThat(meter.getId().getTag("cf.app.name"), is("App666"));
+			assertThat(meter.getId().getTag("cf.app.id"), is("666guid"));
+			assertThat(meter.getId().getTag("cf.app.version"), is("2.0"));
+			assertThat(meter.getId().getTag("cf.instance.index"), is("123"));
 		}
 	}
 
@@ -81,17 +81,17 @@ public class CloudFoundryMicrometerCommonTagsTest {
 
 		@Test
 		public void testDisabledTagValues() {
-			assertThat(meter.getId().getTag("cf_org_name"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_space_id"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_space_name"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_app_name"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_app_id"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_app_version"), is(Matchers.nullValue()));
-			assertThat(meter.getId().getTag("cf_instance_index"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.org.name"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.space.id"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.space.name"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.app.name"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.app.id"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.app.version"), is(Matchers.nullValue()));
+			assertThat(meter.getId().getTag("cf.instance.index"), is(Matchers.nullValue()));
 		}
 	}
 
-	@TestPropertySource(properties = { "management.metrics.cloud.stream.app.cf.tags.enabled=false" })
+	@TestPropertySource(properties = { "spring.cloud.stream.app.metrics.cf.tags.enabled=false" })
 	@ActiveProfiles("cloud")
 	public static class ActiveCloudProfileDisabledProperty extends InactiveCloudProfile {
 	}

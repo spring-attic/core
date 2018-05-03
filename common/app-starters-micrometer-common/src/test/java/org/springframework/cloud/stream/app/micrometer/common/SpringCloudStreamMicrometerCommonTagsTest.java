@@ -48,7 +48,7 @@ public class SpringCloudStreamMicrometerCommonTagsTest {
 	@TestPropertySource(properties = {
 			"spring.cloud.dataflow.stream.name=myStream",
 			"spring.cloud.dataflow.stream.app.label=myApp",
-			"instance.index=666",
+			"spring.cloud.stream.instanceIndex=666",
 			"spring.cloud.application.guid=666guid",
 			"spring.cloud.dataflow.stream.app.type=source" })
 	public static class TestPresetTagValues extends AbstractMicrometerTagTest {

@@ -15,56 +15,62 @@
  */
 package org.springframework.cloud.stream.app.micrometer.common;
 
-import io.micrometer.core.instrument.Meter;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
  * @author Christian Tzolov
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(
-		classes = SpringCloudStreamMicrometerCommonTagsTest.AutoconfigurationApplication.class)
-@TestPropertySource(properties = {
-		"spring.cloud.dataflow.stream.name=myStream",
-		"spring.cloud.dataflow.stream.app.label=myApp",
-		"instance.index=666",
-		"spring.cloud.application.guid=666guid",
-		"spring.cloud.dataflow.stream.app.type=source" })
+@RunWith(Enclosed.class)
 public class SpringCloudStreamMicrometerCommonTagsTest {
 
-	@Autowired
-	private SimpleMeterRegistry simpleMeterRegistry;
+	public static class TestDefaultTagValues extends AbstractMicrometerTagTest {
 
-	@Test
-	public void testCommonTagsPropertiesWired() {
-		assertNotNull(simpleMeterRegistry);
-		Meter m = simpleMeterRegistry.find("jvm.memory.committed").meter();
-		assertNotNull("The jvm.memory.committed meter mast be present in SpringBoot apps!", m);
-
-		assertThat(m.getId().getTag("streamName"), is("myStream"));
-		assertThat(m.getId().getTag("applicationName"), is("myApp"));
-		assertThat(m.getId().getTag("instanceIndex"), is("666"));
-		assertThat(m.getId().getTag("applicationType"), is("source"));
-		assertThat(m.getId().getTag("applicationGuid"), is("666guid"));
+		@Test
+		public void testDefaultTagValues() {
+			assertThat(meter.getId().getTag("stream.name"), is("unknown"));
+			assertThat(meter.getId().getTag("application.name"), is("unknown"));
+			assertThat(meter.getId().getTag("instance.index"), is("0"));
+			assertThat(meter.getId().getTag("application.type"), is("unknown"));
+			assertThat(meter.getId().getTag("application.guid"), is("unknown"));
+		}
 	}
 
-	@SpringBootApplication
-	public static class AutoconfigurationApplication {
-		public static void main(String[] args) {
-			SpringApplication.run(AutoconfigurationApplication.class, args);
+	@TestPropertySource(properties = {
+			"spring.cloud.dataflow.stream.name=myStream",
+			"spring.cloud.dataflow.stream.app.label=myApp",
+			"spring.cloud.stream.instanceIndex=666",
+			"spring.cloud.application.guid=666guid",
+			"spring.cloud.dataflow.stream.app.type=source" })
+	public static class TestPresetTagValues extends AbstractMicrometerTagTest {
+
+		@Test
+		public void testPresetTagValues() {
+			assertThat(meter.getId().getTag("stream.name"), is("myStream"));
+			assertThat(meter.getId().getTag("application.name"), is("myApp"));
+			assertThat(meter.getId().getTag("instance.index"), is("666"));
+			assertThat(meter.getId().getTag("application.type"), is("source"));
+			assertThat(meter.getId().getTag("application.guid"), is("666guid"));
+		}
+	}
+
+	@TestPropertySource(properties = { "spring.cloud.stream.app.metrics.common.tags.enabled=false" })
+	public static class TestDisabledTagValues extends AbstractMicrometerTagTest {
+
+		@Test
+		public void testDefaultTagValues() {
+			assertThat(meter.getId().getTag("stream.name"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.name"), is(nullValue()));
+			assertThat(meter.getId().getTag("instance.index"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.type"), is(nullValue()));
+			assertThat(meter.getId().getTag("application.guid"), is(nullValue()));
 		}
 	}
 }

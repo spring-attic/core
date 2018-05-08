@@ -26,6 +26,7 @@ import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.spring.autoconfigure.MeterRegistryCustomizer;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,6 +38,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Christian Tzolov
  */
 @Configuration
+@ConditionalOnProperty(name = "spring.cloud.stream.app.metrics.common.tags.enabled", havingValue = "true", matchIfMissing = true)
 public class SpringCloudStreamMicrometerCommonTags {
 
 	@Value("${spring.cloud.dataflow.stream.name:unknown}")
@@ -45,7 +47,7 @@ public class SpringCloudStreamMicrometerCommonTags {
 	@Value("${spring.cloud.dataflow.stream.app.label:unknown}")
 	private String applicationName;
 
-	@Value("${instance.index:unknown}")
+	@Value("${spring.cloud.stream.instanceIndex:0}")
 	private String instanceIndex;
 
 	@Value("${spring.cloud.application.guid:unknown}")
@@ -60,11 +62,11 @@ public class SpringCloudStreamMicrometerCommonTags {
 			@Override
 			public void customize(MeterRegistry registry) {
 				registry.config()
-						.commonTags("streamName", streamName)
-						.commonTags("applicationName", applicationName)
-						.commonTags("applicationType", applicationType)
-						.commonTags("instanceIndex", instanceIndex)
-						.commonTags("applicationGuid", applicationGuid);
+						.commonTags("stream.name", streamName)
+						.commonTags("application.name", applicationName)
+						.commonTags("application.type", applicationType)
+						.commonTags("instance.index", instanceIndex)
+						.commonTags("application.guid", applicationGuid);
 			}
 		};
 	}

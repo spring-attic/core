@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 the original author or authors.
+ * Copyright 2015-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,12 @@ import org.springframework.integration.file.splitter.FileSplitter;
 import org.springframework.integration.file.transformer.FileToByteArrayTransformer;
 import org.springframework.integration.transformer.StreamTransformer;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.util.MimeTypeUtils;
 
 /**
  * @author Gary Russell
  * @author Artem Bilan
+ * @author Christian Tzolov
  *
  */
 public class FileUtils {
@@ -43,7 +45,7 @@ public class FileUtils {
 		switch (fileConsumerProperties.getMode()) {
 		case contents:
 			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
-					"application/octet-stream"))
+					MimeTypeUtils.APPLICATION_OCTET_STREAM_VALUE))
 					.transform(new FileToByteArrayTransformer());
 			break;
 		case lines:
@@ -52,9 +54,12 @@ public class FileUtils {
 				withMarkers = false;
 			}
 			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
-					"text/plain"))
+					MimeTypeUtils.TEXT_PLAIN_VALUE))
 					.split(new FileSplitter(true, withMarkers, fileConsumerProperties.getMarkersJson()));
+			break;
 		case ref:
+			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
+					MimeTypeUtils.APPLICATION_JSON_VALUE));
 			break;
 		default:
 			throw new IllegalArgumentException(fileConsumerProperties.getMode().name() +
@@ -75,7 +80,7 @@ public class FileUtils {
 		switch (fileConsumerProperties.getMode()) {
 		case contents:
 			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
-					"application/octet-stream"))
+					MimeTypeUtils.APPLICATION_OCTET_STREAM_VALUE))
 					.transform(new StreamTransformer());
 			break;
 		case lines:
@@ -84,7 +89,7 @@ public class FileUtils {
 				withMarkers = false;
 			}
 			flowBuilder.enrichHeaders(Collections.<String, Object>singletonMap(MessageHeaders.CONTENT_TYPE,
-					"text/plain"))
+					MimeTypeUtils.TEXT_PLAIN_VALUE))
 					.split(new FileSplitter(true, withMarkers, fileConsumerProperties.getMarkersJson()));
 			break;
 		case ref:

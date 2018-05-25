@@ -12,7 +12,14 @@
     <name>app-starters-invoker</name>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.cloud.stream.app</groupId>
+            <artifactId>app-starters-annotation-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud.stream.app</groupId>
+            <artifactId>app-starters-annotation-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

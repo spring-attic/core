@@ -31,10 +31,10 @@ public class FunctionalIntegrationConfiguration {
 	@Conditional(FunctionCondition.class)
 	@Configuration
 	@EnableBinding(Processor.class)
-	class FunctionInvoker {
+	public static class FunctionInvoker {
 
 		@Autowired
-		Function<Object, Object> functionToInvoke;
+		Function<?, ?> functionToInvoke;
 
 		@ServiceActivator(inputChannel = Processor.INPUT, outputChannel = Processor.OUTPUT)
 		public Object invokeProcessor(Object o) {
@@ -45,7 +45,7 @@ public class FunctionalIntegrationConfiguration {
 	@Conditional(ConsumerCondition.class)
 	@Configuration
 	@EnableBinding(Sink.class)
-	class ConsumerInvoker {
+	public static class ConsumerInvoker {
 
 		@Autowired
 		Consumer<Object> consumerToInvoke;
@@ -59,7 +59,7 @@ public class FunctionalIntegrationConfiguration {
 	@Conditional(PollableSourceCondition.class)
 	@Configuration
 	@EnableBinding(Source.class)
-	class PollableSourceInvoker {
+	public static class PollableSourceInvoker {
 
 		@Autowired
 		Supplier<?> supplierToInvoke;
@@ -71,52 +71,6 @@ public class FunctionalIntegrationConfiguration {
 	}
 
 	//Need to have another kind of Source invoker that uses IntegrationFlow in many app starters like ftp, file, jdbc etc.
-
-	class FunctionCondition extends SpringBootCondition {
-
-		@Override
-		public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-			try {
-				Function function = context.getBeanFactory().getBean(Function.class);
-			} catch (NoSuchBeanDefinitionException nsbde) {
-				return ConditionOutcome.noMatch("Function bean is not found");
-			}
-			return ConditionOutcome.match("Function bean is found");
-		}
-	}
-
-	class ConsumerCondition extends SpringBootCondition {
-
-		@Override
-		public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-			try {
-				Consumer consumer = context.getBeanFactory().getBean(Consumer.class);
-			} catch (NoSuchBeanDefinitionException nsbde) {
-				return ConditionOutcome.noMatch("Consumer bean is not found");
-			}
-			return ConditionOutcome.match("Consumer bean is found");
-		}
-	}
-
-
-	class PollableSourceCondition extends SpringBootCondition {
-
-		@Override
-		public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-			try {
-				Map<String, Object> pollableBeans = context.getBeanFactory().getBeansWithAnnotation(PollableSupplier.class);
-
-				Object next = pollableBeans.values().iterator().next();
-				if (next.getClass().isAssignableFrom(Supplier.class)) {
-					return ConditionOutcome.match("Pollable source bean is found");
-				} else {
-					return ConditionOutcome.noMatch("Pollable source bean is not found");
-				}
-			} catch (NoSuchBeanDefinitionException nsbde) {
-				return ConditionOutcome.noMatch("Pollable source bean is not found");
-			}
-		}
-	}
 
 
 }

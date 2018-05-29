@@ -184,10 +184,6 @@
 										<groupId>org.springframework.cloud.stream.app</groupId>
 										<artifactId>app-starters-micrometer-common</artifactId>
 									</dependency>
-									<dependency>
-										<groupId>org.springframework.cloud.stream.app</groupId>
-										<artifactId>app-starters-invoker</artifactId>
-									</dependency>
 								</additionalGlobalDependencies>
 								<additionalPlugins>
 									<plugin>

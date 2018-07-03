@@ -22,6 +22,7 @@
 		<module>app-starters-test-support</module>
 		<module>app-starters-postprocessor-common</module>
 		<module>app-starters-micrometer-common</module>
+		<module>app-starters-metadata-store-common</module>
 	</modules>
 
 </project>

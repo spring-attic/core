@@ -174,3 +174,8 @@ Additional configuration properties for `JdbcMetadataStore` are:
 
 $$metadata.store.jdbc.table-prefix:: $$Prefix for the custom table name.$$ *($$String$$, default: `$$INT_$$`)*
 $$metadata.store.jdbc.region:: $$Unique grouping identifier for messages persisted with this store.$$ *($$String$$, default: `$$DEFAULT$$`)*
+
+
+
+When no any of those technologies dependencies are preset, an in-memory `SimpleMetadataStore` is auto-configured.
+The target application can also provide its own `MetadataStore` bean to override any auto-configuration hooks.

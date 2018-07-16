@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.cloud.stream.app</groupId>
 	<artifactId>app-starters-core-dependencies</artifactId>
-	<version>2.0.1.BUILD-SNAPSHOT</version>
+	<version>2.0.1.RELEASE</version>
 	<packaging>pom</packaging>
 	<name>app-starters-core-dependencies</name>
 	<description>Spring Cloud Stream App Core BOM</description>
@@ -42,52 +42,52 @@
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-annotation-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-time-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-trigger-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-trigger-one-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-trigger-unlimited-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-file-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-ftp-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-postprocessor-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-micrometer-common</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-test-support</artifactId>
-				<version>2.0.1.BUILD-SNAPSHOT</version>
+				<version>2.0.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>

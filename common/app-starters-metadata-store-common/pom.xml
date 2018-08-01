@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
-			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<!--MongoDB-->
@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
@@ -60,6 +60,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
+			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.logging.log4j</groupId>
@@ -82,10 +83,12 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-geode</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>geode-spring-boot-starter</artifactId>
+			<optional>true</optional>
 		</dependency>-->
 
 		<!--JDBC-->
@@ -97,7 +100,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
-			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>

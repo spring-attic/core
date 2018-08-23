@@ -3,11 +3,18 @@
 	<parent>
 		<artifactId>app-starters-common</artifactId>
 		<groupId>org.springframework.cloud.stream.app</groupId>
-		<version>2.0.2.BUILD-SNAPSHOT</version>
+		<version>2.0.3.BUILD-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>app-starters-time-common</artifactId>
 	<name>app-starters-time-common</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.0.7.RELEASE</version>
+		</dependency>
+	</dependencies>
 
 </project>

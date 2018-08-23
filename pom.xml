@@ -3,20 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.cloud.stream.app</groupId>
 	<artifactId>app-starters-build</artifactId>
-	<version>2.0.2.BUILD-SNAPSHOT</version>
+	<version>2.0.3.BUILD-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>app-starters-build</name>
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-build</artifactId>
-		<version>2.0.3.RELEASE</version>
+		<version>2.1.0.BUILD-SNAPSHOT</version>
 		<relativePath />
 	</parent>
 	<scm>
 		<connection>scm:git:git://github.com/spring-cloud-stream-app-starters/core.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/spring-cloud-stream-app-starters/core.git
 		</developerConnection>
-		<url>https://github.com/spring-cloud-stream-app-starters/core</url>
+		<url>https://github.com/#-app-starters/core</url>
 	</scm>
 
 	<properties>
@@ -24,7 +24,7 @@
 		<app-starters-docs-plugin.version>2.0.0.RELEASE	</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>1.0.0.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
-		<app-starters-core-dependencies.version>2.0.2.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
+		<app-starters-core-dependencies.version>2.0.3.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
 	<modules>
@@ -37,7 +37,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud.stream.app</groupId>
 				<artifactId>app-starters-core-dependencies</artifactId>
-				<version>2.0.2.BUILD-SNAPSHOT</version>
+				<version>${app-starters-core-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

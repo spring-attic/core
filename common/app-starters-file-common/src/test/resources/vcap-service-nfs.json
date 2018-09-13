@@ -1,0 +1,23 @@
+{
+  "nfs": [
+    {
+      "credentials": {},
+      "label": "nfs",
+      "name": "nfs",
+      "instance_name": "nfs",
+      "plan": "Existing",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
+        "nfs"
+      ],
+      "volume_mounts": [
+        {
+          "container_dir": "/vcap/foo/bar",
+          "device_type": "shared",
+          "mode": "rw"
+        }
+      ]
+    }
+  ]
+}

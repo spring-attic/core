@@ -17,7 +17,10 @@
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -32,6 +35,12 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 public class TaskLaunchRequestProperties {
+
+	static final String SPRING_DATASOURCE_URL_PROPERTY_KEY = "spring.datasource.url";
+
+	static final String SPRING_DATASOURCE_USERNAME_PROPERTY_KEY = "spring.datasource.username";
+
+	static final String SPRING_DATASOURCE_PASSWORD_PROPERTY_KEY = "spring.datasource.password";
 
 	/**
 	 * The URI of the task artifact to be applied to the TaskLaunchRequest.
@@ -141,5 +150,16 @@ public class TaskLaunchRequestProperties {
 
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
+	}
+
+	Map<String, String> springDataSourceConnectionProperties() {
+		Map<String, String> dataSourceConnectionProperties = new HashMap<>();
+
+		dataSourceConnectionProperties.put(SPRING_DATASOURCE_URL_PROPERTY_KEY, this.getDataSourceUrl());
+		dataSourceConnectionProperties.put(SPRING_DATASOURCE_USERNAME_PROPERTY_KEY, this.getDataSourceUserName());
+		dataSourceConnectionProperties.put(SPRING_DATASOURCE_PASSWORD_PROPERTY_KEY, getDataSourcePassword());
+
+		return Collections.unmodifiableMap(dataSourceConnectionProperties);
+
 	}
 }

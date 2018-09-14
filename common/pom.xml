@@ -23,7 +23,7 @@
 		<module>app-starters-postprocessor-common</module>
 		<module>app-starters-micrometer-common</module>
 		<module>app-starters-metadata-store-common</module>
-		<module>app-starters-tasklaunch-request-common</module>
+		<module>app-starters-task-launch-request-common</module>
 	</modules>
 
 </project>

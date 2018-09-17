@@ -20,12 +20,22 @@ import java.nio.file.Paths;
 
 import org.springframework.integration.file.FileHeaders;
 import org.springframework.messaging.Message;
+import org.springframework.util.Assert;
 
 /**
  * @author David Turanski
  **/
 public abstract class FilePathUtils {
+	/**
+	 * Returns a remote file path for a message with a file name as payload and {@link FileHeaders}.REMOTE_DIRECTORY
+	 * included as a message header.
+	 *
+	 * @param message
+	 * @return
+	 */
 	public static String getRemoteFilePath(Message message) {
+		Assert.isTrue(message.getHeaders().containsKey(FileHeaders.REMOTE_DIRECTORY),
+			String.format("message missing required header %s", FileHeaders.REMOTE_DIRECTORY));
 		String filename = (String) message.getPayload();
 		String remoteDirectory = (String) message.getHeaders().get(FileHeaders.REMOTE_DIRECTORY);
 		return getPath(remoteDirectory, filename);

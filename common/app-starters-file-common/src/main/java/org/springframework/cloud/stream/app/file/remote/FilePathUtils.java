@@ -19,6 +19,7 @@ package org.springframework.cloud.stream.app.file.remote;
 import java.nio.file.Paths;
 
 import org.springframework.integration.file.FileHeaders;
+import org.springframework.lang.Nullable;
 import org.springframework.messaging.Message;
 import org.springframework.util.Assert;
 
@@ -33,12 +34,14 @@ public abstract class FilePathUtils {
 	 * @param message
 	 * @return
 	 */
+	@Nullable
 	public static String getRemoteFilePath(Message message) {
-		Assert.isTrue(message.getHeaders().containsKey(FileHeaders.REMOTE_DIRECTORY),
-			String.format("message missing required header %s", FileHeaders.REMOTE_DIRECTORY));
-		String filename = (String) message.getPayload();
-		String remoteDirectory = (String) message.getHeaders().get(FileHeaders.REMOTE_DIRECTORY);
-		return getPath(remoteDirectory, filename);
+		if (message.getHeaders().containsKey(FileHeaders.REMOTE_DIRECTORY)) {
+			String filename = (String) message.getPayload();
+			String remoteDirectory = (String) message.getHeaders().get(FileHeaders.REMOTE_DIRECTORY);
+			return getPath(remoteDirectory, filename);
+		}
+		return null;
 	}
 
 	public static String getLocalFilePath(String localDirectory, String filename) {

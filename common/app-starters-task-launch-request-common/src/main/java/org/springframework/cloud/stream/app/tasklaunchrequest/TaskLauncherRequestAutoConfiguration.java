@@ -24,7 +24,6 @@ import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.task.launcher.TaskLaunchRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +46,21 @@ public class TaskLauncherRequestAutoConfiguration {
 	}
 
 	@Bean
-	public Function<Message<?>, Message<?>> standaloneTaskLaunchRequest() {
+	public TaskLaunchRequestTransformer taskLaunchRequestTransformer(
+		TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider) {
+		return message -> {
+			switch (taskLaunchRequestTypeProvider.taskLaunchRequestType()) {
+			case DATAFLOW:
+				return dataflowTaskLaunchRequest().apply(message);
+			case STANDALONE:
+				return standaloneTaskLaunchRequest().apply(message);
+			default:
+				return message;
+			}
+		};
+	}
+
+	private Function<Message<?>, Message<?>> standaloneTaskLaunchRequest() {
 		return message -> {
 			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
@@ -62,8 +75,7 @@ public class TaskLauncherRequestAutoConfiguration {
 		};
 	}
 
-	@Bean
-	public Function<Message<?>, Message<?>> dataflowTaskLaunchRequest() {
+	private Function<Message<?>, Message<?>> dataflowTaskLaunchRequest() {
 		return message -> {
 			Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
 
@@ -90,19 +102,8 @@ public class TaskLauncherRequestAutoConfiguration {
 	}
 
 	@Bean
-	public TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider(
-		@Value("${spring.cloud.stream.function.definition:}") String functionDefinition) {
-		return () -> {
-			if (functionDefinition.contains("dataflowTaskLaunchRequest")) {
-				return TaskLaunchRequestType.DATAFLOW;
-			}
-
-			if (functionDefinition.contains("standaloneTaskLaunchRequest")) {
-				return TaskLaunchRequestType.STANDALONE;
-			}
-
-			return TaskLaunchRequestType.NONE;
-		};
+	public TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider() {
+		return () -> taskLaunchRequestProperties.getTaskLauncherOutput();
 	}
 
 	private TaskLaunchRequestContext taskLaunchRequestContext(Message<?> message) {
@@ -112,7 +113,7 @@ public class TaskLauncherRequestAutoConfiguration {
 		return taskLaunchRequestContext != null ? taskLaunchRequestContext : new TaskLaunchRequestContext();
 	}
 
-	static class DataFlowTaskLaunchRequest {
+	public static class DataFlowTaskLaunchRequest {
 		@JsonProperty("args")
 		private List<String> commandlineArguments = new ArrayList<>();
 		@JsonProperty("deploymentProps")

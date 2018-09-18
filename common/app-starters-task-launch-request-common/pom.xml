@@ -11,12 +11,11 @@
 
 
 	<properties>
-		<spring-integration.version>5.1.0.BUILD-SNAPSHOT</spring-integration.version>
+		<spring-integration.version>5.1.0.M2</spring-integration.version>
 		<!-- RC2, SNAPSHOT fail ATM. Could be related to SPR-17160 -->
 		<spring-framework.version>5.1.0.RC1</spring-framework.version>
-		<spring-cloud-function.version>2.0.0.BUILD-SNAPSHOT</spring-cloud-function.version>
-		<project-reactor.version>3.2.0.M4</project-reactor.version>
-		<spring-cloud-stream.version>2.1.0.BUILD-SNAPSHOT</spring-cloud-stream.version>
+
+		<spring-cloud-stream.version>2.1.0.M2</spring-cloud-stream.version>
 	</properties>
 
 	<artifactId>app-starters-task-launch-request-common</artifactId>
@@ -53,21 +52,6 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring-framework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-function-context</artifactId>
-				<version>${spring-cloud-function.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-function-core</artifactId>
-				<version>${spring-cloud-function.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.projectreactor</groupId>
-				<artifactId>reactor-core</artifactId>
-				<version>${project-reactor.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

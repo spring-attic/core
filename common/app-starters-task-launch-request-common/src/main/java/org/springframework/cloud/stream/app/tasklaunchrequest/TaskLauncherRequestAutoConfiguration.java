@@ -67,7 +67,7 @@ public class TaskLauncherRequestAutoConfiguration {
 	private Function<Message<?>, Message<?>> standaloneTaskLaunchRequest() {
 		return message -> {
 			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
-			log.info(String.format("creating a STANDALONE task launch request for uri", taskLaunchRequestProperties
+			log.info(String.format("creating a STANDALONE task launch request for uri %s", taskLaunchRequestProperties
 					.getResourceUri()));
 			TaskLaunchRequest outboundPayload = new TaskLaunchRequest(taskLaunchRequestProperties.getResourceUri(),
 				taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties),
@@ -85,7 +85,7 @@ public class TaskLauncherRequestAutoConfiguration {
 	private Function<Message<?>, Message<?>> dataflowTaskLaunchRequest() {
 		return message -> {
 			Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
-			log.info(String.format("creating a DATAFLOW task launch request for task ", taskLaunchRequestProperties
+			log.info(String.format("creating a DATAFLOW task launch request for task %s", taskLaunchRequestProperties
 				.getApplicationName()));
 			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
@@ -111,7 +111,7 @@ public class TaskLauncherRequestAutoConfiguration {
 
 	@Bean
 	public TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider() {
-		return () -> taskLaunchRequestProperties.getTaskLauncherOutput();
+		return () -> taskLaunchRequestProperties.getTaskLaunchRequest();
 	}
 
 	private TaskLaunchRequestContext taskLaunchRequestContext(Message<?> message) {

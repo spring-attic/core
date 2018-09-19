@@ -88,7 +88,7 @@ public class TaskLaunchRequestProperties {
 	/**
 	 * Set to output a task launch request. Default is `NONE`.
 	 */
-	private TaskLaunchRequestType taskLauncherOutput = TaskLaunchRequestType.NONE;
+	private TaskLaunchRequestType taskLaunchRequest = TaskLaunchRequestType.NONE;
 
 	@NotNull
 	public String getResourceUri() {
@@ -157,13 +157,13 @@ public class TaskLaunchRequestProperties {
 		this.applicationName = applicationName;
 	}
 
-	public TaskLaunchRequestType getTaskLauncherOutput() {
-		return taskLauncherOutput;
+	public TaskLaunchRequestType getTaskLaunchRequest() {
+		return taskLaunchRequest;
 	}
 
-	public void setTaskLauncherOutput(
-		TaskLaunchRequestType taskLauncherOutput) {
-		this.taskLauncherOutput = taskLauncherOutput;
+	public void setTaskLaunchRequest(
+		TaskLaunchRequestType taskLaunchRequest) {
+		this.taskLaunchRequest = taskLaunchRequest;
 	}
 
 	Map<String, String> springDataSourceConnectionProperties() {

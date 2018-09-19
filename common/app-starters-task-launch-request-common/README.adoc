@@ -1,0 +1,70 @@
+=== `Task Launch Request Support` Common Module
+
+This artifact contains a Spring Boot auto-configuration providing components to produce a Task Launch Request payload
+. In theory any message source can be used to launch a Task. The task launch request is one of two structured types,
+specified by the `task-launch-request` property (DATAFLOW, STANDALONE) which can be consumed by one of the available
+task-launcher-sinks.
+
+==== Standalone Task Launch Request
+Standalone requests work with any of the platform specific `tasklauncher` sinks, e.g.,
+`tasklauncher-cloudfoundry`, `tasklauncher-local`, etc. These do not require a Data Flow server to be deployed in the
+ corresponding environment but embedd the platform specific `Deployer`. This means that request must include at a
+ minimum the uri of a jar which can run as a Spring Cloud Task application and data source connection information to access a Task
+ Repository installed on the platform. Users may set property values for command line arguments, environment
+ variables, and deployment properties.
+
+==== Data Flow Task Launch Request
+
+Data Flow requests require a Data Flow server with an existing task definition. The Data Flow server takes care of
+registering the task application bits and the task is a named resource. The only required field is the task name,
+given by `application-name`, and
+the Data Flow server uri (`http://localhost:9393` by default).
+. Users may set property values for command line arguments and deployment properties.
+The Data Flow server is responsible for Enviroment variables and the task repository configuration.
+
+=== Task Launch Request Context
+In addition to user provided values, the app may programmatically provide specific values. For any task launched by the
+`sftp` source presumably requires information derived from the source message, such as the remote and or local file
+path, etc. In this case, the app creates a `TaskLaunchRequestContext` instance and sets it as a message header
+`TaskLaunchRequestContext.HEADER-NAME`. The `TaskLaunchRequestTransformer` will use this to enrich the user provided
+command line arguments, and/or environment variables, depending on the `TaskLaunchRequestType`.
+
+=== Configuration
+To plug this into an app, include a dependency on this module
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.springframework.cloud.stream.app</groupId>
+    <artifactId>app-starters-task-launch-request-common</artifactId>
+</dependency>
+----
+
+Create a `@ConfigurationProperties(prefix="myapp")` extending `TaskLaunchRequestProperties` to bind an appropriate
+prefix.
+
+Set `myapp.task-launch-request` and autowire `TaskLaunchRequestTransformer` to enable the transformation, e,g,:
+
+[source,java]
+----
+@Bean
+public IntegrationFlow flow(TaskLaunchRequestTransformer taskLaunchRequestTransformer) {
+    return IntegrationFlows.from(input()).transform(taskLaunchRequestTransformer).channel(output());
+}
+----
+
+or to provide a TaskLaunchRequestContext:
+
+[source,java]
+----
+@Bean
+public IntegrationFlow flow(TaskLaunchRequestTransformer taskLaunchRequestTransformer) {
+    return IntegrationFlows.from(input())
+    .transform(addTaskLaunchRequestContextHeader) //App provided
+    .transform(taskLaunchRequestTransformer)
+    .channel(output());
+}
+----
+
+`TaskLaunchRequestIntegrationTests` provides some examples.
+

@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.springframework.cloud.task.launcher.TaskLaunchRequest;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +40,8 @@ import org.springframework.util.MimeTypeUtils;
  **/
 @Configuration
 public class TaskLauncherRequestAutoConfiguration {
+
+	private static final Log log = LogFactory.getLog(TaskLaunchRequestTransformer.class);
 
 	private final TaskLaunchRequestProperties taskLaunchRequestProperties;
 
@@ -63,11 +67,14 @@ public class TaskLauncherRequestAutoConfiguration {
 	private Function<Message<?>, Message<?>> standaloneTaskLaunchRequest() {
 		return message -> {
 			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
-
+			log.info(String.format("creating a STANDALONE task launch request for uri", taskLaunchRequestProperties
+					.getResourceUri()));
 			TaskLaunchRequest outboundPayload = new TaskLaunchRequest(taskLaunchRequestProperties.getResourceUri(),
 				taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties),
 				taskLaunchRequestContext.mergeEnvironmentProperties(taskLaunchRequestProperties),
 				DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties), null);
+
+
 
 			MessageBuilder<?> builder = MessageBuilder.withPayload(outboundPayload).copyHeaders(message.getHeaders());
 
@@ -78,7 +85,8 @@ public class TaskLauncherRequestAutoConfiguration {
 	private Function<Message<?>, Message<?>> dataflowTaskLaunchRequest() {
 		return message -> {
 			Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
-
+			log.info(String.format("creating a DATAFLOW task launch request for task ", taskLaunchRequestProperties
+				.getApplicationName()));
 			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
 			DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();

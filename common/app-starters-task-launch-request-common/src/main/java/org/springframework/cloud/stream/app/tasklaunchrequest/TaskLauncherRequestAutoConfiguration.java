@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.task.launcher.TaskLaunchRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,7 @@ import org.springframework.util.MimeTypeUtils;
  * @author David Turanski
  **/
 @Configuration
+@EnableConfigurationProperties(TaskLaunchRequestProperties.class)
 public class TaskLauncherRequestAutoConfiguration {
 
 	private static final Log log = LogFactory.getLog(TaskLaunchRequestTransformer.class);
@@ -111,7 +113,7 @@ public class TaskLauncherRequestAutoConfiguration {
 
 	@Bean
 	public TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider() {
-		return () -> taskLaunchRequestProperties.getTaskLaunchRequest();
+		return () -> taskLaunchRequestProperties.getFormat();
 	}
 
 	private TaskLaunchRequestContext taskLaunchRequestContext(Message<?> message) {

@@ -62,8 +62,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=STANDALONE", "--spring.jmx.enabled=false",
-				"--task.resource-uri=file:///some.jar", "--task.data-source-password=pass")) {
+			.run("--task.launch.request.format=STANDALONE", "--spring.jmx.enabled=false",
+				"--task.launch.request.resource-uri=file:///some.jar", "--task.launch.request.data-source-password=pass")) {
 
 			TaskLaunchRequest taskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				TaskLaunchRequest.class);
@@ -86,8 +86,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=DATAFLOW", "--spring.jmx.enabled=false",
-				"--task.application-name=foo")) {
+			.run("--task.launch.request.format=DATAFLOW", "--spring.jmx.enabled=false",
+				"---task.launch.request.application-name=foo")) {
 
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
@@ -103,9 +103,9 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=DATAFLOW", "--spring.jmx.enabled=false",
-				"--task.application-name=foo", "--task.parameters=foo=bar,baz=boo",
-				"--task" + ".deploymentProperties=count=3")) {
+			.run("--task.launch.request.format=DATAFLOW", "--spring.jmx.enabled=false",
+				"---task.launch.request.application-name=foo", "---task.launch.request.parameters=foo=bar,baz=boo",
+				"---task.launch.request.deploymentProperties=count=3")) {
 
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
@@ -122,8 +122,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=STANDALONE", "--spring.jmx.enabled=false",
-				"--task.resource-uri=file:///some.jar")) {
+			.run("---task.launch.request.format=STANDALONE", "--spring.jmx.enabled=false",
+				"---task.launch.request.resource-uri=file:///some.jar")) {
 
 			TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
 			taskLaunchRequestContext.addCommandLineArg("localFile=/some/file/path");
@@ -150,8 +150,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=STANDALONE", "--spring.jmx.enabled=false",
-				"--task.resource-uri=file:///some.jar", "--enhanceTLRContext=true")) {
+			.run("---task.launch.request.format=STANDALONE", "--spring.jmx.enabled=false",
+				"---task.launch.request.resource-uri=file:///some.jar", "--enhanceTLRContext=true")) {
 
 			TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
 
@@ -176,8 +176,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=DATAFLOW", "--spring.jmx.enabled=false",
-				"--task.application-name=foo", "--task.parameters=foo=bar,baz=boo")) {
+			.run("---task.launch.request.format=DATAFLOW", "--spring.jmx.enabled=false",
+				"---task.launch.request.application-name=foo", "---task.launch.request.parameters=foo=bar,baz=boo")) {
 
 			TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
 
@@ -198,8 +198,8 @@ public class TaskLaunchRequestIntegrationTests {
 
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
-			.run("--task.task-launcher-output=DATAFLOW", "--spring.jmx.enabled=false",
-				"--task.application-name=foo", "--enhanceTLRContext=true")) {
+			.run("---task.launch.request.format=DATAFLOW", "--spring.jmx.enabled=false",
+				"---task.launch.request.application-name=foo", "--enhanceTLRContext=true")) {
 
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
@@ -245,7 +245,6 @@ public class TaskLaunchRequestIntegrationTests {
 
 	@EnableAutoConfiguration(exclude = { TestSupportBinderAutoConfiguration.class,
 		MessageCollectorAutoConfiguration.class })
-	@EnableConfigurationProperties(TestApp.MyTaskLaunchRequestProperties.class)
 	@EnableBinding(Source.class)
 	static class TestApp {
 
@@ -270,9 +269,6 @@ public class TaskLaunchRequestIntegrationTests {
 			return new TaskLaunchRequestContextProvider(taskLaunchRequestTypeProvider, enhance);
 		}
 
-		@ConfigurationProperties(prefix = "task")
-		static class MyTaskLaunchRequestProperties extends TaskLaunchRequestProperties {
-		}
 
 		static class TaskLaunchRequestContextProvider implements MessageProcessor<Message> {
 

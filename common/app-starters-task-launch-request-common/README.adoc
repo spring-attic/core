@@ -2,7 +2,8 @@
 
 This artifact contains a Spring Boot auto-configuration providing components to produce a Task Launch Request payload
 . In theory any message source can be used to launch a Task. The task launch request is one of two structured types,
-specified by the `task-launch-request` property (DATAFLOW, STANDALONE) which can be consumed by one of the available
+specified by the `task.launch.request.format` property (DATAFLOW, STANDALONE) which can be consumed by one of the
+available
 task-launcher-sinks.
 
 ==== Standalone Task Launch Request
@@ -40,10 +41,7 @@ To plug this into an app, include a dependency on this module
 </dependency>
 ----
 
-Create a `@ConfigurationProperties(prefix="myapp")` extending `TaskLaunchRequestProperties` to bind an appropriate
-prefix.
-
-Set `myapp.task-launch-request` and autowire `TaskLaunchRequestTransformer` to enable the transformation, e,g,:
+Set `task.launch.request.format` and autowire `TaskLaunchRequestTransformer` to enable the transformation, e,g,:
 
 [source,java]
 ----

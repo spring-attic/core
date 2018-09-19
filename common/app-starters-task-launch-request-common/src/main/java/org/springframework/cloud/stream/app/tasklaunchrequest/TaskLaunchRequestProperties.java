@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -34,6 +35,7 @@ import org.springframework.validation.annotation.Validated;
  * @author David Turanski
  */
 @Validated
+@ConfigurationProperties("task.launch.request")
 public class TaskLaunchRequestProperties {
 
 	static final String SPRING_DATASOURCE_URL_PROPERTY_KEY = "spring.datasource.url";
@@ -88,7 +90,7 @@ public class TaskLaunchRequestProperties {
 	/**
 	 * Set to output a task launch request. Default is `NONE`.
 	 */
-	private TaskLaunchRequestType taskLaunchRequest = TaskLaunchRequestType.NONE;
+	private TaskLaunchRequestType format = TaskLaunchRequestType.NONE;
 
 	@NotNull
 	public String getResourceUri() {
@@ -157,13 +159,13 @@ public class TaskLaunchRequestProperties {
 		this.applicationName = applicationName;
 	}
 
-	public TaskLaunchRequestType getTaskLaunchRequest() {
-		return taskLaunchRequest;
+	public TaskLaunchRequestType getFormat() {
+		return format;
 	}
 
-	public void setTaskLaunchRequest(
-		TaskLaunchRequestType taskLaunchRequest) {
-		this.taskLaunchRequest = taskLaunchRequest;
+	public void setFormat(
+		TaskLaunchRequestType format) {
+		this.format = format;
 	}
 
 	Map<String, String> springDataSourceConnectionProperties() {

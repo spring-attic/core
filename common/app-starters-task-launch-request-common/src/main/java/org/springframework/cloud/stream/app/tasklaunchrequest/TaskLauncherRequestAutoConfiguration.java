@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.logging.Log;
@@ -57,50 +56,43 @@ public class TaskLauncherRequestAutoConfiguration {
 		return message -> {
 			switch (taskLaunchRequestTypeProvider.taskLaunchRequestType()) {
 			case DATAFLOW:
-				return dataflowTaskLaunchRequest().apply(message);
+				return dataflowTaskLaunchRequest(message);
 			case STANDALONE:
-				return standaloneTaskLaunchRequest().apply(message);
+				return standaloneTaskLaunchRequest(message);
 			default:
 				return message;
 			}
 		};
 	}
 
-	private Function<Message<?>, Message<?>> standaloneTaskLaunchRequest() {
-		return message -> {
-			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
-			log.info(String.format("creating a STANDALONE task launch request for uri %s", taskLaunchRequestProperties
-					.getResourceUri()));
-			TaskLaunchRequest outboundPayload = new TaskLaunchRequest(taskLaunchRequestProperties.getResourceUri(),
-				taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties),
-				taskLaunchRequestContext.mergeEnvironmentProperties(taskLaunchRequestProperties),
-				DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties), null);
-
-
-
-			MessageBuilder<?> builder = MessageBuilder.withPayload(outboundPayload).copyHeaders(message.getHeaders());
-
-			return adjustHeaders(builder, message.getHeaders()).build();
-		};
+	private Message standaloneTaskLaunchRequest(Message message) {
+		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
+		log.info(String.format("creating a STANDALONE task launch request for uri %s", taskLaunchRequestProperties
+			.getResourceUri()));
+		TaskLaunchRequest outboundPayload = new TaskLaunchRequest(taskLaunchRequestProperties.getResourceUri(),
+			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties),
+			taskLaunchRequestContext.mergeEnvironmentProperties(taskLaunchRequestProperties),
+			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties), null);
+		MessageBuilder<?> builder = MessageBuilder.withPayload(outboundPayload).copyHeaders(message.getHeaders());
+		return adjustHeaders(builder, message.getHeaders()).build();
 	}
 
-	private Function<Message<?>, Message<?>> dataflowTaskLaunchRequest() {
-		return message -> {
-			Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
-			log.info(String.format("creating a DATAFLOW task launch request for task %s", taskLaunchRequestProperties
-				.getApplicationName()));
-			TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
+	private Message dataflowTaskLaunchRequest(Message message) {
 
-			DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();
-			taskLaunchRequest.setCommandlineArguments(
-				taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties));
-			taskLaunchRequest.setDeploymentProperties(
-				DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties));
-			taskLaunchRequest.setApplicationName(taskLaunchRequestProperties.getApplicationName());
-			MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
+		Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
+		log.info(String.format("creating a DATAFLOW task launch request for task %s", taskLaunchRequestProperties
+			.getApplicationName()));
+		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
-			return adjustHeaders(builder, message.getHeaders()).build();
-		};
+		DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();
+		taskLaunchRequest.setCommandlineArguments(
+			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties));
+		taskLaunchRequest.setDeploymentProperties(
+			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties));
+		taskLaunchRequest.setApplicationName(taskLaunchRequestProperties.getApplicationName());
+		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
+
+		return adjustHeaders(builder, message.getHeaders()).build();
 	}
 
 	private MessageBuilder<?> adjustHeaders(MessageBuilder<?> builder, MessageHeaders messageHeaders) {

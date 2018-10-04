@@ -19,14 +19,9 @@ package org.springframework.cloud.stream.app.tasklaunchrequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
-
-import org.springframework.util.StringUtils;
 
 /**
  * @author David Turanski
@@ -35,13 +30,7 @@ public class TaskLaunchRequestContext {
 
 	public static final String HEADER_NAME = TaskLaunchRequestContext.class.getName();
 
-	private Map<String, String> environment = new HashMap();
-
 	private Set<String> commandLineArgs = new HashSet<>();
-
-	public Map<String, String> getEnvironment() {
-		return this.environment;
-	}
 
 	public Collection<String> getCommandLineArgs() {
 		return this.commandLineArgs;
@@ -55,47 +44,14 @@ public class TaskLaunchRequestContext {
 		this.commandLineArgs.addAll(args);
 	}
 
-	public void addEnvironmentVariable(String key, String value) {
-		this.environment.put(key, value);
-	}
-
-	public void addEnvironment(Map<String, String> env) {
-		this.environment.putAll(env);
-	}
-
-	/**
-	 * Merge environment variables with default and any configured environment variables.
-	 *
-	 * @param taskLaunchRequestProperties the configuration properties.
-	 * @return the environment.
-	 */
-	Map<String, String> mergeEnvironmentProperties(TaskLaunchRequestProperties taskLaunchRequestProperties) {
-		Map<String, String> environmentProperties = getEnvironment();
-
-		environmentProperties.putAll(taskLaunchRequestProperties.springDataSourceConnectionProperties());
-
-		String providedProperties = taskLaunchRequestProperties.getEnvironmentProperties();
-
-		if (StringUtils.hasText(providedProperties)) {
-			String[] splitProperties = StringUtils.split(providedProperties, ",");
-			Properties properties = StringUtils.splitArrayElementsIntoProperties(splitProperties, "=");
-
-			for (String key : properties.stringPropertyNames()) {
-				environmentProperties.put(key, properties.getProperty(key));
-			}
-		}
-
-		return Collections.unmodifiableMap(environmentProperties);
-	}
-
 	/**
 	 * Merge command line args with any configured command line args.
 	 *
 	 * @param taskLaunchRequestProperties the configuration properties.
 	 * @return the args.
 	 */
-	List<String> mergeCommandLineArgs(TaskLaunchRequestProperties taskLaunchRequestProperties) {
-		this.commandLineArgs.addAll(taskLaunchRequestProperties.getParameters());
+	List<String> mergeCommandLineArgs(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
+		this.commandLineArgs.addAll(taskLaunchRequestProperties.getArgs());
 		return Collections.unmodifiableList(new ArrayList<>(commandLineArgs));
 	}
 

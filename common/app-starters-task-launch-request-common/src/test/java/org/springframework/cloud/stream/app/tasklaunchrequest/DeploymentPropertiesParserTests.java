@@ -31,7 +31,7 @@ public class DeploymentPropertiesParserTests {
 
 	@Test
 	public void testParseSimpleDeploymentProperty() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
+		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
 
 		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value");
 
@@ -45,7 +45,7 @@ public class DeploymentPropertiesParserTests {
 
 	@Test
 	public void testParseSimpleDeploymentPropertyMultipleValues() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
+		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
 		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value1,value2");
 
 		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
@@ -59,7 +59,7 @@ public class DeploymentPropertiesParserTests {
 
 	@Test
 	public void testParseMultipleDeploymentPropertiesSingleValue() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
+		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
 		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value1,app.sftp.other.param=value2");
 
 		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
@@ -75,7 +75,7 @@ public class DeploymentPropertiesParserTests {
 
 	@Test
 	public void testParseMultipleDeploymentPropertiesMultipleValues() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
+		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
 		taskLaunchRequestProperties.setDeploymentProperties(
 			"app.sftp.param=value1,value2,app.sftp.other.param=other1,other2");
 

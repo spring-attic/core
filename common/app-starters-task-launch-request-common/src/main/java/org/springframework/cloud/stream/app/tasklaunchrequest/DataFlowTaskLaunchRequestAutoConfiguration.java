@@ -26,7 +26,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.task.launcher.TaskLaunchRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -39,49 +38,27 @@ import org.springframework.util.MimeTypeUtils;
  * @author David Turanski
  **/
 @Configuration
-@EnableConfigurationProperties(TaskLaunchRequestProperties.class)
-public class TaskLauncherRequestAutoConfiguration {
+@EnableConfigurationProperties(DataflowTaskLaunchRequestProperties.class)
+public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 	private static final Log log = LogFactory.getLog(TaskLaunchRequestTransformer.class);
 
-	private final TaskLaunchRequestProperties taskLaunchRequestProperties;
+	private final DataflowTaskLaunchRequestProperties taskLaunchRequestProperties;
 
-	public TaskLauncherRequestAutoConfiguration(TaskLaunchRequestProperties taskLaunchRequestProperties) {
+	public DataFlowTaskLaunchRequestAutoConfiguration(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
 		this.taskLaunchRequestProperties = taskLaunchRequestProperties;
 	}
 
 	@Bean
-	public TaskLaunchRequestTransformer taskLaunchRequestTransformer(
-		TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider) {
-		return message -> {
-			switch (taskLaunchRequestTypeProvider.taskLaunchRequestType()) {
-			case DATAFLOW:
-				return dataflowTaskLaunchRequest(message);
-			case STANDALONE:
-				return standaloneTaskLaunchRequest(message);
-			default:
-				return message;
-			}
-		};
-	}
-
-	private Message standaloneTaskLaunchRequest(Message message) {
-		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
-		log.info(String.format("creating a STANDALONE task launch request for uri %s", taskLaunchRequestProperties
-			.getResourceUri()));
-		TaskLaunchRequest outboundPayload = new TaskLaunchRequest(taskLaunchRequestProperties.getResourceUri(),
-			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties),
-			taskLaunchRequestContext.mergeEnvironmentProperties(taskLaunchRequestProperties),
-			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties), null);
-		MessageBuilder<?> builder = MessageBuilder.withPayload(outboundPayload).copyHeaders(message.getHeaders());
-		return adjustHeaders(builder, message.getHeaders()).build();
+	public TaskLaunchRequestTransformer taskLaunchRequestTransformer() {
+		return message -> dataflowTaskLaunchRequest(message);
 	}
 
 	private Message dataflowTaskLaunchRequest(Message message) {
 
-		Assert.hasText(taskLaunchRequestProperties.getApplicationName(), "'applicationName' is required");
-		log.info(String.format("creating a DATAFLOW task launch request for task %s", taskLaunchRequestProperties
-			.getApplicationName()));
+		Assert.hasText(taskLaunchRequestProperties.getTaskName(), "'taskName' is required");
+		log.info(String.format("creating a task launch request for task %s", taskLaunchRequestProperties
+			.getTaskName()));
 		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
 		DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();
@@ -89,7 +66,7 @@ public class TaskLauncherRequestAutoConfiguration {
 			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties));
 		taskLaunchRequest.setDeploymentProperties(
 			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties));
-		taskLaunchRequest.setApplicationName(taskLaunchRequestProperties.getApplicationName());
+		taskLaunchRequest.setApplicationName(taskLaunchRequestProperties.getTaskName());
 		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
 
 		return adjustHeaders(builder, message.getHeaders()).build();
@@ -101,11 +78,6 @@ public class TaskLauncherRequestAutoConfiguration {
 			builder.removeHeader(TaskLaunchRequestContext.HEADER_NAME);
 		}
 		return builder;
-	}
-
-	@Bean
-	public TaskLaunchRequestTypeProvider taskLaunchRequestTypeProvider() {
-		return () -> taskLaunchRequestProperties.getFormat();
 	}
 
 	private TaskLaunchRequestContext taskLaunchRequestContext(Message<?> message) {
@@ -142,7 +114,7 @@ public class TaskLauncherRequestAutoConfiguration {
 		}
 
 		public void setApplicationName(String applicationName) {
-			Assert.hasText(applicationName, "'applicationName' cannot be blank.");
+			Assert.hasText(applicationName, "'taskName' cannot be blank.");
 			this.applicationName = applicationName;
 		}
 

@@ -27,7 +27,7 @@ import org.springframework.util.StringUtils;
  **/
 abstract class DeploymentPropertiesParser {
 
-	static Map<String, String> parseDeploymentProperties(TaskLaunchRequestProperties taskLaunchRequestProperties) {
+	static Map<String, String> parseDeploymentProperties(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
 		ArrayList<String> pairs = new ArrayList<>();
 		Map<String, String> deploymentProperties = new HashMap<>();
 

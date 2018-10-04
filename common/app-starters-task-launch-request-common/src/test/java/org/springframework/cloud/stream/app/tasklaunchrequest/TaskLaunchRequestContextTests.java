@@ -17,12 +17,10 @@
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.entry;
 
 /**
  * @author David Turanski
@@ -30,40 +28,14 @@ import static org.assertj.core.api.Java6Assertions.entry;
 public class TaskLaunchRequestContextTests {
 	@Test
 	public void testMergeCommandLineArgs() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
-		taskLaunchRequestProperties.setParameters(Arrays.asList("abc", "klm", "xyz", "pqr"));
+		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
+		taskLaunchRequestProperties.setArgs(Arrays.asList("abc", "klm", "xyz", "pqr"));
 
 		TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
 		taskLaunchRequestContext.addCommandLineArgs(Arrays.asList("foo", "bar"));
 		assertThat(
 			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties)).containsExactlyInAnyOrder("abc",
 			"klm", "xyz", "pqr", "foo", "bar");
-	}
-
-	@Test
-	public void testMergeEnvironment() {
-		TaskLaunchRequestProperties taskLaunchRequestProperties = new TaskLaunchRequestProperties();
-		TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
-
-		taskLaunchRequestProperties.setEnvironmentProperties("foo=bar,boo=baz");
-		taskLaunchRequestContext.addEnvironmentVariable("cat", "caz");
-		taskLaunchRequestContext.addEnvironmentVariable("car", "cdr");
-
-		Map<String, String> environmenent = taskLaunchRequestContext.mergeEnvironmentProperties
-			(taskLaunchRequestProperties);
-
-		assertThat(environmenent).containsOnly(
-			entry("foo", "bar"),
-			entry("boo", "baz"),
-			entry("cat", "caz"),
-			entry("car", "cdr"),
-			entry(TaskLaunchRequestProperties.SPRING_DATASOURCE_PASSWORD_PROPERTY_KEY, taskLaunchRequestProperties
-				.getDataSourcePassword()),
-			entry(TaskLaunchRequestProperties.SPRING_DATASOURCE_USERNAME_PROPERTY_KEY, taskLaunchRequestProperties
-				.getDataSourceUserName()),
-			entry(TaskLaunchRequestProperties.SPRING_DATASOURCE_URL_PROPERTY_KEY, taskLaunchRequestProperties
-				.getDataSourceUrl()));
-
 	}
 
 }

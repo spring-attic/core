@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.springframework.cloud.stream.app.tasklaunchrequest.TaskLauncherRequestAutoConfiguration
+  org.springframework.cloud.stream.app.tasklaunchrequest.DataFlowTaskLaunchRequestAutoConfiguration

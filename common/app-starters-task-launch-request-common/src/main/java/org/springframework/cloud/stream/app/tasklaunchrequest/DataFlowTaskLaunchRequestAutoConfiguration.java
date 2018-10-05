@@ -66,7 +66,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties));
 		taskLaunchRequest.setDeploymentProperties(
 			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties));
-		taskLaunchRequest.setApplicationName(taskLaunchRequestProperties.getTaskName());
+		taskLaunchRequest.setTaskName(taskLaunchRequestProperties.getTaskName());
 		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
 
 		return adjustHeaders(builder, message.getHeaders()).build();
@@ -93,7 +93,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		@JsonProperty("deploymentProps")
 		private Map<String, String> deploymentProperties = new HashMap<>();
 		@JsonProperty("name")
-		private String applicationName;
+		private String taskName;
 
 		public void setCommandlineArguments(List<String> commandlineArguments) {
 			Assert.notNull(commandlineArguments, "'commandLineArguments' cannot be null.");
@@ -113,13 +113,13 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 			return this.deploymentProperties;
 		}
 
-		public void setApplicationName(String applicationName) {
-			Assert.hasText(applicationName, "'taskName' cannot be blank.");
-			this.applicationName = applicationName;
+		public void setTaskName(String taskName) {
+			Assert.hasText(taskName, "'taskName' cannot be blank.");
+			this.taskName = taskName;
 		}
 
-		public String getApplicationName() {
-			return this.applicationName;
+		public String getTaskName() {
+			return this.taskName;
 		}
 	}
 }

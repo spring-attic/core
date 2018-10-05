@@ -63,7 +63,7 @@ public class TaskLaunchRequestIntegrationTests {
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
 
-			assertThat(dataFlowTaskLaunchRequest.getApplicationName()).isEqualTo("foo");
+			assertThat(dataFlowTaskLaunchRequest.getTaskName()).isEqualTo("foo");
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).hasSize(0);
 			assertThat(dataFlowTaskLaunchRequest.getDeploymentProperties()).hasSize(0);
 		}
@@ -81,7 +81,7 @@ public class TaskLaunchRequestIntegrationTests {
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
 
-			assertThat(dataFlowTaskLaunchRequest.getApplicationName()).isEqualTo("foo");
+			assertThat(dataFlowTaskLaunchRequest.getTaskName()).isEqualTo("foo");
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).containsExactlyInAnyOrder("foo=bar",
 				"baz=boo");
 			assertThat(dataFlowTaskLaunchRequest.getDeploymentProperties()).containsOnly(entry("count", "3"));
@@ -104,7 +104,7 @@ public class TaskLaunchRequestIntegrationTests {
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				taskLaunchRequestContext, DataFlowTaskLaunchRequest.class);
 
-			assertThat(dataFlowTaskLaunchRequest.getApplicationName()).isEqualTo("foo");
+			assertThat(dataFlowTaskLaunchRequest.getTaskName()).isEqualTo("foo");
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).containsExactlyInAnyOrder("foo=bar",
 				"baz=boo", "localFile=/some/file/path", "process=true");
 		}
@@ -121,7 +121,7 @@ public class TaskLaunchRequestIntegrationTests {
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				DataFlowTaskLaunchRequest.class);
 
-			assertThat(dataFlowTaskLaunchRequest.getApplicationName()).isEqualTo("foo");
+			assertThat(dataFlowTaskLaunchRequest.getTaskName()).isEqualTo("foo");
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).hasSize(1);
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).containsExactly("runtimeArg");
 		}

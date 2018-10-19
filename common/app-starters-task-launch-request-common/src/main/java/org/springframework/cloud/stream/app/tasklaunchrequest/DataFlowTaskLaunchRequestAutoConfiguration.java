@@ -90,8 +90,10 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 	public static class DataFlowTaskLaunchRequest {
 		@JsonProperty("args")
 		private List<String> commandlineArguments = new ArrayList<>();
+
 		@JsonProperty("deploymentProps")
 		private Map<String, String> deploymentProperties = new HashMap<>();
+
 		@JsonProperty("name")
 		private String taskName;
 

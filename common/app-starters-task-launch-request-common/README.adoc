@@ -1,0 +1,56 @@
+=== `Data Flow Task Launch Request Support` Common Module
+
+This artifact contains a Spring Boot auto-configuration providing components to produce a Task Launch Request payload.
+In theory any message source can be used to launch a Task. The task launch request is compatible with the
+task-launcher-dataflow sink.
+
+
+==== Data Flow Task Launch Request
+
+Data Flow Task Launch Request requests require a Data Flow server with an existing task definition.
+The only required field is the task name, given by `task.launch.request.task-name`. Users may optionally
+provide values for task command line arguments and deployment properties.
+
+=== Task Launch Request Context
+In addition to user provided values, the stream app may programmatically provide specific values. For example, any task
+launched by the `sftp` source should provide information derived from the source message, such as the local file
+path. In this case, the app creates a `TaskLaunchRequestContext` instance and sets it as a message header
+`TaskLaunchRequestContext.HEADER-NAME`. The `TaskLaunchRequestTransformer` will use the TaskLaunchRequestContext to
+enrich the user provided command line arguments.
+
+=== Configuration
+To enable this capability for a stream app, include a dependency on this module
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.springframework.cloud.stream.app</groupId>
+    <artifactId>app-starters-task-launch-request-common</artifactId>
+</dependency>
+----
+
+Autowire `TaskLaunchRequestTransformer` to enable the transformation, e,g,:
+
+[source,java]
+----
+@Bean
+public IntegrationFlow flow(TaskLaunchRequestTransformer taskLaunchRequestTransformer) {
+    return IntegrationFlows.from(input()).transform(taskLaunchRequestTransformer).channel(output());
+}
+----
+
+To provide a `TaskLaunchRequestContext`:
+
+[source,java]
+----
+@Bean
+public IntegrationFlow flow(TaskLaunchRequestTransformer taskLaunchRequestTransformer) {
+    return IntegrationFlows.from(input())
+    .transform(addTaskLaunchRequestContextHeader()) //App provided
+    .transform(taskLaunchRequestTransformer)
+    .channel(output());
+}
+----
+
+`TaskLaunchRequestIntegrationTests` provides some examples.
+

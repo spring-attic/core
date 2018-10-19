@@ -1,7 +1,7 @@
 === `Data Flow Task Launch Request Support` Common Module
 
-This artifact contains a Spring Boot auto-configuration providing components to produce a Task Launch Request payload
-. In theory any message source can be used to launch a Task. The task launch request is compatible with the
+This artifact contains a Spring Boot auto-configuration providing components to produce a Task Launch Request payload.
+In theory any message source can be used to launch a Task. The task launch request is compatible with the
 task-launcher-dataflow sink.
 
 

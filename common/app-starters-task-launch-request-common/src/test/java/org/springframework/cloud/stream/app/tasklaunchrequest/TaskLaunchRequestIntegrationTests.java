@@ -152,11 +152,8 @@ public class TaskLaunchRequestIntegrationTests {
 	@Configuration
 	@EnableAutoConfiguration
 	static class TestApp {
-		@Bean
-		public TaskLaunchRequestContextProvider taskLaunchRequestContextProvider(@Value("${enhanceTLRContext:false}")
-			boolean enhance) {
-			return new TaskLaunchRequestContextProvider(enhance);
-		}
+
+		@Value("${enhanceTLRContext:false}") boolean enhance;
 
 		@Bean
 		public MessageChannel input() {
@@ -172,33 +169,22 @@ public class TaskLaunchRequestIntegrationTests {
 		TaskLaunchRequestTransformer taskLaunchRequestTransformer;
 
 		@Bean
-		public IntegrationFlow flow(TaskLaunchRequestContextProvider provider) {
+		public IntegrationFlow flow() {
 
-			return IntegrationFlows.from(input()).transform(provider).transform(taskLaunchRequestTransformer)
+			return IntegrationFlows.from(input())
+				.enrichHeaders(
+					h -> h.headerFunction(TaskLaunchRequestContext.HEADER_NAME,
+						m -> {
+							if (enhance) {
+								TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
+								taskLaunchRequestContext.addCommandLineArg("runtimeArg");
+								return taskLaunchRequestContext;
+							}
+							return null;
+						}
+					))
+				.transform(taskLaunchRequestTransformer)
 				.channel(output()).get();
-		}
-
-		static class TaskLaunchRequestContextProvider implements MessageProcessor<Message> {
-
-			private final boolean enhance;
-
-			TaskLaunchRequestContextProvider(boolean enhance) {
-				this.enhance = enhance;
-			}
-
-			@Override
-			public Message<?> processMessage(Message<?> message) {
-				if (enhance) {
-
-					TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
-					taskLaunchRequestContext.addCommandLineArg("runtimeArg");
-
-					message = MessageBuilder.fromMessage(message).setHeader(TaskLaunchRequestContext.HEADER_NAME,
-						taskLaunchRequestContext).build();
-				}
-
-				return message;
-			}
 		}
 	}
 }

@@ -105,7 +105,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		}
 
 		public void setDeploymentProperties(Map<String, String> deploymentProperties) {
-			Assert.notNull(commandlineArguments, "'deploymentProperties' cannot be null.");
+			Assert.notNull(deploymentProperties, "'deploymentProperties' cannot be null.");
 			this.deploymentProperties = deploymentProperties;
 		}
 

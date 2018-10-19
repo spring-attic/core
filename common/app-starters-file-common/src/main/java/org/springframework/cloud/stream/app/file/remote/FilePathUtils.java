@@ -28,11 +28,11 @@ import org.springframework.util.Assert;
  **/
 public abstract class FilePathUtils {
 	/**
-	 * Returns a remote file path for a message with a file name as payload and {@link FileHeaders}.REMOTE_DIRECTORY
+	 * Returns a remote file path for a message with a file name as payload and {@link FileHeaders#REMOTE_DIRECTORY}
 	 * included as a message header.
 	 *
-	 * @param message
-	 * @return
+	 * @param message the message containing the header.
+	 * @return the file path.
 	 */
 	@Nullable
 	public static String getRemoteFilePath(Message message) {

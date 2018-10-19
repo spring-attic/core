@@ -19,6 +19,9 @@ package org.springframework.cloud.stream.app.tasklaunchrequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -41,13 +44,14 @@ public class DataflowTaskLaunchRequestProperties {
 	 * Comma delimited list of deployment properties to be applied to the
 	 * TaskLaunchRequest.
 	 */
-	private String deploymentProperties;
+	private String deploymentProperties = "";
 
 	/**
 	 * The Data Flow task name.
 	 */
 	private String taskName;
 
+	@NotNull
 	public List<String> getArgs() {
 		return this.args;
 	}
@@ -56,6 +60,7 @@ public class DataflowTaskLaunchRequestProperties {
 		this.args = args;
 	}
 
+	@NotNull
 	public String getDeploymentProperties() {
 		return this.deploymentProperties;
 	}
@@ -64,6 +69,7 @@ public class DataflowTaskLaunchRequestProperties {
 		this.deploymentProperties = deploymentProperties;
 	}
 
+	@NotBlank
 	public String getTaskName() {
 		return taskName;
 	}

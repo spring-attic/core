@@ -38,11 +38,26 @@ public class TaskLaunchRequestPropertiesTests {
 	@Test
 	public void deploymentPropertiesCanBeCustomized() {
 		DataflowTaskLaunchRequestProperties properties = getBatchProperties(
+			"task.launch.request.taskName=foo",
 			"task.launch.request.deploymentProperties:prop1=val1,prop2=val2");
 		assertThat(properties.getDeploymentProperties()).isEqualTo("prop1=val1,prop2=val2");
 	}
 
-	private DataflowTaskLaunchRequestProperties getBatchProperties(String var) {
+	@Test
+	public void parametersCanBeCustomized() {
+		DataflowTaskLaunchRequestProperties properties = getBatchProperties(
+			"task.launch.request.taskName=foo",
+			"task.launch.request.args:jp1=jpv1,jp2=jpv2");
+		List<String> args = properties.getArgs();
+
+		assertThat(args).isNotNull();
+		assertThat(args).hasSize(2);
+		assertThat(args.get(0)).isEqualTo("jp1=jpv1");
+		assertThat(args.get(1)).isEqualTo("jp2=jpv2");
+	}
+
+
+	private DataflowTaskLaunchRequestProperties getBatchProperties(String... var) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
 		if (var != null) {
@@ -53,18 +68,6 @@ public class TaskLaunchRequestPropertiesTests {
 		context.refresh();
 
 		return context.getBean(DataflowTaskLaunchRequestProperties.class);
-	}
-
-	@Test
-	public void parametersCanBeCustomized() {
-		DataflowTaskLaunchRequestProperties properties = getBatchProperties("task.launch.request.args:jp1=jpv1,"
-			+ "jp2=jpv2");
-		List<String> args = properties.getArgs();
-
-		assertThat(args).isNotNull();
-		assertThat(args).hasSize(2);
-		assertThat(args.get(0)).isEqualTo("jp1=jpv1");
-		assertThat(args.get(1)).isEqualTo("jp2=jpv2");
 	}
 
 	@Configuration

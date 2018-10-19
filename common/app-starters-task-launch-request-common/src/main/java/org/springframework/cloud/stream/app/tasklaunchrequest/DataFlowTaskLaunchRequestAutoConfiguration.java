@@ -98,7 +98,6 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		private String taskName;
 
 		public void setCommandlineArguments(List<String> commandlineArguments) {
-			Assert.notNull(commandlineArguments, "'commandLineArguments' cannot be null.");
 			this.commandlineArguments = commandlineArguments;
 		}
 
@@ -107,7 +106,6 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		}
 
 		public void setDeploymentProperties(Map<String, String> deploymentProperties) {
-			Assert.notNull(deploymentProperties, "'deploymentProperties' cannot be null.");
 			this.deploymentProperties = deploymentProperties;
 		}
 
@@ -116,7 +114,6 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		}
 
 		public void setTaskName(String taskName) {
-			Assert.hasText(taskName, "'taskName' cannot be blank.");
 			this.taskName = taskName;
 		}
 

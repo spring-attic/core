@@ -21,18 +21,24 @@ import org.junit.runner.RunWith;
 
 import org.springframework.test.context.TestPropertySource;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 /**
  * @author Christian Tzolov
  */
 @RunWith(Enclosed.class)
 public class SecurityCommonTest {
 
-	@TestPropertySource(properties = { "spring.cloud.security.enabled=false" })
-	public static class SimpleTests extends AbstractSecurityCommonTest {
+	@TestPropertySource(properties = {
+			"spring.cloud.security.enabled=false",
+			"management.endpoints.web.exposure.include=health,info"})
+	public static class SimpleTests extends AbstractSecurityCommonTests {
 
 		@Test
 		public void testOne() throws Exception {
-			System.out.println(httpSourceSecurityConfiguration);
+			this.mvc.perform(get("/info")).andExpect(status().isOk());
+			//this.mvc.perform(get("/info")).andExpect(status().isOk()).andExpect(content().string("Hello World"));
 		}
 
 	}

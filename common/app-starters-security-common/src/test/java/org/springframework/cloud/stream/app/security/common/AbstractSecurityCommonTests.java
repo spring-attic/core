@@ -21,19 +21,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Controller;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * @author Christian Tzolov
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = AbstractSecurityCommonTest.AutoConfigurationApplication.class)
-public class AbstractSecurityCommonTest {
+@SpringBootTest(classes = AbstractSecurityCommonTests.AutoConfigurationApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class AbstractSecurityCommonTests {
+
+	//@Autowired
+	//protected SecurityCommonConfiguration.HttpSourceSecurityConfiguration httpSourceSecurityConfiguration;
+
+	//@Autowired
+	//protected Processor processor;
+
+	//@Autowired
+	//protected MessageCollector messageCollector;
 
 	@Autowired
-	protected SecurityCommonConfiguration.HttpSourceSecurityConfiguration httpSourceSecurityConfiguration;
+	protected MockMvc mvc;
 
 	@SpringBootApplication
+	@Controller
+	//@EnableBinding(Processor.class)
 	public static class AutoConfigurationApplication {
 		public static void main(String[] args) {
 			SpringApplication.run(AutoConfigurationApplication.class, args);

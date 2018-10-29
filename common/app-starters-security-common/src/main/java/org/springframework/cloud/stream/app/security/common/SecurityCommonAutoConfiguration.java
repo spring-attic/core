@@ -10,15 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author Artem Bilan
  */
 @Configuration
-public class SecurityCommonConfiguration {
-
+public class SecurityCommonAutoConfiguration {
 
 	/**
 	 * The custom {@link WebSecurityConfigurerAdapter} to disable security in the application
-	 * if {@code http.enableSecurity = false} (default).
-	 * When {@code http.enableSecurity = true} and {@code http.enableCsrf = false} (default),
-	 * the CSRF protection is disabled in the application.
-	 * If both options are {@code true}, then this configuration falls back to the default
+	 * if {@code spring.cloud.security.enabled = false} (default).
+	 * When {@code spring.cloud.security.enabled = true} then this configuration falls back to the default
 	 * Spring Security configuration.
 	 * @see org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration
 	 */
@@ -28,21 +25,13 @@ public class SecurityCommonConfiguration {
 		@Value("${spring.cloud.security.enabled:false}")
 		private Boolean enableSecurity;
 
-		//@Value("${spring.cloud.security.csrf.enabled:false}")
-		//private Boolean enableCsrf;
-
 		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-
+		protected void configure(HttpSecurity httpSecurity) throws Exception {
 			if (!this.enableSecurity) {
-				http.requestMatcher(request -> false);
+				httpSecurity.requestMatcher(request -> false);
 			}
-			//else if (!this.enableCsrf) {
-			//	super.configure(http);
-			//	http.csrf().disable();
-			//}
 			else {
-				super.configure(http);
+				super.configure(httpSecurity);
 			}
 		}
 	}

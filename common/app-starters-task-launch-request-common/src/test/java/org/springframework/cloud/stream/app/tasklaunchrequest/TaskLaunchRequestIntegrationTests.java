@@ -18,6 +18,7 @@ package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ import static org.springframework.cloud.stream.app.tasklaunchrequest.DataFlowTas
 /**
  * @author David Turanski
  **/
+@Ignore
 public class TaskLaunchRequestIntegrationTests {
 
 	@Test

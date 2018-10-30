@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.curator.test.TestingServer;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -60,6 +61,7 @@ import com.amazonaws.services.dynamodbv2.model.DescribeTableResult;
  * @since 2.0.2
  */
 @RunWith(Parameterized.class)
+@Ignore
 public class MetadataStoreAutoConfigurationTests {
 
 	private final static List<Class<? extends ConcurrentMetadataStore>> METADATA_STORE_CLASSES =

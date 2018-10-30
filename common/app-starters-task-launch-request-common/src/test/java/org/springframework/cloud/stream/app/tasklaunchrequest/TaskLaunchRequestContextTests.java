@@ -18,6 +18,7 @@ package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author David Turanski
  **/
+@Ignore
 public class TaskLaunchRequestContextTests {
 	@Test
 	public void testMergeCommandLineArgs() {

@@ -14,10 +14,10 @@
 	<name>app-starters-metadata-store-common</name>
 
 	<properties>
-		<aws-java-sdk.version>1.11.336</aws-java-sdk.version>
+		<aws-java-sdk.version>1.11.439</aws-java-sdk.version>
 		<spring-integration-aws.version>2.0.0.RELEASE</spring-integration-aws.version>
 		<spring-integration-hazelcast.version>1.0.0.RELEASE</spring-integration-hazelcast.version>
-		<curator.version>2.11.1</curator.version>
+		<curator.version>4.0.1</curator.version>
 	</properties>
 
 	<dependencies>
@@ -112,38 +112,6 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-zookeeper</artifactId>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.curator</groupId>
-					<artifactId>curator-recipes</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.curator</groupId>
-					<artifactId>curator-framework</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.curator</groupId>
-					<artifactId>curator-client</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-recipes</artifactId>
-			<version>${curator.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-framework</artifactId>
-			<version>${curator.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-client</artifactId>
-			<version>${curator.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

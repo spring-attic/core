@@ -37,11 +37,11 @@ import static org.junit.Assert.assertTrue;
  * @author Artem Bilan
  */
 @RunWith(Enclosed.class)
-public class SecurityCommonTest {
+public class SecurityCommonTests {
 
 
 	@TestPropertySource(properties = {
-			"spring.cloud.security.enabled=true",
+			"spring.cloud.stream.security.enabled=true",
 			"management.endpoints.web.exposure.include=health,info,env",
 			"info.name=MY TEST APP"})
 	public static class SecurityEnabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
@@ -78,7 +78,7 @@ public class SecurityCommonTest {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.cloud.security.enabled=false",
+			"spring.cloud.stream.security.enabled=false",
 			"management.endpoints.web.exposure.include=health,info,env",
 			"info.name=MY TEST APP" })
 	public static class SecurityDisabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
@@ -115,7 +115,7 @@ public class SecurityCommonTest {
 
 	@TestPropertySource(properties = {
 			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.security.enabled=true",
+			"spring.cloud.stream.security.enabled=true",
 			"management.endpoints.web.exposure.include=health,info"})
 	public static class SecurityEnabledManagementSecurityDisabledUnauthorizedAccessTests extends AbstractSecurityCommonTests {
 
@@ -150,7 +150,7 @@ public class SecurityCommonTest {
 
 	@TestPropertySource(properties = {
 			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.security.enabled=true",
+			"spring.cloud.stream.security.enabled=true",
 			"management.endpoints.web.exposure.include=health,info,env",
 			"info.name=MY TEST APP" })
 	public static class SecurityEnabledManagementSecurityDisabledAuthorizedAccessTests extends AbstractSecurityCommonTests {

@@ -43,9 +43,10 @@ public class SecurityCommonAutoConfiguration {
 	 * When {@code spring.cloud.security.enabled = true} (default) then this configuration falls back to the default
 	 * Spring Security configuration.
 	 * @see org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration
+	 * @see org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
 	 */
 	@Configuration
-	@ConditionalOnProperty(name = "spring.cloud.security.enabled", havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(name = "spring.cloud.stream.security.enabled", havingValue = "false", matchIfMissing = true)
 	protected static class DisableSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		@Override
@@ -70,11 +71,11 @@ public class SecurityCommonAutoConfiguration {
 			super(ConfigurationPhase.PARSE_CONFIGURATION);
 		}
 
-		@ConditionalOnProperty(name = "spring.cloud.security.enabled", havingValue = "true", matchIfMissing = true)
+		@ConditionalOnProperty(name = "spring.cloud.stream.security.enabled", havingValue = "true")
 		static class SecurityEnabled {
 		}
 
-		@ConditionalOnProperty(name = "spring.cloud.security.csrf-enabled", havingValue = "false")
+		@ConditionalOnProperty(name = "spring.cloud.stream.security.csrf-enabled", havingValue = "false")
 		static class HttpCsrfDisabled {
 		}
 	}

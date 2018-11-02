@@ -18,9 +18,11 @@ package org.springframework.cloud.stream.app.security.common;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -29,12 +31,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 public abstract class AbstractSecurityCommonTests {
 
 	@Autowired
 	protected TestRestTemplate restTemplate;
 
-	@SpringBootApplication
+	@SpringBootConfiguration
+	@EnableAutoConfiguration
 	public static class AutoConfigurationApplication {
 	}
 }

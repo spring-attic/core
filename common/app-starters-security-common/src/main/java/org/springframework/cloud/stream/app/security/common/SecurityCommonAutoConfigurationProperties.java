@@ -16,7 +16,6 @@
 package org.springframework.cloud.stream.app.security.common;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * {@code SecurityCommonAutoConfiguration} properties.
@@ -24,15 +23,14 @@ import org.springframework.validation.annotation.Validated;
  * @author Christian Tzolov
  * @author Artem Bilan
  */
-@ConfigurationProperties("spring.cloud.security")
-@Validated
+@ConfigurationProperties("spring.cloud.security.security")
 public class SecurityCommonAutoConfigurationProperties {
 
 
 	/**
 	 * The security enabling flag.
 	 */
-	private boolean enabled = true;
+	private boolean enabled = false;
 
 	/**
 	 * The security CSRF enabling flag. Makes sense only if 'enableSecurity = true'.

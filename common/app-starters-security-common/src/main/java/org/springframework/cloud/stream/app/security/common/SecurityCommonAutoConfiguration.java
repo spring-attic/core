@@ -28,6 +28,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /**
  * @author Christian Tzolov
  * @author Artem Bilan
+ *
+ * @since 2.1
  */
 @Configuration
 @AutoConfigureBefore(name = SecurityCommonAutoConfiguration.MANAGEMENT_WEB_SECURITY_AUTO_CONFIGURATION_CLASS)

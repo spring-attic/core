@@ -39,7 +39,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Enclosed.class)
 public class SecurityCommonTests {
 
-
 	@TestPropertySource(properties = {
 			"spring.cloud.stream.security.enabled=true",
 			"management.endpoints.web.exposure.include=health,info,env",

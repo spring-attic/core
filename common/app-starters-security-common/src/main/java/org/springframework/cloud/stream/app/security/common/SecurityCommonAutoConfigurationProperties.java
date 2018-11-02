@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2018 the original author or authors.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,6 +22,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @author Christian Tzolov
  * @author Artem Bilan
+ *
+ * @since 2.1
  */
 @ConfigurationProperties("spring.cloud.stream.security")
 public class SecurityCommonAutoConfigurationProperties {

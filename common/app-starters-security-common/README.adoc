@@ -1,9 +1,7 @@
 === `App Starters Security` Common Module
 
-This artifact contains a Spring Boot auto-configuration to disable security in the application that set
-`spring.cloud.security.enabled = false` (default).
-If the `spring.cloud.security.enabled` property is explicitly set to `true` then this configuration falls back to the
-default Spring Security configuration.
+This artifact contains a Spring Boot auto-configuration to disable security in the application that set `spring.cloud.stream.security.enabled = false` (default).
+If the `spring.cloud.stream.security.enabled` property is explicitly set to `true` then this configuration falls back to the default Spring Security configuration.
 
 === Configuration
 To disable the security for a stream app, just include a dependency on this module
@@ -20,5 +18,4 @@ To disable the security for a stream app, just include a dependency on this modu
 Additional properties allow to further fine tune the security control.
 
 * `spring.cloud.stream.security.enabled` - `false` (default) surpasses the boot security
-* `spring.cloud.stream.security.csrf-enabled` - even with spring.cloud.stream.security.enabled set to true you can
-enable CQRS by setting csrf-enabled to false.
+* `spring.cloud.stream.security.csrf-enabled` - even with spring.cloud.stream.security.enabled set to true you can enable CQRS by setting csrf-enabled to false.

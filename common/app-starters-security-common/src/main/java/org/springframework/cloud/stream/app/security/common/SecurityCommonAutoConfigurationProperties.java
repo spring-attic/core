@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Christian Tzolov
  * @author Artem Bilan
  */
-@ConfigurationProperties("spring.cloud.security.security")
+@ConfigurationProperties("spring.cloud.stream.security")
 public class SecurityCommonAutoConfigurationProperties {
 
 
@@ -33,12 +33,12 @@ public class SecurityCommonAutoConfigurationProperties {
 	private boolean enabled = false;
 
 	/**
-	 * The security CSRF enabling flag. Makes sense only if 'enableSecurity = true'.
+	 * The security CSRF enabling flag. Makes sense only if security 'enabled` is `true'.
 	 */
 	private boolean csrfEnabled = true;
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -46,7 +46,7 @@ public class SecurityCommonAutoConfigurationProperties {
 	}
 
 	public boolean isCsrfEnabled() {
-		return csrfEnabled;
+		return this.csrfEnabled;
 	}
 
 	public void setCsrfEnabled(boolean csrfEnabled) {

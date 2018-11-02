@@ -39,8 +39,8 @@ public class SecurityCommonAutoConfiguration {
 
 	/**
 	 * The custom {@link WebSecurityConfigurerAdapter} to disable security in the application
-	 * if {@code spring.cloud.security.enabled = false}.
-	 * When {@code spring.cloud.security.enabled = true} (default) then this configuration falls back to the default
+	 * if {@code spring.cloud.security.enabled = false} (default).
+	 * When {@code spring.cloud.security.enabled = true} then this configuration falls back to the default
 	 * Spring Security configuration.
 	 * @see org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration
 	 * @see org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration

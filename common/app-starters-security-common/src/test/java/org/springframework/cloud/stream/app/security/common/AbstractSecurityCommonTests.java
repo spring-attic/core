@@ -18,38 +18,23 @@ package org.springframework.cloud.stream.app.security.common;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Controller;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * @author Christian Tzolov
+ * @author Artem Bilan
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = AbstractSecurityCommonTests.AutoConfigurationApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AbstractSecurityCommonTests {
-
-	//@Autowired
-	//protected SecurityCommonConfiguration.HttpSourceSecurityConfiguration httpSourceSecurityConfiguration;
-
-	//@Autowired
-	//protected Processor processor;
-
-	//@Autowired
-	//protected MessageCollector messageCollector;
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public abstract class AbstractSecurityCommonTests {
 
 	@Autowired
-	protected MockMvc mvc;
+	protected TestRestTemplate restTemplate;
 
 	@SpringBootApplication
-	@Controller
-	//@EnableBinding(Processor.class)
 	public static class AutoConfigurationApplication {
-		public static void main(String[] args) {
-			SpringApplication.run(AutoConfigurationApplication.class, args);
-		}
 	}
 }

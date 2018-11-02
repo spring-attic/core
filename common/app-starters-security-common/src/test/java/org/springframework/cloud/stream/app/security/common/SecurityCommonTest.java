@@ -15,31 +15,183 @@
  */
 package org.springframework.cloud.stream.app.security.common;
 
+import java.util.Map;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Christian Tzolov
+ * @author Artem Bilan
  */
 @RunWith(Enclosed.class)
 public class SecurityCommonTest {
 
+
 	@TestPropertySource(properties = {
-			"spring.cloud.security.enabled=false",
-			"management.endpoints.web.exposure.include=health,info"})
-	public static class SimpleTests extends AbstractSecurityCommonTests {
+			"spring.cloud.security.enabled=true",
+			"management.endpoints.web.exposure.include=health,info,env",
+			"info.name=MY TEST APP"})
+	public static class SecurityEnabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
 
 		@Test
-		public void testOne() throws Exception {
-			this.mvc.perform(get("/info")).andExpect(status().isOk());
-			//this.mvc.perform(get("/info")).andExpect(status().isOk()).andExpect(content().string("Hello World"));
+		@SuppressWarnings("rawtypes")
+		public void testHealthEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/health", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map health = response.getBody();
+			assertEquals("UP", health.get("status"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testInfoEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/info", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map info = response.getBody();
+			assertEquals("MY TEST APP", info.get("name"));
+		}
+
+		// The ManagementWebSecurityAutoConfiguration exposes only Info and Health endpoint not Env!
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testEnvEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
+			assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+			assertTrue(response.hasBody());
 		}
 
 	}
+
+	@TestPropertySource(properties = {
+			"spring.cloud.security.enabled=false",
+			"management.endpoints.web.exposure.include=health,info,env",
+			"info.name=MY TEST APP" })
+	public static class SecurityDisabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testHealthEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/health", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map health = response.getBody();
+			assertEquals("UP", health.get("status"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testInfoEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/info", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map info = response.getBody();
+			assertEquals("MY TEST APP", info.get("name"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testEnvEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+
+	}
+
+	@TestPropertySource(properties = {
+			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
+			"spring.cloud.security.enabled=true",
+			"management.endpoints.web.exposure.include=health,info"})
+	public static class SecurityEnabledManagementSecurityDisabledUnauthorizedAccessTests extends AbstractSecurityCommonTests {
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testHealthEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/health", Map.class);
+			assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map health = response.getBody();
+			assertEquals("Unauthorized", health.get("error"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testInfoEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/info", Map.class);
+			assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map info = response.getBody();
+			assertEquals("Unauthorized", info.get("error"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testEnvEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
+			assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+	}
+
+	@TestPropertySource(properties = {
+			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
+			"spring.cloud.security.enabled=true",
+			"management.endpoints.web.exposure.include=health,info,env",
+			"info.name=MY TEST APP" })
+	public static class SecurityEnabledManagementSecurityDisabledAuthorizedAccessTests extends AbstractSecurityCommonTests {
+
+		@Autowired
+		private SecurityProperties securityProperties;
+
+		@Before
+		public void before() {
+			restTemplate.getRestTemplate().getInterceptors().add(new BasicAuthenticationInterceptor(
+					securityProperties.getUser().getName(), securityProperties.getUser().getPassword()));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testHealthEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/health", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map health = response.getBody();
+			assertEquals("UP", health.get("status"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testInfoEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/info", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			Map info = response.getBody();
+			assertEquals("MY TEST APP", info.get("name"));
+		}
+
+		@Test
+		@SuppressWarnings("rawtypes")
+		public void testEnvEndpoint() {
+			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+
+	}
+
 }

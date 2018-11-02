@@ -16,8 +16,12 @@
 package org.springframework.cloud.stream.app.security.common;
 
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.AllNestedConditions;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -27,6 +31,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @AutoConfigureBefore(name = SecurityCommonAutoConfiguration.MANAGEMENT_WEB_SECURITY_AUTO_CONFIGURATION_CLASS)
+@EnableConfigurationProperties(SecurityCommonAutoConfigurationProperties.class)
 public class SecurityCommonAutoConfiguration {
 
 	public final static String MANAGEMENT_WEB_SECURITY_AUTO_CONFIGURATION_CLASS =
@@ -49,28 +54,28 @@ public class SecurityCommonAutoConfiguration {
 		}
 	}
 
-	//@Configuration
-	//@Conditional(OnHttpCsrfSecurityDisabled.class)
-	//protected static class DisableHttpCsrfSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	//
-	//	@Override
-	//	protected void configure(HttpSecurity http) throws Exception {
-	//		super.configure(http);
-	//		http.csrf().disable();
-	//	}
-	//}
-	//
-	//public static class OnHttpCsrfSecurityDisabled extends AllNestedConditions {
-	//	public OnHttpCsrfSecurityDisabled() {
-	//		super(ConfigurationPhase.REGISTER_BEAN);
-	//	}
-	//
-	//	@ConditionalOnProperty(name = "spring.cloud.security.enabled", havingValue = "true", matchIfMissing = true)
-	//	static class SecurityEnabled {
-	//	}
-	//
-	//	@ConditionalOnProperty(name = "spring.cloud.security.csrf.enabled", havingValue = "false")
-	//	static class HttpCsrfDisabled {
-	//	}
-	//}
+	@Configuration
+	@Conditional(OnHttpCsrfSecurityDisabled.class)
+	protected static class DisableHttpCsrfSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity httpSecurity) throws Exception {
+			super.configure(httpSecurity);
+			httpSecurity.csrf().disable();
+		}
+	}
+
+	public static class OnHttpCsrfSecurityDisabled extends AllNestedConditions {
+		public OnHttpCsrfSecurityDisabled() {
+			super(ConfigurationPhase.PARSE_CONFIGURATION);
+		}
+
+		@ConditionalOnProperty(name = "spring.cloud.security.enabled", havingValue = "true", matchIfMissing = true)
+		static class SecurityEnabled {
+		}
+
+		@ConditionalOnProperty(name = "spring.cloud.security.csrf-enabled", havingValue = "false")
+		static class HttpCsrfDisabled {
+		}
+	}
 }

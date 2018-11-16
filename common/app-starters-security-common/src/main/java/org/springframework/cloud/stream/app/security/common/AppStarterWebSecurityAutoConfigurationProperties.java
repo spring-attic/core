@@ -18,7 +18,7 @@ package org.springframework.cloud.stream.app.security.common;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * {@code SecurityCommonAutoConfiguration} properties.
+ * {@code DefaultAppsWebSecurityAutoConfiguration} properties.
  *
  * @author Christian Tzolov
  * @author Artem Bilan
@@ -26,13 +26,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2.1
  */
 @ConfigurationProperties("spring.cloud.stream.security")
-public class SecurityCommonAutoConfigurationProperties {
+public class AppStarterWebSecurityAutoConfigurationProperties {
 
 
 	/**
 	 * The security enabling flag.
 	 */
-	private boolean enabled = false;
+	private boolean enabled = true;
 
 	/**
 	 * The security CSRF enabling flag. Makes sense only if security 'enabled` is `true'.

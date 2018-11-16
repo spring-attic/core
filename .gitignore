@@ -25,3 +25,4 @@ dump.rdb
 coverage-error.log
 .apt_generated
 aws.credentials.properties
+my-logfile*

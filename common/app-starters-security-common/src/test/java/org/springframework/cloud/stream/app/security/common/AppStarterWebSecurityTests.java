@@ -18,6 +18,7 @@ package org.springframework.cloud.stream.app.security.common;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -30,6 +31,7 @@ import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -37,12 +39,12 @@ import static org.junit.Assert.assertTrue;
  * @author Artem Bilan
  */
 @RunWith(Enclosed.class)
-public class SecurityCommonTests {
+public class AppStarterWebSecurityTests {
 
 	@TestPropertySource(properties = {
-			"spring.cloud.stream.security.enabled=true",
-			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP"})
+			"management.endpoints.web.exposure.include=health,info,logfile,bindings,env",
+			"info.name=MY TEST APP",
+			"logging.file=my-logfile" })
 	public static class SecurityEnabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
 
 		@Test
@@ -65,6 +67,22 @@ public class SecurityCommonTests {
 			assertEquals("MY TEST APP", info.get("name"));
 		}
 
+		@Test
+		public void testLogFileEndpoint() {
+			ResponseEntity<String> response = this.restTemplate.getForEntity("/actuator/logfile", String.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			assertFalse(response.getBody().contains("<title>Please sign in</title>"));
+		}
+
+		@Test
+		@Ignore("TODO")
+		public void testBindingsEndpoint() {
+			ResponseEntity<?> response = this.restTemplate.getForEntity("/actuator/bindings", Object.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+
 		// The ManagementWebSecurityAutoConfiguration exposes only Info and Health endpoint not Env!
 		@Test
 		@SuppressWarnings("rawtypes")
@@ -78,8 +96,9 @@ public class SecurityCommonTests {
 
 	@TestPropertySource(properties = {
 			"spring.cloud.stream.security.enabled=false",
-			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP" })
+			"management.endpoints.web.exposure.include=health,info,logfile,bindings,env",
+			"info.name=MY TEST APP",
+			"logging.file=my-logfile" })
 	public static class SecurityDisabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
 
 		@Test
@@ -103,6 +122,13 @@ public class SecurityCommonTests {
 		}
 
 		@Test
+		public void testLogFileEndpoint() {
+			ResponseEntity<String> response = this.restTemplate.getForEntity("/actuator/logfile", String.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+
+		@Test
 		@SuppressWarnings("rawtypes")
 		public void testEnvEndpoint() {
 			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
@@ -113,9 +139,11 @@ public class SecurityCommonTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.stream.security.enabled=true",
-			"management.endpoints.web.exposure.include=health,info"})
+			"spring.autoconfigure.exclude=" +
+					"org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration"
+					+ ",org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration",
+			"management.endpoints.web.exposure.include=health,info,logfile,bindings",
+			"logging.file=my-logfile" })
 	public static class SecurityEnabledManagementSecurityDisabledUnauthorizedAccessTests extends AbstractSecurityCommonTests {
 
 		@Test
@@ -139,6 +167,14 @@ public class SecurityCommonTests {
 		}
 
 		@Test
+		public void testLogFileEndpoint() {
+			ResponseEntity<String> response = this.restTemplate.getForEntity("/actuator/logfile", String.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+			assertTrue(response.getBody().contains("<title>Please sign in</title>"));
+		}
+
+		@Test
 		@SuppressWarnings("rawtypes")
 		public void testEnvEndpoint() {
 			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
@@ -148,10 +184,11 @@ public class SecurityCommonTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.stream.security.enabled=true",
-			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP" })
+			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration"
+					+ ",org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration",
+			"management.endpoints.web.exposure.include=health,info,logfile,bindings,env",
+			"info.name=MY TEST APP",
+			"logging.file=my-logfile" })
 	public static class SecurityEnabledManagementSecurityDisabledAuthorizedAccessTests extends AbstractSecurityCommonTests {
 
 		@Autowired
@@ -184,6 +221,13 @@ public class SecurityCommonTests {
 		}
 
 		@Test
+		public void testLogFileEndpoint() {
+			ResponseEntity<String> response = this.restTemplate.getForEntity("/actuator/logfile", String.class);
+			assertEquals(HttpStatus.OK, response.getStatusCode());
+			assertTrue(response.hasBody());
+		}
+
+		@Test
 		@SuppressWarnings("rawtypes")
 		public void testEnvEndpoint() {
 			ResponseEntity<Map> response = this.restTemplate.getForEntity("/actuator/env", Map.class);
@@ -192,5 +236,4 @@ public class SecurityCommonTests {
 		}
 
 	}
-
 }

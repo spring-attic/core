@@ -51,7 +51,7 @@ public class SecurityCommonAutoConfiguration {
 	 */
 	@Configuration
 	@ConditionalOnProperty(name = "spring.cloud.stream.security.enabled", havingValue = "false", matchIfMissing = true)
-	@Order(Ordered.LOWEST_PRECEDENCE)
+	@Order(Ordered.LOWEST_PRECEDENCE-150)
 	protected static class DisableSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		@Override

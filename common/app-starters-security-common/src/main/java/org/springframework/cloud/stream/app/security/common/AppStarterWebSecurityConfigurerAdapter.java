@@ -20,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.actuate.info.InfoEndpoint;
-import org.springframework.boot.actuate.logging.LogFileWebEndpoint;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,13 +30,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  *
  * App Starter default configuration for web security when the actuator dependency is on the
  * classpath.
- * By default it allows unauthenticated access to the {@link HealthEndpoint}, {@link LogFileWebEndpoint}
- * {@link InfoEndpoint} and {@link BindingsEndpoint}.
+ * By default it allows unauthenticated access to the {@link HealthEndpoint} and {@link InfoEndpoint}.
  *
- * The {@code spring.cloud.stream.security.enabled} and {@code spring.cloud.stream.security.csrf-enabled}
+ * The {@code spring.cloud.stream.security.enabled} and {@code spring.cloud.app-starter-stream.security.csrf-enabled}
  * can be used to customize adapter's behavior
- * Setting {@code spring.cloud.stream.security.enabled = false} would surpass the security for the entire application.
- * For secured application setting {@code spring.cloud.stream.security.csrf-enabled = false} disables CSRF.
+ * Setting {@code spring.cloud.app-starter-stream.security.enabled = false} would surpass the security for the entire application.
+ * For secured application setting {@code spring.cloud.app-starter-stream.security.csrf-enabled = false} disables CSRF.
  *
  * If the user specifies their own {@link WebSecurityConfigurerAdapter}, this will back-off completely
  * and the user should specify all the bits that they want to configure as part of the custom security
@@ -60,8 +57,7 @@ public class AppStarterWebSecurityConfigurerAdapter extends WebSecurityConfigure
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.requestMatchers(
-						EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class,
-								LogFileWebEndpoint.class, BindingsEndpoint.class))
+						EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class))
 				.permitAll().anyRequest().authenticated()
 				.and().formLogin()
 				.and().httpBasic();

@@ -25,7 +25,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @since 2.1
  */
-@ConfigurationProperties("spring.cloud.stream.security")
+@ConfigurationProperties("spring.cloud.app-starter-stream.security")
 public class AppStarterWebSecurityAutoConfigurationProperties {
 
 

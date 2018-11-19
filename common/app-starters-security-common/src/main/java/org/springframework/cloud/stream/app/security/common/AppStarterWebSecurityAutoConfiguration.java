@@ -19,7 +19,6 @@ package org.springframework.cloud.stream.app.security.common;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.info.InfoEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.logging.LogFileWebEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -29,7 +28,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
-import org.springframework.cloud.stream.config.BindingsEndpointAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -46,8 +44,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @AutoConfigureBefore(value = { ManagementWebSecurityAutoConfiguration.class, SecurityAutoConfiguration.class })
 @AutoConfigureAfter({ HealthEndpointAutoConfiguration.class, InfoEndpointAutoConfiguration.class,
-		WebEndpointAutoConfiguration.class, LogFileWebEndpointAutoConfiguration.class,
-		BindingsEndpointAutoConfiguration.class, OAuth2ClientAutoConfiguration.class })
+		WebEndpointAutoConfiguration.class, OAuth2ClientAutoConfiguration.class })
 @Import({ AppStarterWebSecurityConfigurerAdapter.class, WebSecurityEnablerConfiguration.class })
 public class AppStarterWebSecurityAutoConfiguration {
 }

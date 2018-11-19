@@ -2,9 +2,9 @@
 
 Spring Boot auto-configuration to manage the web security of the application starters.
 
-It also provides default configuration for web security when the actuator dependency is on the classpath. By default it allows unauthenticated access to the `HealthEndpoint`, `LogFileWebEndpoint`, `InfoEndpoint` and `BindingsEndpoint`.
+It also provides default configuration for web security when the actuator dependency is on the classpath. By default it allows unauthenticated access to the `HealthEndpoint` and `InfoEndpoint`.
 
-The `spring.cloud.stream.security.enabled` and `spring.cloud.stream.security.csrf-enabled` can customize adapter's behavior. Setting `spring.cloud.stream.security.enabled = false` would completely surpass the security for the application. For secured application setting `spring.cloud.stream.security.csrf-enabled = false` would disable only the CSRF access.
+The `spring.cloud.app-starter-stream.security.enabled` and `spring.cloud.app-starter-stream.security.csrf-enabled` can customize adapter's behavior. Setting `spring.cloud.stream.security.enabled = false` would completely surpass the security for the application. For secured application setting `spring.cloud.app-starter-stream.security.csrf-enabled = false` would disable only the CSRF access.
 
 If the user specifies their own {@link WebSecurityConfigurerAdapter}, this will back-off completely and the user should specify all the bits that they want to configure as part of the custom security configuration.
 
@@ -23,5 +23,5 @@ Spring Cloud Stream application starters that inherit the `core` will have this 
 
 Additional properties allow to further fine tune the security control.
 
-* `spring.cloud.stream.security.enabled` - `false` surpasses the boot security.
-* `spring.cloud.stream.security.csrf-enabled` - even with spring.cloud.stream.security.enabled set to true you can enable CQRS by setting csrf-enabled to false.
+* `spring.cloud.app-starter-stream.security.enabled` - `false` surpasses the boot security.
+* `spring.cloud.app-starter-stream.security.csrf-enabled` - even with spring.cloud.app-starter-stream.security.enabled set to true you can enable CQRS by setting csrf-enabled to false.

@@ -17,6 +17,7 @@
 package org.springframework.cloud.stream.app.security.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * {@code spring.cloud.stream-app-starters.security.csrf-enabled} can be used to customize adapter's behavior
  *
  * If the security is enabled (e.g. spring.cloud.app-starter-stream.security.enabled = true) and the
- *  actuator dependency is on the classpath it falls back to ManagementWebSecurityAutoConfiguration
+ *  actuator dependency is on the classpath it falls back to {@link ManagementWebSecurityAutoConfiguration}
  * allowing unauthenticated access to the HealthEndpoint and InfoEndpoint.
  *
  * Setting {@code spring.cloud.app-starter-stream.security.enabled = false} would surpass the security

@@ -37,12 +37,11 @@ import static org.junit.Assert.assertTrue;
  * @author Artem Bilan
  */
 @RunWith(Enclosed.class)
-public class SecurityCommonTests {
+public class AppStarterWebSecurityTests {
 
 	@TestPropertySource(properties = {
-			"spring.cloud.stream.security.enabled=true",
 			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP"})
+			"info.name=MY TEST APP" })
 	public static class SecurityEnabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
 
 		@Test
@@ -77,9 +76,9 @@ public class SecurityCommonTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.cloud.stream.security.enabled=false",
+			"spring.cloud.streamapp.security.enabled=false",
 			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP" })
+			"info.name=MY TEST APP"})
 	public static class SecurityDisabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {
 
 		@Test
@@ -113,8 +112,9 @@ public class SecurityCommonTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.stream.security.enabled=true",
+			"spring.autoconfigure.exclude=" +
+					"org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration"
+					+ ",org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration",
 			"management.endpoints.web.exposure.include=health,info"})
 	public static class SecurityEnabledManagementSecurityDisabledUnauthorizedAccessTests extends AbstractSecurityCommonTests {
 
@@ -148,10 +148,10 @@ public class SecurityCommonTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-			"spring.cloud.stream.security.enabled=true",
+			"spring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration"
+					+ ",org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration",
 			"management.endpoints.web.exposure.include=health,info,env",
-			"info.name=MY TEST APP" })
+			"info.name=MY TEST APP"})
 	public static class SecurityEnabledManagementSecurityDisabledAuthorizedAccessTests extends AbstractSecurityCommonTests {
 
 		@Autowired
@@ -192,5 +192,4 @@ public class SecurityCommonTests {
 		}
 
 	}
-
 }

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.cloud.stream.app.security.common.SecurityCommonAutoConfiguration
+org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration

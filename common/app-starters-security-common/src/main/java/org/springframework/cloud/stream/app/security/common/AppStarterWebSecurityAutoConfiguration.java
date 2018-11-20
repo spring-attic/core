@@ -16,12 +16,14 @@
 
 package org.springframework.cloud.stream.app.security.common;
 
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.AnyNestedCondition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -40,10 +42,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @ConditionalOnMissingBean(WebSecurityConfigurerAdapter.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Conditional(AppStarterWebSecurityAutoConfiguration.OnHttpCsrfOrSecurityDisabled.class)
-@AutoConfigureBefore(name = {
-		"org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
-		"org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration"
-})
+@AutoConfigureBefore(value = { ManagementWebSecurityAutoConfiguration.class, SecurityAutoConfiguration.class })
 @Import({ AppStarterWebSecurityConfigurerAdapter.class, WebSecurityEnablerConfiguration.class })
 public class AppStarterWebSecurityAutoConfiguration {
 

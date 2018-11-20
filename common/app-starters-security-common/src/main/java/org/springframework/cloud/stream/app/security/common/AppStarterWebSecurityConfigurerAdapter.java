@@ -57,14 +57,14 @@ public class AppStarterWebSecurityConfigurerAdapter extends WebSecurityConfigure
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		super.configure(http);
-		if (this.securityProperties.isCsrfEnabled() == false) {
+		if (!this.securityProperties.isCsrfEnabled()) {
 			http.csrf().disable();
 		}
 	}
 
 	@Override
 	public void configure(WebSecurity builder) {
-		if (this.securityProperties.isEnabled() == false) {
+		if (!this.securityProperties.isEnabled()) {
 			builder.ignoring().antMatchers("/**");
 		}
 	}

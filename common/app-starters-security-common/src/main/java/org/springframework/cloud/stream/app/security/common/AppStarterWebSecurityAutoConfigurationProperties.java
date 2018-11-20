@@ -18,14 +18,14 @@ package org.springframework.cloud.stream.app.security.common;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * {@code DefaultAppsWebSecurityAutoConfiguration} properties.
+ * {@code AppStarterWebSecurityAutoConfiguration} properties.
  *
  * @author Christian Tzolov
  * @author Artem Bilan
  *
  * @since 2.1
  */
-@ConfigurationProperties("spring.cloud.app-starter-stream.security")
+@ConfigurationProperties("spring.cloud.stream-app-starters.security")
 public class AppStarterWebSecurityAutoConfigurationProperties {
 
 

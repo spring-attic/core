@@ -16,19 +16,16 @@
 
 package org.springframework.cloud.stream.app.security.common;
 
-import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.info.InfoEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.AnyNestedCondition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ConfigurationCondition;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -41,10 +38,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
 @ConditionalOnMissingBean(WebSecurityConfigurerAdapter.class)
-@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@AutoConfigureBefore(value = { ManagementWebSecurityAutoConfiguration.class, SecurityAutoConfiguration.class })
-@AutoConfigureAfter({ HealthEndpointAutoConfiguration.class, InfoEndpointAutoConfiguration.class,
-		WebEndpointAutoConfiguration.class, OAuth2ClientAutoConfiguration.class })
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
+@Conditional(AppStarterWebSecurityAutoConfiguration.OnHttpCsrfOrSecurityDisabled.class)
+@AutoConfigureBefore(name = {
+		"org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration",
+		"org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration"
+})
 @Import({ AppStarterWebSecurityConfigurerAdapter.class, WebSecurityEnablerConfiguration.class })
 public class AppStarterWebSecurityAutoConfiguration {
+
+	public static class OnHttpCsrfOrSecurityDisabled extends AnyNestedCondition {
+		public OnHttpCsrfOrSecurityDisabled() {
+			super(ConfigurationCondition.ConfigurationPhase.PARSE_CONFIGURATION);
+		}
+
+		@ConditionalOnProperty(name = "spring.cloud.stream-app-starters.security.enabled", havingValue = "false")
+		static class SecurityDisabled {
+		}
+
+		@ConditionalOnProperty(name = "spring.cloud.stream-app-starters.security.csrf-enabled", havingValue = "false")
+		static class HttpCsrfDisabled {
+		}
+	}
 }

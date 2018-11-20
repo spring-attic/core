@@ -76,7 +76,7 @@ public class AppStarterWebSecurityTests {
 	}
 
 	@TestPropertySource(properties = {
-			"spring.cloud.stream-app-starters.security.enabled=false",
+			"spring.cloud.streamapp.security.enabled=false",
 			"management.endpoints.web.exposure.include=health,info,env",
 			"info.name=MY TEST APP"})
 	public static class SecurityDisabledManagementSecurityEnabledTests extends AbstractSecurityCommonTests {

@@ -51,11 +51,11 @@ public class AppStarterWebSecurityAutoConfiguration {
 			super(ConfigurationCondition.ConfigurationPhase.PARSE_CONFIGURATION);
 		}
 
-		@ConditionalOnProperty(name = "spring.cloud.stream-app-starters.security.enabled", havingValue = "false")
+		@ConditionalOnProperty(name = "spring.cloud.streamapp.security.enabled", havingValue = "false")
 		static class SecurityDisabled {
 		}
 
-		@ConditionalOnProperty(name = "spring.cloud.stream-app-starters.security.csrf-enabled", havingValue = "false")
+		@ConditionalOnProperty(name = "spring.cloud.streamapp.security.csrf-enabled", havingValue = "false")
 		static class HttpCsrfDisabled {
 		}
 	}

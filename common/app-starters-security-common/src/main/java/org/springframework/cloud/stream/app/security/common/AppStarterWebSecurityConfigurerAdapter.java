@@ -27,17 +27,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /**
  * App Starter default configuration for managing the apps web security.
  *
- * The {@code spring.cloud.stream-app-starters.security.enabled} and
- * {@code spring.cloud.stream-app-starters.security.csrf-enabled} can be used to customize adapter's behavior
+ * The {@code spring.cloud.streamapp.security.enabled} and
+ * {@code spring.cloud.streamapp.security.csrf-enabled} can be used to customize adapter's behavior
  *
- * If the security is enabled (e.g. spring.cloud.app-starter-stream.security.enabled = true) and the
+ * If the security is enabled (e.g. spring.cloud.streamapp.security.enabled = true) and the
  *  actuator dependency is on the classpath it falls back to {@link ManagementWebSecurityAutoConfiguration}
  * allowing unauthenticated access to the HealthEndpoint and InfoEndpoint.
  *
- * Setting {@code spring.cloud.app-starter-stream.security.enabled = false} would surpass the security
+ * Setting {@code spring.cloud.streamapp.security.enabled = false} would surpass the security
  * for the entire application.
  *
- * Setting {@code spring.cloud.app-starter-stream.security.csrf-enabled = false} disables the CSRF.
+ * Setting {@code spring.cloud.streamapp.security.csrf-enabled = false} disables the CSRF.
  *
  * If the user specifies their own {@link WebSecurityConfigurerAdapter}, this will back-off completely
  * and the user should specify all the bits that they want to configure as part of the custom security

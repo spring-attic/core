@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertNotNull;
@@ -37,6 +38,9 @@ public class AbstractMicrometerTagTest {
 
 	@Autowired
 	protected SimpleMeterRegistry simpleMeterRegistry;
+
+	@Autowired
+	protected ConfigurableApplicationContext context;
 
 	protected Meter meter;
 

@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author David Turanski
  **/
-@Ignore
+
 public class TaskLaunchRequestContextTests {
 	@Test
 	public void testMergeCommandLineArgs() {

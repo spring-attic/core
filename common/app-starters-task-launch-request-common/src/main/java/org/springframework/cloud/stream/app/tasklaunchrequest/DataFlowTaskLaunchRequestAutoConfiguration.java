@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.logging.Log;
@@ -50,9 +51,15 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 	}
 
 	@Bean
-	public TaskLaunchRequestTransformer taskLaunchRequestTransformer() {
+	public Function<Message<?>, Message<DataFlowTaskLaunchRequest>> taskLaunchRequest() {
 		return message -> dataflowTaskLaunchRequest(message);
 	}
+
+	@Deprecated
+	@Bean TaskLaunchRequestTransformer taskLaunchRequestTransformer() {
+		return message -> dataflowTaskLaunchRequest(message);
+	}
+
 
 	private Message dataflowTaskLaunchRequest(Message message) {
 
@@ -88,6 +95,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 	}
 
 	public static class DataFlowTaskLaunchRequest {
+
 		@JsonProperty("args")
 		private List<String> commandlineArguments = new ArrayList<>();
 

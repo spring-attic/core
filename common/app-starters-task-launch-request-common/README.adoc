@@ -29,15 +29,7 @@ To enable this capability for a stream app, include a dependency on this module
 </dependency>
 ----
 
-Autowire `TaskLaunchRequestTransformer` to enable the transformation, e,g,:
-
-[source,java]
-----
-@Bean
-public IntegrationFlow flow(TaskLaunchRequestTransformer taskLaunchRequestTransformer) {
-    return IntegrationFlows.from(input()).transform(taskLaunchRequestTransformer).channel(output());
-}
-----
+and set the application property `spring.cloud.stream.function.definition=taskLaunchRequest`
 
 To provide a `TaskLaunchRequestContext`:
 

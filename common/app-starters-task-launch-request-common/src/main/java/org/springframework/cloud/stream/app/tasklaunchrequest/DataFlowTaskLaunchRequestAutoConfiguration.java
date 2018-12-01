@@ -17,10 +17,11 @@
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.logging.Log;
@@ -29,11 +30,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeTypeUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author David Turanski
@@ -42,24 +46,31 @@ import org.springframework.util.MimeTypeUtils;
 @EnableConfigurationProperties(DataflowTaskLaunchRequestProperties.class)
 public class DataFlowTaskLaunchRequestAutoConfiguration {
 
-	private static final Log log = LogFactory.getLog(TaskLaunchRequestTransformer.class);
+	private static final Log log = LogFactory.getLog(DataFlowTaskLaunchRequestAutoConfiguration.class);
 
 	private final DataflowTaskLaunchRequestProperties taskLaunchRequestProperties;
 
+	private final Map<String,Expression> argExpressionsMap;
+	private final Map<String,String> deploymentProperties;
+
 	public DataFlowTaskLaunchRequestAutoConfiguration(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
 		this.taskLaunchRequestProperties = taskLaunchRequestProperties;
+		this.deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			taskLaunchRequestProperties.getDeploymentProperties());
+
+		argExpressionsMap = new HashMap<>();
+		if (StringUtils.hasText(taskLaunchRequestProperties.getArgExpressions())) {
+			SpelExpressionParser expressionParser = new SpelExpressionParser();
+
+			KeyValueListParser.parseCommaDelimitedKeyValuePairs(taskLaunchRequestProperties.getArgExpressions()).forEach(
+				(k,v)-> argExpressionsMap.put(k, expressionParser.parseExpression(v)));
+		}
 	}
 
 	@Bean
-	public Function<Message<?>, Message<DataFlowTaskLaunchRequest>> taskLaunchRequest() {
+	public TaskLaunchRequestFunction taskLaunchRequest() {
 		return message -> dataflowTaskLaunchRequest(message);
 	}
-
-	@Deprecated
-	@Bean TaskLaunchRequestTransformer taskLaunchRequestTransformer() {
-		return message -> dataflowTaskLaunchRequest(message);
-	}
-
 
 	private Message dataflowTaskLaunchRequest(Message message) {
 
@@ -69,14 +80,32 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
 
 		DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();
-		taskLaunchRequest.setCommandlineArguments(
-			taskLaunchRequestContext.mergeCommandLineArgs(taskLaunchRequestProperties));
-		taskLaunchRequest.setDeploymentProperties(
-			DeploymentPropertiesParser.parseDeploymentProperties(taskLaunchRequestProperties));
+
+		List<String> evaluatedArgs = evaluateArgExpressions(message,
+			KeyValueListParser.parseCommaDelimitedKeyValuePairs(taskLaunchRequestProperties.getArgExpressions()));
+
+		taskLaunchRequest
+			.addCommmandLineArguments(taskLaunchRequestProperties.getArgs())
+			.addCommmandLineArguments(evaluatedArgs)
+			.addCommmandLineArguments(taskLaunchRequestContext.getCommandLineArgs());
+
+		taskLaunchRequest.setDeploymentProperties(deploymentProperties);
 		taskLaunchRequest.setTaskName(taskLaunchRequestProperties.getTaskName());
+
 		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
 
 		return adjustHeaders(builder, message.getHeaders()).build();
+	}
+
+	private List<String> evaluateArgExpressions(Message message, Map<String, String> argExpressions) {
+		List<String> results = new LinkedList<>();
+		argExpressions.forEach((k, v) -> {
+			Expression expression = argExpressionsMap.get(k);
+			Assert.notNull(expression, String.format("expression %s cannot be null!", v));
+			Object val = expression.getValue(message);
+			results.add(String.format("%s=%s", k, val));
+		});
+		return results;
 	}
 
 	private MessageBuilder<?> adjustHeaders(MessageBuilder<?> builder, MessageHeaders messageHeaders) {
@@ -106,7 +135,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 		private String taskName;
 
 		public void setCommandlineArguments(List<String> commandlineArguments) {
-			this.commandlineArguments = commandlineArguments;
+			this.commandlineArguments = new ArrayList<>(commandlineArguments);
 		}
 
 		public List<String> getCommandlineArguments() {
@@ -127,6 +156,11 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 		public String getTaskName() {
 			return this.taskName;
+		}
+
+		DataFlowTaskLaunchRequest addCommmandLineArguments(Collection<String> args) {
+			this.commandlineArguments.addAll(args);
+			return this;
 		}
 	}
 }

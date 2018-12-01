@@ -58,7 +58,7 @@ public class TaskLaunchRequestIntegrationTests {
 					 .web(WebApplicationType.NONE)
 					 .run("--debug", "--spring.jmx.enabled=false",
 						 "--spring.cloud.stream.function.definition=taskLaunchRequest",
-						 "---task.launch.request.task-name=foo")) {
+						 "--task.launch.request.task-name=foo")) {
 
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context,
 				null);
@@ -75,8 +75,8 @@ public class TaskLaunchRequestIntegrationTests {
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
 			.run("--spring.jmx.enabled=false", "--spring.cloud.stream.function.definition=taskLaunchRequest",
-				"---task.launch.request.task-name=foo", "---task.launch.request.args=foo=bar,baz=boo",
-				"---task.launch.request.deploymentProperties=count=3")) {
+				"--task.launch.request.task-name=foo", "--task.launch.request.args=foo=bar,baz=boo",
+				"--task.launch.request.deploymentProperties=count=3")) {
 
 			DataFlowTaskLaunchRequest dataFlowTaskLaunchRequest = verifyAndreceiveDataFlowTaskLaunchRequest(context);
 
@@ -93,7 +93,7 @@ public class TaskLaunchRequestIntegrationTests {
 		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
 			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
 			.run("--spring.jmx.enabled=false", "--spring.cloud.stream.function.definition=taskLaunchRequest",
-				"---task.launch.request.task-name=foo", "---task.launch.request.args=foo=bar,baz=boo")) {
+				"--task.launch.request.task-name=foo", "--task.launch.request.args=foo=bar,baz=boo")) {
 
 			TaskLaunchRequestContext taskLaunchRequestContext = new TaskLaunchRequestContext();
 
@@ -122,6 +122,67 @@ public class TaskLaunchRequestIntegrationTests {
 			assertThat(dataFlowTaskLaunchRequest.getTaskName()).isEqualTo("foo");
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).hasSize(1);
 			assertThat(dataFlowTaskLaunchRequest.getCommandlineArguments()).containsExactly("runtimeArg");
+		}
+	}
+
+	@Test
+	public void taskLaunchRequestWithArgExpressions() throws IOException {
+		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
+			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
+			.run("--spring.jmx.enabled=false", "--spring.cloud.stream.function.definition=taskLaunchRequest",
+				"--task.launch.request.task-name=foo",
+				"--task.launch.request.arg-expressions=foo=payload.toUpperCase(),bar=payload.substring(0,2)")) {
+
+			MessageChannel input = context.getBean("input", MessageChannel.class);
+
+			OutputDestination target = context.getBean(OutputDestination.class);
+
+			Message<String> message = MessageBuilder.withPayload("hello").build();
+
+			input.send(message);
+
+			ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
+
+			Message<byte[]> response = target.receive(1000);
+
+			assertThat(response).isNotNull();
+
+			DataFlowTaskLaunchRequest request = objectMapper.readValue(response.getPayload(),
+				DataFlowTaskLaunchRequest.class);
+
+			assertThat(request.getCommandlineArguments()).containsExactlyInAnyOrder("foo=HELLO", "bar=he");
+
+		}
+	}
+
+	@Test
+	public void taskLaunchRequestWithIntPayload() throws IOException {
+		try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
+			TestChannelBinderConfiguration.getCompleteConfiguration(TestApp.class)).web(WebApplicationType.NONE)
+			.run("--spring.jmx.enabled=false", "--spring.cloud.stream.function.definition=taskLaunchRequest",
+				"--task.launch.request.task-name=foo",
+				"--task.launch.request.arg-expressions=i=payload")) {
+
+			ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
+
+			MessageChannel input = context.getBean("input", MessageChannel.class);
+
+			OutputDestination target = context.getBean(OutputDestination.class);
+
+			Message<Integer> message =
+				MessageBuilder.withPayload(123).build();
+
+			input.send(message);
+
+			Message<byte[]> response = target.receive(1000);
+
+			assertThat(response).isNotNull();
+
+			DataFlowTaskLaunchRequest request = objectMapper.readValue(response.getPayload(),
+				DataFlowTaskLaunchRequest.class);
+
+			assertThat(request.getCommandlineArguments()).containsExactly("i=123");
+
 		}
 	}
 
@@ -164,7 +225,7 @@ public class TaskLaunchRequestIntegrationTests {
 		boolean enhance;
 
 		@Bean
-		public MessageChannel input() {
+		MessageChannel input() {
 			return new DirectChannel();
 		}
 
@@ -183,7 +244,7 @@ public class TaskLaunchRequestIntegrationTests {
 							return null;
 						}
 					))
-				.channel("output").get();
+				.channel(Source.OUTPUT).get();
 		}
 	}
 }

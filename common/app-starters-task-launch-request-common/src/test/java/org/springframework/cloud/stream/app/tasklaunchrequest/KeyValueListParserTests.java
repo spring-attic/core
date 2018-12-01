@@ -27,16 +27,12 @@ import static org.junit.Assert.assertTrue;
  * @author Chris Schaefer
  * @author David Turanski
  */
-public class DeploymentPropertiesParserTests {
+public class KeyValueListParserTests {
 
 	@Test
 	public void testParseSimpleDeploymentProperty() {
-		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
-
-		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value");
-
-		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
-			taskLaunchRequestProperties);
+		Map<String, String> deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			"app.sftp.param=value");
 		assertTrue("Invalid number of deployment properties: " + deploymentProperties.size(),
 			deploymentProperties.size() == 1);
 		assertTrue("Expected deployment key not found", deploymentProperties.containsKey("app.sftp.param"));
@@ -45,25 +41,36 @@ public class DeploymentPropertiesParserTests {
 
 	@Test
 	public void testParseSimpleDeploymentPropertyMultipleValues() {
-		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
-		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value1,value2");
-
-		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
-			taskLaunchRequestProperties);
+		Map<String, String> deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			"app.sftp.param=value1,value2,value3");
 
 		assertTrue("Invalid number of deployment properties: " + deploymentProperties.size(),
 			deploymentProperties.size() == 1);
 		assertTrue("Expected deployment key not found", deploymentProperties.containsKey("app.sftp.param"));
-		assertEquals("Invalid deployment value", "value1,value2", deploymentProperties.get("app.sftp.param"));
+		assertEquals("Invalid deployment value", "value1,value2,value3", deploymentProperties.get("app.sftp.param"));
+	}
+
+	@Test
+	public void testParseSpelExpressionMultipleValues() {
+		Map<String, String> argExpressions = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			"arg1=payload.substr(0,2),arg2=headers['foo'],arg3=headers['bar']==false");
+
+		assertTrue("Invalid number of deployment properties: " + argExpressions.size(),
+			argExpressions.size() == 3);
+		assertTrue("Expected deployment key not found", argExpressions.containsKey("arg1"));
+		assertEquals("Invalid deployment value", "payload.substr(0,2)", argExpressions.get("arg1"));
+
+		assertTrue("Expected deployment key not found", argExpressions.containsKey("arg2"));
+		assertEquals("Invalid deployment value", "headers['foo']", argExpressions.get("arg2"));
+
+		assertTrue("Expected deployment key not found", argExpressions.containsKey("arg3"));
+		assertEquals("Invalid deployment value", "headers['bar']==false", argExpressions.get("arg3"));
 	}
 
 	@Test
 	public void testParseMultipleDeploymentPropertiesSingleValue() {
-		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
-		taskLaunchRequestProperties.setDeploymentProperties("app.sftp.param=value1,app.sftp.other.param=value2");
-
-		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
-			taskLaunchRequestProperties);
+		Map<String, String> deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			"app.sftp.param=value1,app.sftp.other.param=value2");
 
 		assertTrue("Invalid number of deployment properties: " + deploymentProperties.size(),
 			deploymentProperties.size() == 2);
@@ -76,11 +83,9 @@ public class DeploymentPropertiesParserTests {
 	@Test
 	public void testParseMultipleDeploymentPropertiesMultipleValues() {
 		DataflowTaskLaunchRequestProperties taskLaunchRequestProperties = new DataflowTaskLaunchRequestProperties();
-		taskLaunchRequestProperties.setDeploymentProperties(
-			"app.sftp.param=value1,value2,app.sftp.other.param=other1,other2");
 
-		Map<String, String> deploymentProperties = DeploymentPropertiesParser.parseDeploymentProperties(
-			taskLaunchRequestProperties);
+		Map<String, String> deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			"app.sftp.param=value1,value2,app.sftp.other.param=other1,other2");
 
 		assertTrue("Invalid number of deployment properties: " + deploymentProperties.size(),
 			deploymentProperties.size() == 2);

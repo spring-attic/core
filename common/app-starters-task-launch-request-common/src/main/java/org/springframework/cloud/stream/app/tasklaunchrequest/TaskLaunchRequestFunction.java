@@ -16,12 +16,16 @@
 
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
-import org.springframework.integration.handler.MessageProcessor;
+import java.util.function.Function;
+
 import org.springframework.messaging.Message;
 
 /**
+ * A marker interface useful for unambiguous dependency injection of this Function.
+ *
  * @author David Turanski
  **/
 @FunctionalInterface
-public interface TaskLaunchRequestTransformer extends MessageProcessor<Message> {
+public interface TaskLaunchRequestFunction extends Function<Message<?>, Message<?>> {
+
 }

@@ -17,11 +17,7 @@
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author David Turanski
@@ -30,29 +26,13 @@ public class TaskLaunchRequestContext {
 
 	public static final String HEADER_NAME = TaskLaunchRequestContext.class.getName();
 
-	private Set<String> commandLineArgs = new HashSet<>();
+	private List<String> commandLineArgs = new ArrayList<>();
 
-	public Collection<String> getCommandLineArgs() {
+	public List<String> getCommandLineArgs() {
 		return this.commandLineArgs;
 	}
 
 	public void addCommandLineArg(String arg) {
 		this.commandLineArgs.add(arg);
 	}
-
-	public void addCommandLineArgs(Collection<String> args) {
-		this.commandLineArgs.addAll(args);
-	}
-
-	/**
-	 * Merge command line args with any configured command line args.
-	 *
-	 * @param taskLaunchRequestProperties the configuration properties.
-	 * @return the args.
-	 */
-	List<String> mergeCommandLineArgs(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
-		this.commandLineArgs.addAll(taskLaunchRequestProperties.getArgs());
-		return Collections.unmodifiableList(new ArrayList<>(commandLineArgs));
-	}
-
 }

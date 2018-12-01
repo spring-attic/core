@@ -23,20 +23,27 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /**
+ * Parses a comma delimited list of key value pairs in which the values can contain commas as well.
+ *
+ * @author Chris Schaeffer
  * @author David Turanski
  **/
-abstract class DeploymentPropertiesParser {
+abstract class KeyValueListParser {
 
-	static Map<String, String> parseDeploymentProperties(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
+	static Map<String, String> parseCommaDelimitedKeyValuePairs(String value) {
+		Map<String, String> keyValuePairs = new HashMap<>();
+
+		if (StringUtils.isEmpty(value)) {
+			return keyValuePairs;
+		}
+
 		ArrayList<String> pairs = new ArrayList<>();
-		Map<String, String> deploymentProperties = new HashMap<>();
 
-		String properties = taskLaunchRequestProperties.getDeploymentProperties();
-		String[] candidates = StringUtils.commaDelimitedListToStringArray(properties);
+		String[] candidates = StringUtils.commaDelimitedListToStringArray(value);
 
 		for (int i = 0; i < candidates.length; i++) {
 			if (i > 0 && !candidates[i].contains("=")) {
-				pairs.set(pairs.size() - 1, pairs.get(pairs.size() - 1) + "," + candidates[i]);
+				pairs.add(pairs.get(pairs.size() - 1) + "," + candidates[i]);
 			}
 			else {
 				pairs.add(candidates[i]);
@@ -44,13 +51,13 @@ abstract class DeploymentPropertiesParser {
 		}
 
 		for (String pair : pairs) {
-			addKeyValuePairAsProperty(pair, deploymentProperties);
+			addKeyValuePair(pair, keyValuePairs);
 		}
 
-		return deploymentProperties;
+		return keyValuePairs;
 	}
 
-	private static void addKeyValuePairAsProperty(String pair, Map<String, String> properties) {
+	private static void addKeyValuePair(String pair, Map<String, String> properties) {
 		int firstEquals = pair.indexOf('=');
 		if (firstEquals != -1) {
 			properties.put(pair.substring(0, firstEquals).trim(), pair.substring(firstEquals + 1).trim());

@@ -41,6 +41,11 @@ public class DataflowTaskLaunchRequestProperties {
 	private List<String> args = new ArrayList<>();
 
 	/**
+	 * Comma separated list of option args as SpEL expressions in key=value format.
+	 */
+	private String argExpressions = "";
+
+	/**
 	 * Comma delimited list of deployment properties to be applied to the
 	 * TaskLaunchRequest.
 	 */
@@ -57,7 +62,7 @@ public class DataflowTaskLaunchRequestProperties {
 	}
 
 	public void setArgs(List<String> args) {
-		this.args = args;
+		this.args = new ArrayList<>(args);
 	}
 
 	@NotNull
@@ -76,6 +81,14 @@ public class DataflowTaskLaunchRequestProperties {
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
+	}
+
+	public String getArgExpressions() {
+		return argExpressions;
+	}
+
+	public void setArgExpressions(String argExpressions) {
+		this.argExpressions = argExpressions;
 	}
 
 }

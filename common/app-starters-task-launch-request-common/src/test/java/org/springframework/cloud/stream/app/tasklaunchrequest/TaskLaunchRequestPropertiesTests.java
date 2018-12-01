@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.cloud.stream.config.SpelExpressionConverterConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -56,7 +55,6 @@ public class TaskLaunchRequestPropertiesTests {
 		assertThat(args.get(1)).isEqualTo("jp2=jpv2");
 	}
 
-
 	private DataflowTaskLaunchRequestProperties getBatchProperties(String... var) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
@@ -73,7 +71,8 @@ public class TaskLaunchRequestPropertiesTests {
 	@Configuration
 	@EnableIntegration
 	@EnableConfigurationProperties(DataflowTaskLaunchRequestProperties.class)
-	@Import(SpelExpressionConverterConfiguration.class)
+	@Import(DataFlowTaskLaunchRequestAutoConfiguration.class)
 	static class Conf {
+
 	}
 }

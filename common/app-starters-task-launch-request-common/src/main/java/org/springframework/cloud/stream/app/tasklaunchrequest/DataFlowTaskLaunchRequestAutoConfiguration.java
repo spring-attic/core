@@ -37,6 +37,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeTypeUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author David Turanski
@@ -45,14 +46,25 @@ import org.springframework.util.MimeTypeUtils;
 @EnableConfigurationProperties(DataflowTaskLaunchRequestProperties.class)
 public class DataFlowTaskLaunchRequestAutoConfiguration {
 
-	private static final Log log = LogFactory.getLog(TaskLaunchRequestFunction.class);
+	private static final Log log = LogFactory.getLog(DataFlowTaskLaunchRequestAutoConfiguration.class);
 
 	private final DataflowTaskLaunchRequestProperties taskLaunchRequestProperties;
 
-	private SpelExpressionParser expressionParser = new SpelExpressionParser();
+	private final Map<String,Expression> argExpressionsMap;
+	private final Map<String,String> deploymentProperties;
 
 	public DataFlowTaskLaunchRequestAutoConfiguration(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
 		this.taskLaunchRequestProperties = taskLaunchRequestProperties;
+		this.deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+			taskLaunchRequestProperties.getDeploymentProperties());
+
+		argExpressionsMap = new HashMap<>();
+		if (StringUtils.hasText(taskLaunchRequestProperties.getArgExpressions())) {
+			SpelExpressionParser expressionParser = new SpelExpressionParser();
+
+			KeyValueListParser.parseCommaDelimitedKeyValuePairs(taskLaunchRequestProperties.getArgExpressions()).forEach(
+				(k,v)-> argExpressionsMap.put(k, expressionParser.parseExpression(v)));
+		}
 	}
 
 	@Bean
@@ -77,9 +89,7 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 			.addCommmandLineArguments(evaluatedArgs)
 			.addCommmandLineArguments(taskLaunchRequestContext.getCommandLineArgs());
 
-		taskLaunchRequest.setDeploymentProperties(
-			KeyValueListParser.parseCommaDelimitedKeyValuePairs(
-				taskLaunchRequestProperties.getDeploymentProperties()));
+		taskLaunchRequest.setDeploymentProperties(deploymentProperties);
 		taskLaunchRequest.setTaskName(taskLaunchRequestProperties.getTaskName());
 
 		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
@@ -88,10 +98,9 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 	}
 
 	private List<String> evaluateArgExpressions(Message message, Map<String, String> argExpressions) {
-		//for each value, convert SpEL expression to string.
 		List<String> results = new LinkedList<>();
 		argExpressions.forEach((k, v) -> {
-			Expression expression = expressionParser.parseExpression(v);
+			Expression expression = argExpressionsMap.get(k);
 			Assert.notNull(expression, String.format("expression %s cannot be null!", v));
 			Object val = expression.getValue(message);
 			results.add(String.format("%s=%s", k, val));

@@ -20,7 +20,7 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.11.RELEASE</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.12.M1</scs-app-maven-plugin.version>
 		<app-starters-docs-plugin.version>2.0.0.RELEASE	</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>1.0.0.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>

@@ -20,11 +20,10 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.12.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.12.M2</scs-app-maven-plugin.version>
 		<app-starters-docs-plugin.version>2.0.0.RELEASE	</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>1.0.0.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
-		<app-starters-core-dependencies.version>2.1.0.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
 	<modules>
@@ -167,7 +166,7 @@
                                         <name>app-starters-core-dependencies</name>
                                         <groupId>org.springframework.cloud.stream.app</groupId>
                                         <artifactId>app-starters-core-dependencies</artifactId>
-                                        <version>${app-starters-core-dependencies.version}</version>
+                                        <version>${project.version}</version>
                                     </bom>
                                 </additionalBoms>
                                 <binders>

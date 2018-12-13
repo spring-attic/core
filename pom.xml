@@ -24,6 +24,7 @@
 		<app-starters-docs-plugin.version>2.0.0.RELEASE	</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>1.0.0.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
+		<app-starters-core-dependencies.version>2.1.0.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
 
 	<modules>
@@ -166,7 +167,7 @@
                                         <name>app-starters-core-dependencies</name>
                                         <groupId>org.springframework.cloud.stream.app</groupId>
                                         <artifactId>app-starters-core-dependencies</artifactId>
-                                        <version>${project.version}</version>
+                                        <version>${app-starters-core-dependencies.version}</version>
                                     </bom>
                                 </additionalBoms>
                                 <binders>

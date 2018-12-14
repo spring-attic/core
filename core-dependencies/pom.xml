@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.cloud.stream.app</groupId>
 	<artifactId>app-starters-core-dependencies</artifactId>
-	<version>2.1.0.BUILD-SNAPSHOT-DgenerateBackupPoms=false</version>
+	<version>2.1.0.BUILD-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>app-starters-core-dependencies</name>
 	<description>Spring Cloud Stream App Core BOM</description>

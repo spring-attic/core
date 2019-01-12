@@ -62,14 +62,15 @@ public class SpringCloudStreamMicrometerCommonTags {
 				.commonTags("application.guid", applicationGuid);
 	}
 
-	/**
-	 * This is a work around for: https://github.com/micrometer-metrics/micrometer/issues/544
-	 */
 	@Bean
 	public MeterRegistryCustomizer<MeterRegistry> renameNameTag() {
 		return registry -> {
 			if (registry.getClass().getCanonicalName().contains("AtlasMeterRegistry")) {
 				registry.config().meterFilter(MeterFilter.renameTag("spring.integration", "name", "aname"));
+			}
+			if (registry.getClass().getCanonicalName().contains("InfluxMeterRegistry")) {
+				registry.config().meterFilter(MeterFilter.replaceTagValues("application.name",
+						tagValue -> ("time".equalsIgnoreCase(tagValue)) ? "atime" : tagValue));
 			}
 		};
 	}

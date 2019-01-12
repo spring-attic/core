@@ -62,6 +62,7 @@ public class SpringCloudStreamMicrometerEnvironmentPostProcessorTest {
 	}
 
 	@TestPropertySource(properties = {
+			"management.metrics.export.simple.enabled=true",
 			"management.metrics.export.influx.enabled=true",
 			"management.metrics.export.prometheus.enabled=true",
 			"management.metrics.export.datadog.enabled=true",

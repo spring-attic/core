@@ -15,16 +15,23 @@
  */
 package org.springframework.cloud.stream.app.micrometer.common;
 
+import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.simple.SimpleConfig;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.metrics.export.simple.SimpleProperties;
+import org.springframework.boot.actuate.autoconfigure.metrics.export.simple.SimplePropertiesConfigAdapter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertNotNull;
@@ -52,9 +59,24 @@ public class AbstractMicrometerTagTest {
 	}
 
 	@SpringBootApplication
+	@EnableConfigurationProperties(SimpleProperties.class)
 	public static class AutoConfigurationApplication {
+
 		public static void main(String[] args) {
 			SpringApplication.run(AutoConfigurationApplication.class, args);
 		}
+
+		@Bean
+		public SimpleMeterRegistry simpleMeterRegistry(SimpleConfig config, Clock clock) {
+			return new SimpleMeterRegistry(config, clock);
+		}
+
+		@Bean
+		@ConditionalOnMissingBean
+		public SimpleConfig simpleConfig(SimpleProperties simpleProperties) {
+			return new SimplePropertiesConfigAdapter(simpleProperties);
+		}
+
+
 	}
 }

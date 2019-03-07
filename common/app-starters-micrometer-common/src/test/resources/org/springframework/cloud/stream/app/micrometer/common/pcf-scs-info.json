@@ -1,0 +1,13 @@
+{
+  "sso":[{
+    "name": "sso",
+    "label": "sso",
+    "plan": "notfree",
+    "tags": ["configuration"],
+    "credentials":{
+      "uri": "http://pivotal.io",
+      "client_id": "fakeClientId",
+      "client_secret": "fakeSecret",
+      "access_token_uri": "token"
+    }
+  }]}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,16 @@
  */
 package org.springframework.cloud.stream.app.micrometer.common;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.simple.SimpleConfig;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.pivotal.cfenv.test.CfEnvTestUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +37,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.StreamUtils;
 
 import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Christian Tzolov
+ * @author Soby Chacko
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AbstractMicrometerTagTest.AutoConfigurationApplication.class)
@@ -58,6 +66,14 @@ public class AbstractMicrometerTagTest {
 		assertNotNull("The jvm.memory.committed meter mast be present in SpringBoot apps!", meter);
 	}
 
+	@BeforeClass
+	public static void setup() throws IOException {
+		String serviceJson = StreamUtils.copyToString(new DefaultResourceLoader().getResource(
+				"classpath:/org/springframework/cloud/stream/app/micrometer/common/pcf-scs-info.json")
+				.getInputStream(), Charset.forName("UTF-8"));
+		CfEnvTestUtils.mockVcapServicesFromString(serviceJson);
+	}
+
 	@SpringBootApplication
 	@EnableConfigurationProperties(SimpleProperties.class)
 	public static class AutoConfigurationApplication {
@@ -76,7 +92,5 @@ public class AbstractMicrometerTagTest {
 		public SimpleConfig simpleConfig(SimpleProperties simpleProperties) {
 			return new SimplePropertiesConfigAdapter(simpleProperties);
 		}
-
-
 	}
 }

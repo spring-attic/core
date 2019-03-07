@@ -20,6 +20,8 @@
         <spring-cloud-stream.version>2.1.1.RELEASE</spring-cloud-stream.version>
 		<spring-cloud-dependencies.version>Greenwich.RELEASE</spring-cloud-dependencies.version>
 		<spring-cloud-stream-dependencies.version>Fishtown.SR1</spring-cloud-stream-dependencies.version>
+		<spring-cloud-services-config-client.version>2.1.1.RELEASE</spring-cloud-services-config-client.version>
+		<java-cfenv-boot.version>1.0.1.RELEASE</java-cfenv-boot.version>
 	</properties>
 
 	<dependencyManagement>
@@ -111,6 +113,17 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-stream-test-support-internal</artifactId>
 				<version>${spring-cloud-stream.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.pivotal.spring.cloud</groupId>
+				<artifactId>spring-cloud-services-starter-config-client</artifactId>
+				<version>${spring-cloud-services-config-client.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.pivotal.cfenv</groupId>
+				<artifactId>java-cfenv-test-support</artifactId>
+				<version>${java-cfenv-boot.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

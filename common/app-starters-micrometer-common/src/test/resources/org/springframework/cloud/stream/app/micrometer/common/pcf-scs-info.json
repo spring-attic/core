@@ -5,7 +5,7 @@
     "plan": "notfree",
     "tags": ["configuration"],
     "credentials":{
-      "uri": "http://pivotal.io",
+      "uri": "https://pivotal.io",
       "client_id": "fakeClientId",
       "client_secret": "fakeSecret",
       "access_token_uri": "token"

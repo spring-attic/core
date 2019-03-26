@@ -59,7 +59,7 @@ The `GemfireMetadataStore` requires these dependencies for auto-configuration:
 </dependency>
 ----
 
-or when your environment is based on the Open Source http://geode.apache.org/[Apache Geode]:
+or when your environment is based on the Open Source https://geode.apache.org/[Apache Geode]:
 
 [source,xml]
 ----
@@ -127,7 +127,7 @@ Also a `CuratorFramework` bean can be provided to override a default auto-config
 
 ==== AWS DymanoDb
 
-The `DynamoDbMetadataStore` requires regular Spring Cloud AWS auto-configuration for http://cloud.spring.io/spring-cloud-static/spring-cloud-aws/2.0.0.RELEASE/single/spring-cloud-aws.html#_spring_boot_auto_configuration[Spring Boot] and minimal set of dependencies is like this:
+The `DynamoDbMetadataStore` requires regular Spring Cloud AWS auto-configuration for https://cloud.spring.io/spring-cloud-static/spring-cloud-aws/2.0.0.RELEASE/single/spring-cloud-aws.html#_spring_boot_auto_configuration[Spring Boot] and minimal set of dependencies is like this:
 
 [source,xml]
 ----

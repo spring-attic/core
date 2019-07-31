@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,6 @@ public class TaskLaunchRequestPropertiesTests {
 	@Test
 	public void deploymentPropertiesCanBeCustomized() {
 		DataflowTaskLaunchRequestProperties properties = getBatchProperties(
-			"task.launch.request.taskName=foo",
 			"task.launch.request.deploymentProperties:prop1=val1,prop2=val2");
 		assertThat(properties.getDeploymentProperties()).isEqualTo("prop1=val1,prop2=val2");
 	}
@@ -45,7 +44,6 @@ public class TaskLaunchRequestPropertiesTests {
 	@Test
 	public void parametersCanBeCustomized() {
 		DataflowTaskLaunchRequestProperties properties = getBatchProperties(
-			"task.launch.request.taskName=foo",
 			"task.launch.request.args:jp1=jpv1,jp2=jpv2");
 		List<String> args = properties.getArgs();
 
@@ -67,6 +65,7 @@ public class TaskLaunchRequestPropertiesTests {
 
 		return context.getBean(DataflowTaskLaunchRequestProperties.class);
 	}
+
 
 	@Configuration
 	@EnableIntegration

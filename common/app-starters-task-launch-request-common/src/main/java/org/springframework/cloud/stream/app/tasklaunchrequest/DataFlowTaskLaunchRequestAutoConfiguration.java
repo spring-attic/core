@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.stream.app.tasklaunchrequest.support.CommandLineArgumentsMessageMapper;
+import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskLaunchRequestSupplier;
+import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskNameMessageMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.Assert;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
+
 
 /**
  * @author David Turanski
@@ -46,121 +46,116 @@ import org.springframework.util.StringUtils;
 @EnableConfigurationProperties(DataflowTaskLaunchRequestProperties.class)
 public class DataFlowTaskLaunchRequestAutoConfiguration {
 
+	public final static String TASK_LAUNCH_REQUEST_FUNCTION_NAME = "taskLaunchRequest";
+
 	private static final Log log = LogFactory.getLog(DataFlowTaskLaunchRequestAutoConfiguration.class);
 
 	private final DataflowTaskLaunchRequestProperties taskLaunchRequestProperties;
 
-	private final Map<String,Expression> argExpressionsMap;
 	private final Map<String,String> deploymentProperties;
+
 
 	public DataFlowTaskLaunchRequestAutoConfiguration(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
 		this.taskLaunchRequestProperties = taskLaunchRequestProperties;
 		this.deploymentProperties = KeyValueListParser.parseCommaDelimitedKeyValuePairs(
 			taskLaunchRequestProperties.getDeploymentProperties());
 
-		argExpressionsMap = new HashMap<>();
-		if (StringUtils.hasText(taskLaunchRequestProperties.getArgExpressions())) {
-			SpelExpressionParser expressionParser = new SpelExpressionParser();
+	}
 
-			KeyValueListParser.parseCommaDelimitedKeyValuePairs(taskLaunchRequestProperties.getArgExpressions()).forEach(
-				(k,v)-> argExpressionsMap.put(k, expressionParser.parseExpression(v)));
-		}
+	/**
+	 * A {@link java.util.function.Function} to transform a {@link Message} payload to a {@link DataFlowTaskLaunchRequest}.
+	 *
+	 * @param taskLaunchRequestMessageProcessor a {@link TaskLaunchRequestMessageProcessor}.
+	 *
+	 * @return a {code DataFlowTaskLaunchRequest} Message.
+	 */
+	@Bean(name = TASK_LAUNCH_REQUEST_FUNCTION_NAME)
+	@ConditionalOnMissingBean(TaskLaunchRequestFunction.class)
+	public TaskLaunchRequestFunction taskLaunchRequest(TaskLaunchRequestMessageProcessor taskLaunchRequestMessageProcessor) {
+		return message -> taskLaunchRequestMessageProcessor.postProcessMessage(message);
 	}
 
 	@Bean
-	public TaskLaunchRequestFunction taskLaunchRequest() {
-		return message -> dataflowTaskLaunchRequest(message);
+	@ConditionalOnMissingBean(TaskNameMessageMapper.class)
+	public TaskNameMessageMapper taskNameMessageMapper(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
+		if (StringUtils.hasText(taskLaunchRequestProperties.getTaskNameExpression())) {
+			SpelExpressionParser expressionParser = new SpelExpressionParser();
+			Expression taskNameExpression = expressionParser.parseExpression(taskLaunchRequestProperties.getTaskNameExpression());
+			return new ExpressionEvaluatingTaskNameMessageMapper(taskNameExpression);
+		}
+
+		return message -> taskLaunchRequestProperties.getTaskName();
 	}
 
-	private Message dataflowTaskLaunchRequest(Message message) {
-
-		Assert.hasText(taskLaunchRequestProperties.getTaskName(), "'taskName' is required");
-		log.info(String.format("creating a task launch request for task %s", taskLaunchRequestProperties
-			.getTaskName()));
-		TaskLaunchRequestContext taskLaunchRequestContext = taskLaunchRequestContext(message);
-
-		DataFlowTaskLaunchRequest taskLaunchRequest = new DataFlowTaskLaunchRequest();
-
-		List<String> evaluatedArgs = evaluateArgExpressions(message,
-			KeyValueListParser.parseCommaDelimitedKeyValuePairs(taskLaunchRequestProperties.getArgExpressions()));
-
-		taskLaunchRequest
-			.addCommmandLineArguments(taskLaunchRequestProperties.getArgs())
-			.addCommmandLineArguments(evaluatedArgs)
-			.addCommmandLineArguments(taskLaunchRequestContext.getCommandLineArgs());
-
-		taskLaunchRequest.setDeploymentProperties(deploymentProperties);
-		taskLaunchRequest.setTaskName(taskLaunchRequestProperties.getTaskName());
-
-		MessageBuilder<?> builder = MessageBuilder.withPayload(taskLaunchRequest).copyHeaders(message.getHeaders());
-
-		return adjustHeaders(builder, message.getHeaders()).build();
+	@Bean
+	@ConditionalOnMissingBean(CommandLineArgumentsMessageMapper.class)
+	public CommandLineArgumentsMessageMapper commandLineArgumentsMessageMapper(
+			DataflowTaskLaunchRequestProperties dataflowTaskLaunchRequestProperties){
+		return new ExpressionEvaluatingCommandLineArgsMapper(dataflowTaskLaunchRequestProperties.getArgExpressions());
 	}
 
-	private List<String> evaluateArgExpressions(Message message, Map<String, String> argExpressions) {
-		List<String> results = new LinkedList<>();
-		argExpressions.forEach((k, v) -> {
-			Expression expression = argExpressionsMap.get(k);
-			Assert.notNull(expression, String.format("expression %s cannot be null!", v));
-			Object val = expression.getValue(message);
-			results.add(String.format("%s=%s", k, val));
-		});
-		return results;
+	@Bean
+	public TaskLaunchRequestSupplier taskLaunchRequestInitializer(
+			DataflowTaskLaunchRequestProperties taskLaunchRequestProperties){
+		return new DataflowTaskLaunchRequestPropertiesInitializer(taskLaunchRequestProperties);
 	}
 
-	private MessageBuilder<?> adjustHeaders(MessageBuilder<?> builder, MessageHeaders messageHeaders) {
-		builder.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON);
-		if (messageHeaders.containsKey(TaskLaunchRequestContext.HEADER_NAME)) {
-			builder.removeHeader(TaskLaunchRequestContext.HEADER_NAME);
-		}
-		return builder;
+	@Bean
+	public TaskLaunchRequestMessageProcessor taskLaunchRequestMessageProcessor(
+			TaskLaunchRequestSupplier taskLaunchRequestInitializer,
+			TaskNameMessageMapper taskNameMessageMapper,
+			CommandLineArgumentsMessageMapper commandLineArgumentsMessageMapper) {
+
+		return new TaskLaunchRequestMessageProcessor(taskLaunchRequestInitializer,
+				taskNameMessageMapper,
+				commandLineArgumentsMessageMapper);
 	}
 
-	private TaskLaunchRequestContext taskLaunchRequestContext(Message<?> message) {
-		TaskLaunchRequestContext taskLaunchRequestContext = (TaskLaunchRequestContext) message.getHeaders()
-			.get(TaskLaunchRequestContext.HEADER_NAME);
+	static class DataflowTaskLaunchRequestPropertiesInitializer extends TaskLaunchRequestSupplier {
+		DataflowTaskLaunchRequestPropertiesInitializer(
+				DataflowTaskLaunchRequestProperties taskLaunchRequestProperties){
 
-		return taskLaunchRequestContext != null ? taskLaunchRequestContext : new TaskLaunchRequestContext();
-	}
+			this.commandLineArgumentSupplier(
+					() -> new ArrayList<>(taskLaunchRequestProperties.getArgs())
+			);
 
-	public static class DataFlowTaskLaunchRequest {
+			this.deploymentPropertiesSupplier(
+					() -> KeyValueListParser.parseCommaDelimitedKeyValuePairs(
+							taskLaunchRequestProperties.getDeploymentProperties())
+			);
 
-		@JsonProperty("args")
-		private List<String> commandlineArguments = new ArrayList<>();
-
-		@JsonProperty("deploymentProps")
-		private Map<String, String> deploymentProperties = new HashMap<>();
-
-		@JsonProperty("name")
-		private String taskName;
-
-		public void setCommandlineArguments(List<String> commandlineArguments) {
-			this.commandlineArguments = new ArrayList<>(commandlineArguments);
-		}
-
-		public List<String> getCommandlineArguments() {
-			return this.commandlineArguments;
-		}
-
-		public void setDeploymentProperties(Map<String, String> deploymentProperties) {
-			this.deploymentProperties = deploymentProperties;
-		}
-
-		public Map<String, String> getDeploymentProperties() {
-			return this.deploymentProperties;
-		}
-
-		public void setTaskName(String taskName) {
-			this.taskName = taskName;
-		}
-
-		public String getTaskName() {
-			return this.taskName;
-		}
-
-		DataFlowTaskLaunchRequest addCommmandLineArguments(Collection<String> args) {
-			this.commandlineArguments.addAll(args);
-			return this;
+			this.taskNameSupplier(()->taskLaunchRequestProperties.getTaskName());
 		}
 	}
+
+	static class ExpressionEvaluatingCommandLineArgsMapper implements CommandLineArgumentsMessageMapper {
+		private final Map<String,Expression> argExpressionsMap;
+
+		ExpressionEvaluatingCommandLineArgsMapper(String argExpressions) {
+			argExpressionsMap = new HashMap<>();
+			if (StringUtils.hasText(argExpressions)) {
+				SpelExpressionParser expressionParser = new SpelExpressionParser();
+
+				KeyValueListParser.parseCommaDelimitedKeyValuePairs(argExpressions).forEach(
+						(k,v)-> argExpressionsMap.put(k, expressionParser.parseExpression(v)));
+			}
+
+		}
+
+		@Override
+		public Collection<String> processMessage(Message<?> message) {
+			return evaluateArgExpressions(message, argExpressionsMap);
+		}
+
+		private Collection<String> evaluateArgExpressions(Message<?> message, Map<String, Expression> argExpressions) {
+			List<String> results = new LinkedList<>();
+			argExpressions.forEach((k, v) -> {
+				Expression expression = argExpressionsMap.get(k);
+				Assert.notNull(expression, String.format("expression %s cannot be null!", v));
+				results.add(String.format("%s=%s", k, expression.getValue(message)));
+			});
+			return results;
+		}
+	}
+
 }

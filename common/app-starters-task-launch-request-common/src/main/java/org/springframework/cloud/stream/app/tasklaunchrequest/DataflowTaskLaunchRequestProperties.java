@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@ package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Base Properties to create a {@link org.springframework.cloud.task.launcher.TaskLaunchRequest}.
+ * Base Properties to create a {@link DataFlowTaskLaunchRequest}.
  *
  * @author Chris Schaefer
  * @author David Turanski
@@ -56,6 +55,12 @@ public class DataflowTaskLaunchRequestProperties {
 	 */
 	private String taskName;
 
+
+	/**
+	 * A SpEL expression to extract the task name from each Message, using the Message as the evaluation context.
+	 */
+	private String taskNameExpression;
+
 	@NotNull
 	public List<String> getArgs() {
 		return this.args;
@@ -74,7 +79,6 @@ public class DataflowTaskLaunchRequestProperties {
 		this.deploymentProperties = deploymentProperties;
 	}
 
-	@NotBlank
 	public String getTaskName() {
 		return taskName;
 	}
@@ -83,12 +87,25 @@ public class DataflowTaskLaunchRequestProperties {
 		this.taskName = taskName;
 	}
 
+	public String getTaskNameExpression() {
+		return taskNameExpression;
+	}
+
+	public void setTaskNameExpression(String taskNameExpression) {
+		this.taskNameExpression = taskNameExpression;
+	}
+
 	public String getArgExpressions() {
 		return argExpressions;
 	}
 
 	public void setArgExpressions(String argExpressions) {
 		this.argExpressions = argExpressions;
+	}
+
+	@AssertFalse(message = "Cannot specify both 'taskName' and 'taskNameExpression'.")
+	public boolean isTaskNameAndTaskNameExpressionSet() {
+		return StringUtils.hasText(this.taskName) && StringUtils.hasText(this.taskNameExpression);
 	}
 
 }

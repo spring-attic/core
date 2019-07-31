@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package org.springframework.cloud.stream.app.tasklaunchrequest;
+package org.springframework.cloud.stream.app.tasklaunchrequest.support;
 
-import java.util.function.Function;
+import org.springframework.integration.handler.MessageProcessor;
 
-import org.springframework.messaging.Message;
-
-/**
- * A marker interface useful for unambiguous dependency injection of this Function.
- *
- * @author David Turanski
- **/
 @FunctionalInterface
-public interface TaskLaunchRequestFunction extends Function<Message<?>, Message<DataFlowTaskLaunchRequest>> {
-
+public interface TaskNameMessageMapper extends MessageProcessor<String> {
 }

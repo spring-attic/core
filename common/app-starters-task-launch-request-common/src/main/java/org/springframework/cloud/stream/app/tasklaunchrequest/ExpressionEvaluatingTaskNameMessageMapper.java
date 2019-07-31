@@ -16,16 +16,20 @@
 
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
-import java.util.function.Function;
-
+import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskNameMessageMapper;
+import org.springframework.expression.Expression;
 import org.springframework.messaging.Message;
 
-/**
- * A marker interface useful for unambiguous dependency injection of this Function.
- *
- * @author David Turanski
- **/
-@FunctionalInterface
-public interface TaskLaunchRequestFunction extends Function<Message<?>, Message<DataFlowTaskLaunchRequest>> {
+public class ExpressionEvaluatingTaskNameMessageMapper implements TaskNameMessageMapper {
 
+    private final Expression expression;
+
+    public ExpressionEvaluatingTaskNameMessageMapper(Expression expression) {
+        this.expression = expression;
+    }
+
+    @Override
+    public String processMessage(Message<?> message) {
+        return expression.getValue(message).toString();
+    }
 }

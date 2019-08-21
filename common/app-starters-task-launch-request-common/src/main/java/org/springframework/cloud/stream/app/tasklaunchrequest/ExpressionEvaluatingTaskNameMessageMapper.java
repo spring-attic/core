@@ -17,19 +17,22 @@
 package org.springframework.cloud.stream.app.tasklaunchrequest;
 
 import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskNameMessageMapper;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.messaging.Message;
 
 public class ExpressionEvaluatingTaskNameMessageMapper implements TaskNameMessageMapper {
 
     private final Expression expression;
+    private final EvaluationContext evaluationContext;
 
-    public ExpressionEvaluatingTaskNameMessageMapper(Expression expression) {
+    public ExpressionEvaluatingTaskNameMessageMapper(Expression expression, EvaluationContext evaluationContext) {
+        this.evaluationContext = evaluationContext;
         this.expression = expression;
     }
 
     @Override
     public String processMessage(Message<?> message) {
-        return expression.getValue(message).toString();
+        return expression.getValue(evaluationContext, message).toString();
     }
 }

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.stream.app.tasklaunchrequest.support.CommandLineArgumentsMessageMapper;
@@ -32,8 +33,10 @@ import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskLaunch
 import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskNameMessageMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.integration.expression.ExpressionUtils;
 import org.springframework.messaging.Message;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -77,21 +80,29 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(TaskNameMessageMapper.class)
-	public TaskNameMessageMapper taskNameMessageMapper(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties) {
+	public TaskNameMessageMapper taskNameMessageMapper(DataflowTaskLaunchRequestProperties taskLaunchRequestProperties,
+													   EvaluationContext evaluationContext) {
 		if (StringUtils.hasText(taskLaunchRequestProperties.getTaskNameExpression())) {
 			SpelExpressionParser expressionParser = new SpelExpressionParser();
 			Expression taskNameExpression = expressionParser.parseExpression(taskLaunchRequestProperties.getTaskNameExpression());
-			return new ExpressionEvaluatingTaskNameMessageMapper(taskNameExpression);
+			return new ExpressionEvaluatingTaskNameMessageMapper(taskNameExpression, evaluationContext);
 		}
 
 		return message -> taskLaunchRequestProperties.getTaskName();
 	}
 
 	@Bean
+	public EvaluationContext evaluationContext(BeanFactory beanFactory) {
+		return ExpressionUtils.createStandardEvaluationContext(beanFactory);
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(CommandLineArgumentsMessageMapper.class)
 	public CommandLineArgumentsMessageMapper commandLineArgumentsMessageMapper(
-			DataflowTaskLaunchRequestProperties dataflowTaskLaunchRequestProperties){
-		return new ExpressionEvaluatingCommandLineArgsMapper(dataflowTaskLaunchRequestProperties.getArgExpressions());
+			DataflowTaskLaunchRequestProperties dataflowTaskLaunchRequestProperties, EvaluationContext evaluationContext){
+
+		return new ExpressionEvaluatingCommandLineArgsMapper(dataflowTaskLaunchRequestProperties.getArgExpressions(),
+				evaluationContext);
 	}
 
 	@Bean
@@ -130,9 +141,11 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 	static class ExpressionEvaluatingCommandLineArgsMapper implements CommandLineArgumentsMessageMapper {
 		private final Map<String,Expression> argExpressionsMap;
+		private final EvaluationContext evaluationContext;
 
-		ExpressionEvaluatingCommandLineArgsMapper(String argExpressions) {
-			argExpressionsMap = new HashMap<>();
+		ExpressionEvaluatingCommandLineArgsMapper(String argExpressions, EvaluationContext evaluationContext) {
+			this.evaluationContext = evaluationContext;
+			this.argExpressionsMap = new HashMap<>();
 			if (StringUtils.hasText(argExpressions)) {
 				SpelExpressionParser expressionParser = new SpelExpressionParser();
 
@@ -144,15 +157,14 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 		@Override
 		public Collection<String> processMessage(Message<?> message) {
-			return evaluateArgExpressions(message, argExpressionsMap);
+			return evaluateArgExpressions(message);
 		}
 
-		private Collection<String> evaluateArgExpressions(Message<?> message, Map<String, Expression> argExpressions) {
+		private Collection<String> evaluateArgExpressions(Message<?> message) {
 			List<String> results = new LinkedList<>();
-			argExpressions.forEach((k, v) -> {
-				Expression expression = argExpressionsMap.get(k);
-				Assert.notNull(expression, String.format("expression %s cannot be null!", v));
-				results.add(String.format("%s=%s", k, expression.getValue(message)));
+			this.argExpressionsMap.forEach((k, expression) -> {
+				Assert.notNull(expression, String.format("expression %s cannot be null!", expression));
+				results.add(String.format("%s=%s", k, expression.getValue(this.evaluationContext, message)));
 			});
 			return results;
 		}

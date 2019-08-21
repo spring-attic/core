@@ -57,7 +57,7 @@ public class DataFlowTaskLaunchRequest {
         return this.taskName;
     }
 
-    org.springframework.cloud.stream.app.tasklaunchrequest.DataFlowTaskLaunchRequest addCommmandLineArguments(Collection<String> args) {
+    public DataFlowTaskLaunchRequest addCommmandLineArguments(Collection<String> args) {
         this.commandlineArguments.addAll(args);
         return this;
     }

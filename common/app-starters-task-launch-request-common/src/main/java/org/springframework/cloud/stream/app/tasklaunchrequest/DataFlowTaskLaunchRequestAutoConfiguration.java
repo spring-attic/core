@@ -38,7 +38,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.expression.ExpressionUtils;
 import org.springframework.messaging.Message;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 
@@ -162,10 +161,8 @@ public class DataFlowTaskLaunchRequestAutoConfiguration {
 
 		private Collection<String> evaluateArgExpressions(Message<?> message) {
 			List<String> results = new LinkedList<>();
-			this.argExpressionsMap.forEach((k, expression) -> {
-				Assert.notNull(expression, String.format("expression %s cannot be null!", expression));
-				results.add(String.format("%s=%s", k, expression.getValue(this.evaluationContext, message)));
-			});
+			this.argExpressionsMap.forEach((k, expression) ->
+				results.add(String.format("%s=%s", k, expression.getValue(this.evaluationContext, message))));
 			return results;
 		}
 	}

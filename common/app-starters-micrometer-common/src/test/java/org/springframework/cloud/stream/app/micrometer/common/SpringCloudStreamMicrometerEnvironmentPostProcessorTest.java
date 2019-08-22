@@ -48,6 +48,7 @@ public class SpringCloudStreamMicrometerEnvironmentPostProcessorTest {
 
 			assertThat(propertySource.getProperty("management.metrics.export.influx.enabled"), Is.is("false"));
 			assertThat(propertySource.getProperty("management.metrics.export.prometheus.enabled"), Is.is("false"));
+			assertThat(propertySource.getProperty("management.metrics.export.prometheus.rsocket.enabled"), Is.is("false"));
 			assertThat(propertySource.getProperty("management.metrics.export.datadog.enabled"), Is.is("false"));
 
 			assertThat(propertySource.getProperty("management.endpoints.web.exposure.include"), Is.is("prometheus"));
@@ -65,6 +66,7 @@ public class SpringCloudStreamMicrometerEnvironmentPostProcessorTest {
 			"management.metrics.export.simple.enabled=true",
 			"management.metrics.export.influx.enabled=true",
 			"management.metrics.export.prometheus.enabled=true",
+			"management.metrics.export.prometheus.rsocket.enabled=true",
 			"management.metrics.export.datadog.enabled=true",
 			"management.endpoints.web.exposure.include=info,health"})
 	public static class TestOverrideMetricsEnabledProperties extends AbstractMicrometerTagTest {
@@ -82,6 +84,7 @@ public class SpringCloudStreamMicrometerEnvironmentPostProcessorTest {
 
 			assertThat(context.getEnvironment().getProperty("management.metrics.export.influx.enabled"), Is.is("true"));
 			assertThat(context.getEnvironment().getProperty("management.metrics.export.prometheus.enabled"), Is.is("true"));
+			assertThat(context.getEnvironment().getProperty("management.metrics.export.prometheus.rsocket.enabled"), Is.is("true"));
 			assertThat(context.getEnvironment().getProperty("management.metrics.export.datadog.enabled"), Is.is("true"));
 
 			assertThat(context.getEnvironment().getProperty("management.endpoints.web.exposure.include"), Is.is("info,health"));

@@ -22,7 +22,7 @@
 		<spring-cloud-stream-dependencies.version>Fishtown.SR2</spring-cloud-stream-dependencies.version>
 		<spring-cloud-services-config-client.version>2.1.1.RELEASE</spring-cloud-services-config-client.version>
 		<java-cfenv-boot.version>1.0.1.RELEASE</java-cfenv-boot.version>
-		<prometheus-rsocket.version>0.8.0</prometheus-rsocket.version>
+		<prometheus-rsocket.version>0.9.0</prometheus-rsocket.version>
 	</properties>
 
 	<dependencyManagement>

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -216,6 +217,7 @@ public class TaskLaunchRequestIntegrationTests {
 	}
 
 	@Test
+	@Ignore
 	public void customTaskNameExtractor() {
 		applicationContextRunner.withPropertyValues(
 				"spring.jmx.enabled=false", "spring.cloud.stream.function.definition=taskLaunchRequest",

@@ -17,6 +17,7 @@ package org.springframework.cloud.stream.app.micrometer.common;
 
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.influx.InfluxMeterRegistry;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -38,6 +39,7 @@ import static org.junit.Assert.assertThat;
 		properties = {
 				"management.metrics.export.influx.enabled=true",
 				"spring.cloud.dataflow.stream.app.label=time" })
+@Ignore
 public class InfluxReservedKeywordHandlingTest {
 
 	@Autowired

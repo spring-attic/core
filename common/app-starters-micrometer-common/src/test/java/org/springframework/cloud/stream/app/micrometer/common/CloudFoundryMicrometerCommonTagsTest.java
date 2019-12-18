@@ -16,6 +16,7 @@
 package org.springframework.cloud.stream.app.micrometer.common;
 
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -30,6 +31,7 @@ import static org.junit.Assert.assertThat;
  * @author Christian Tzolov
  */
 @RunWith(Enclosed.class)
+@Ignore
 public class CloudFoundryMicrometerCommonTagsTest {
 
 	@ActiveProfiles("cloud")

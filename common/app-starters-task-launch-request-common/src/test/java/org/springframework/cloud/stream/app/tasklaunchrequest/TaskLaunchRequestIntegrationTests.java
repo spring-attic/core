@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,12 +32,11 @@ import org.springframework.cloud.stream.app.tasklaunchrequest.support.CommandLin
 import org.springframework.cloud.stream.app.tasklaunchrequest.support.TaskNameMessageMapper;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.cloud.stream.test.binder.MessageCollectorAutoConfiguration;
 import org.springframework.cloud.stream.test.binder.TestSupportBinderAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.messaging.Message;
@@ -190,7 +188,6 @@ public class TaskLaunchRequestIntegrationTests {
 				});
 	}
 
-
 	@Test
 	public void taskNameExpression() {
 		applicationContextRunner.withPropertyValues(
@@ -217,40 +214,50 @@ public class TaskLaunchRequestIntegrationTests {
 	}
 
 	@Test
-	@Ignore
 	public void customTaskNameExtractor() {
 		applicationContextRunner.withPropertyValues(
 				"spring.jmx.enabled=false", "spring.cloud.stream.function.definition=taskLaunchRequest",
 				"customTaskNameExtractor=true")
 				.run(context -> {
-					MessageChannel input = context.getBean("input", MessageChannel.class);
+                    MessageChannel input = context.getBean("input", MessageChannel.class);
 
-					OutputDestination target = context.getBean(OutputDestination.class);
+                    OutputDestination target = context.getBean(OutputDestination.class);
 
-					ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
+                    ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
 
-					Message<String> message = MessageBuilder.withPayload("foo").build();
-					input.send(message);
+                    Message<String> message = MessageBuilder.withPayload("foo").build();
+                    input.send(message);
 
-					Message<byte[]> response = target.receive(1000);
-					assertThat(response).isNotNull();
+                    Message<byte[]> response = target.receive(1000);
+                    assertThat(response).isNotNull();
 
-					DataFlowTaskLaunchRequest request = objectMapper.readValue(response.getPayload(),
-							DataFlowTaskLaunchRequest.class);
+                    DataFlowTaskLaunchRequest request = objectMapper.readValue(response.getPayload(),
+                            DataFlowTaskLaunchRequest.class);
 
-					assertThat(request.getTaskName()).isEqualTo("fooTask");
+                    assertThat(request.getTaskName()).isEqualTo("fooTask");
+                        });
+        //TODO: Workaround for https://github.com/spring-cloud/spring-cloud-stream/issues/1876
+        applicationContextRunner.withPropertyValues(
+                "spring.jmx.enabled=false", "spring.cloud.stream.function.definition=taskLaunchRequest",
+                "customTaskNameExtractor=true")
+                .run(context -> {
+                    MessageChannel input = context.getBean("input", MessageChannel.class);
 
-					message = MessageBuilder.withPayload("bar").build();
-					input.send(message);
+                    OutputDestination target = context.getBean(OutputDestination.class);
 
-					response = target.receive(1000);
+                    ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
 
-					request = objectMapper.readValue(response.getPayload(),
-							DataFlowTaskLaunchRequest.class);
-					assertThat(request.getTaskName()).isEqualTo("defaultTask");
+                    Message<String> message = MessageBuilder.withPayload("bar").build();
+                    input.send(message);
 
+                    Message<byte[]> response = target.receive(1000);
+                    assertThat(response).isNotNull();
 
-				});
+                    DataFlowTaskLaunchRequest request = objectMapper.readValue(response.getPayload(),
+                            DataFlowTaskLaunchRequest.class);
+
+                    assertThat(request.getTaskName()).isEqualTo("defaultTask");
+                });
 	}
 
 	private DataFlowTaskLaunchRequest verifyAndreceiveDataFlowTaskLaunchRequest(ApplicationContext context)
@@ -275,7 +282,7 @@ public class TaskLaunchRequestIntegrationTests {
 
 	@EnableAutoConfiguration(exclude = { TestSupportBinderAutoConfiguration.class,
 		MessageCollectorAutoConfiguration.class })
-	@EnableBinding(Source.class)
+	@EnableBinding(Processor.class)
 	static class TestApp {
 
 		@Bean
@@ -293,15 +300,10 @@ public class TaskLaunchRequestIntegrationTests {
 		}
 
 		@Bean
-		MessageChannel input() {
-			return new DirectChannel();
-		}
-
-		@Bean
 		public IntegrationFlow flow() {
 
-			return IntegrationFlows.from(input())
-				.channel(Source.OUTPUT).get();
+			return IntegrationFlows.from(Processor.INPUT)
+				.channel(Processor.OUTPUT).get();
 		}
 	}
 }

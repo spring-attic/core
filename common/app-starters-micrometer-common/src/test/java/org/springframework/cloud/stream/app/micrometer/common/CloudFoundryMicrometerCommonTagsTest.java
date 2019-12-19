@@ -31,7 +31,6 @@ import static org.junit.Assert.assertThat;
  * @author Christian Tzolov
  */
 @RunWith(Enclosed.class)
-@Ignore
 public class CloudFoundryMicrometerCommonTagsTest {
 
 	@ActiveProfiles("cloud")

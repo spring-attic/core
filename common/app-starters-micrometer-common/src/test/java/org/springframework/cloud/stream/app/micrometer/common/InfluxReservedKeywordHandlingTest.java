@@ -39,7 +39,6 @@ import static org.junit.Assert.assertThat;
 		properties = {
 				"management.metrics.export.influx.enabled=true",
 				"spring.cloud.dataflow.stream.app.label=time" })
-@Ignore
 public class InfluxReservedKeywordHandlingTest {
 
 	@Autowired

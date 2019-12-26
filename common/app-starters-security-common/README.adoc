@@ -10,9 +10,10 @@ The `spring.cloud.streamapp.security.enabled = false` completely surpass the app
 
 For secured application setting `spring.cloud.streamapp.security.csrf-enabled = false` disables security for the CSRF access.
 
-With security enabled (`spring.cloud.streamapp.security.enabled = true`) and `actuator` dependency on the classpath, the `ManagementWebSecurityAutoConfiguration` is activated, providing unauthenticated access to the `HealthEndpoint` and `InfoEndpoint`.
+With security enabled (`spring.cloud.streamapp.security.enabled = true`) and `actuator` dependency on the classpath, the `(Reactive)ManagementWebSecurityAutoConfiguration` is activated, providing unauthenticated access to the `HealthEndpoint` and `InfoEndpoint`.
 
-If the user specifies their own `WebSecurityConfigurerAdapter`, this configuration will back-off completely and the user should specify all the bits that they want to configure as part of the custom security configuration.
+If the user specifies their own `WebSecurityConfigurerAdapter` (for MVC application), this configuration will back-off completely and the user should specify all the bits that they want to configure as part of the custom security configuration.
+For reactive (WebFlux) application the same effect can be achieved with a custom `WebFilterChainProxy` bean.
 
 === Configuration
 To include app starters security management for a stream app, just include a dependency on this module.

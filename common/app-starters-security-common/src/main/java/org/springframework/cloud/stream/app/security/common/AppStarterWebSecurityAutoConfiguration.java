@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@ package org.springframework.cloud.stream.app.security.common;
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.AnyNestedCondition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ConfigurationCondition;
-import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
@@ -37,26 +37,39 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  *
  * @since 2.1
  */
+@Conditional(OnHttpCsrfOrSecurityDisabled.class)
 @Configuration
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
 @ConditionalOnMissingBean(WebSecurityConfigurerAdapter.class)
-@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
-@Conditional(AppStarterWebSecurityAutoConfiguration.OnHttpCsrfOrSecurityDisabled.class)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @AutoConfigureBefore(value = { ManagementWebSecurityAutoConfiguration.class, SecurityAutoConfiguration.class })
-@Import({ AppStarterWebSecurityConfigurerAdapter.class, WebSecurityEnablerConfiguration.class })
+@EnableConfigurationProperties(AppStarterWebSecurityAutoConfigurationProperties.class)
+@EnableWebSecurity
 public class AppStarterWebSecurityAutoConfiguration {
 
-	public static class OnHttpCsrfOrSecurityDisabled extends AnyNestedCondition {
-		public OnHttpCsrfOrSecurityDisabled() {
-			super(ConfigurationCondition.ConfigurationPhase.PARSE_CONFIGURATION);
-		}
+	@Bean
+	WebSecurityConfigurerAdapter appStarterWebSecurityConfigurerAdapter(
+			AppStarterWebSecurityAutoConfigurationProperties securityProperties) {
 
-		@ConditionalOnProperty(name = "spring.cloud.streamapp.security.enabled", havingValue = "false")
-		static class SecurityDisabled {
-		}
 
-		@ConditionalOnProperty(name = "spring.cloud.streamapp.security.csrf-enabled", havingValue = "false")
-		static class HttpCsrfDisabled {
-		}
+		return new WebSecurityConfigurerAdapter() {
+
+			@Override
+			protected void configure(HttpSecurity http) throws Exception {
+				super.configure(http);
+				if (!securityProperties.isCsrfEnabled()) {
+					http.csrf().disable();
+				}
+			}
+
+			@Override
+			public void configure(WebSecurity builder) {
+				if (!securityProperties.isEnabled()) {
+					builder.ignoring().antMatchers("/**");
+				}
+			}
+
+		};
 	}
+
 }

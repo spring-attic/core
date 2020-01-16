@@ -16,11 +16,11 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<app-starters-core.version>2.1.2.BUILD-SNAPSHOT</app-starters-core.version>
+		<app-starters-core.version>3.0.0.BUILD-SNAPSHOT</app-starters-core.version>
 		<spring-boot.version>2.2.1.RELEASE</spring-boot.version>
 		<app-metadata-maven-plugin-version>1.0.1.RELEASE</app-metadata-maven-plugin-version>
 		<scst-app-maven-plugin.version>2.0.0.BUILD-SNAPSHOT</scst-app-maven-plugin.version>
-		<app-starters-docs-plugin.version>2.0.1.RELEASE	</app-starters-docs-plugin.version>
+		<app-starters-docs-plugin.version>2.0.2.BUILD-SNAPSHOT</app-starters-docs-plugin.version>
 		<spring-cloud-stream-dependencies.version>Horsham.RELEASE</spring-cloud-stream-dependencies.version>
 		<spring-cloud-function-dependencies.version>3.0.0.RELEASE</spring-cloud-function-dependencies.version>
 		<spring-cloud-dependencies.version>Hoxton.RELEASE</spring-cloud-dependencies.version>

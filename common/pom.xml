@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>app-starters-build</artifactId>
+		<artifactId>stream-apps-parent</artifactId>
 		<groupId>org.springframework.cloud.stream.app</groupId>
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>app-starters-common</artifactId>
+	<artifactId>stream-apps-common</artifactId>
 	<packaging>pom</packaging>
-	<name>app-starters-common</name>
+	<name>stream-apps-common</name>
 
 	<modules>
-		<module>app-starters-annotation-common</module>
-		<module>app-starters-time-common</module>
-		<module>app-starters-trigger-common</module>
-		<module>app-starters-trigger-one-common</module>
-		<module>app-starters-trigger-unlimited-common</module>
-		<module>app-starters-file-common</module>
-		<module>app-starters-ftp-common</module>
-		<module>app-starters-test-support</module>
-		<module>app-starters-postprocessor-common</module>
-		<module>app-starters-micrometer-common</module>
-		<module>app-starters-metadata-store-common</module>
-		<module>app-starters-task-launch-request-common</module>
-		<module>app-starters-security-common</module>
+		<module>stream-apps-annotation-common</module>
+		<module>stream-apps-time-common</module>
+		<module>stream-apps-trigger-common</module>
+		<module>stream-apps-trigger-one-common</module>
+		<module>stream-apps-trigger-unlimited-common</module>
+		<module>stream-apps-file-common</module>
+		<module>stream-apps-ftp-common</module>
+		<module>stream-apps-test-support</module>
+		<module>stream-apps-postprocessor-common</module>
+		<module>stream-apps-micrometer-common</module>
+		<module>stream-apps-metadata-store-common</module>
+<!--		<module>stream-apps-task-launch-request-common</module>-->
+		<module>stream-apps-security-common</module>
 	</modules>
 
 </project>

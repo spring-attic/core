@@ -16,8 +16,7 @@
 		<module>stream-apps-ftp-common</module>
 		<module>stream-apps-test-support</module>
 		<module>stream-apps-postprocessor-common</module>
-
-
+		<module>stream-apps-micrometer-common</module>
 		<module>stream-apps-metadata-store-common</module>
 		<module>stream-apps-task-launch-request-common</module>
 		<module>stream-apps-security-common</module>

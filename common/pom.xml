@@ -12,11 +12,6 @@
 	<name>stream-apps-common</name>
 
 	<modules>
-		<module>stream-apps-annotation-common</module>
-		<module>stream-apps-time-common</module>
-		<module>stream-apps-trigger-common</module>
-		<module>stream-apps-trigger-one-common</module>
-		<module>stream-apps-trigger-unlimited-common</module>
 		<module>stream-apps-file-common</module>
 		<module>stream-apps-ftp-common</module>
 		<module>stream-apps-test-support</module>

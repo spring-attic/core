@@ -34,6 +34,7 @@ import org.springframework.test.context.TestPropertySource;
  * @since 3.0
  */
 @TestPropertySource(properties = {
+		"spring.main.web-application-type=servlet",
 		"spring.cloud.streamapp.security.enabled=false",
 		"management.endpoints.web.exposure.include=health,info,env",
 		"info.name=MY TEST APP" })

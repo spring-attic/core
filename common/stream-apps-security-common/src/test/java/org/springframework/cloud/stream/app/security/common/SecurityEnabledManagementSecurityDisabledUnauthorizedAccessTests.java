@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original author or authors.
+ * Copyright 2019-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,11 @@ import org.springframework.test.context.TestPropertySource;
  * @since 3.0
  */
 @TestPropertySource(properties = {
+		"spring.main.web-application-type=servlet",
 		"spring.autoconfigure.exclude=" +
 				"org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration"
 				+ ",org.springframework.cloud.stream.app.security.common.AppStarterWebSecurityAutoConfiguration",
 		"management.endpoints.web.exposure.include=health,info" })
-@Disabled
 public class SecurityEnabledManagementSecurityDisabledUnauthorizedAccessTests extends AbstractSecurityCommonTests {
 
 	@Test

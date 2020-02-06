@@ -61,8 +61,7 @@ public class TaskLaunchRequestIntegrationTests {
 	@Test
 	public void noTaskLaunchRequestPropertiesAreRequired() {
 
-		applicationContextRunner.withPropertyValues(
-				"debug", "spring.jmx.enabled=false")
+		applicationContextRunner.withPropertyValues("spring.jmx.enabled=false")
 				.run(context -> {
 					MessageChannel input = context.getBean("input", MessageChannel.class);
 
@@ -81,7 +80,7 @@ public class TaskLaunchRequestIntegrationTests {
 	public void simpleDataflowTaskLaunchRequest() {
 
 		applicationContextRunner.withPropertyValues(
-				"debug", "spring.jmx.enabled=false",
+				"spring.jmx.enabled=false",
 				"spring.cloud.stream.function.definition=taskLaunchRequest",
 				"task.launch.request.task-name=foo")
 				.run(context -> {
@@ -284,6 +283,11 @@ public class TaskLaunchRequestIntegrationTests {
 		MessageCollectorAutoConfiguration.class })
 	@EnableBinding(Processor.class)
 	static class TestApp {
+
+		@Bean
+		ObjectMapper objectMapper() {
+			return new ObjectMapper();
+		}
 
 		@Bean
 		@ConditionalOnProperty("customTaskNameExtractor")

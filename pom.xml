@@ -22,8 +22,8 @@
         <scst-app-maven-plugin.version>2.0.0.BUILD-SNAPSHOT</scst-app-maven-plugin.version>
         <stream-apps-docs-plugin.version>2.0.2.BUILD-SNAPSHOT</stream-apps-docs-plugin.version>
         <spring-cloud-stream-dependencies.version>Horsham.BUILD-SNAPSHOT</spring-cloud-stream-dependencies.version>
-        <spring-cloud-stream.version>3.0.1.RELEASE</spring-cloud-stream.version>
-        <spring-cloud-function-dependencies.version>3.0.0.RELEASE</spring-cloud-function-dependencies.version>
+        <spring-cloud-stream.version>3.0.2.BUILD-SNAPSHOT</spring-cloud-stream.version>
+        <spring-cloud-function-dependencies.version>3.0.2.BUILD-SNAPSHOT</spring-cloud-function-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.RELEASE</spring-cloud-dependencies.version>
         <java-cfenv-boot.version>2.1.1.RELEASE</java-cfenv-boot.version>
     </properties>

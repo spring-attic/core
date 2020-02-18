@@ -18,7 +18,7 @@
         <java.version>1.8</java.version>
         <stream-apps-core.version>3.0.0.BUILD-SNAPSHOT</stream-apps-core.version>
         <spring-boot.version>2.3.0.M1</spring-boot.version>
-        <app-metadata-maven-plugin-version>1.0.1.RELEASE</app-metadata-maven-plugin-version>
+        <app-metadata-maven-plugin-version>1.0.2.BUILD-SNAPSHOT</app-metadata-maven-plugin-version>
         <scst-app-maven-plugin.version>2.0.0.BUILD-SNAPSHOT</scst-app-maven-plugin.version>
         <stream-apps-docs-plugin.version>2.0.2.BUILD-SNAPSHOT</stream-apps-docs-plugin.version>
         <spring-cloud-stream-dependencies.version>Horsham.SR2</spring-cloud-stream-dependencies.version>
@@ -196,31 +196,27 @@
                         <generatedProjectHome>${basedir}/apps</generatedProjectHome>
                         <javaVersion>1.8</javaVersion>
                         <bootVersion>${spring-boot.version}</bootVersion>
-                        <applicationType>stream</applicationType>
 
                         <binders>
-                            <kafka/>
-                            <rabbit/>
+                            <item>kafka</item>
+                            <item>rabbit</item>
                         </binders>
                         <boms>
-                            <bom>
-                                <name>scst-bom</name>
+                            <dependency>
                                 <groupId>org.springframework.cloud</groupId>
                                 <artifactId>spring-cloud-stream-dependencies</artifactId>
                                 <version>${spring-cloud-stream-dependencies.version}</version>
-                            </bom>
-                            <bom>
-                                <name>scfn-bom</name>
+                            </dependency>
+                            <dependency>
                                 <groupId>org.springframework.cloud</groupId>
                                 <artifactId>spring-cloud-function-dependencies</artifactId>
                                 <version>${spring-cloud-function-dependencies.version}</version>
-                            </bom>
-                            <bom>
-                                <name>sc-bom</name>
+                            </dependency>
+                            <dependency>
                                 <groupId>org.springframework.cloud</groupId>
                                 <artifactId>spring-cloud-dependencies</artifactId>
                                 <version>${spring-cloud-dependencies.version}</version>
-                            </bom>
+                            </dependency>
                         </boms>
                         <globalDependencies>
                             <dependency>
@@ -271,22 +267,6 @@
                                 <artifactId>spring-boot-starter-security</artifactId>
                             </dependency>
                         </globalDependencies>
-                        <additionalPlugins>
-                            <plugin>
-                                <groupId>org.springframework.cloud</groupId>
-                                <artifactId>spring-cloud-app-starter-metadata-maven-plugin</artifactId>
-                                <version>${app-metadata-maven-plugin-version}</version>
-                                <executions>
-                                    <execution>
-                                        <id>aggregate-metadata</id>
-                                        <phase>compile</phase>
-                                        <goals>
-                                            <goal>aggregate-metadata</goal>
-                                        </goals>
-                                    </execution>
-                                </executions>
-                            </plugin>
-                        </additionalPlugins>
                     </configuration>
                 </plugin>
             </plugins>

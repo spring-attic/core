@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>stream-apps-common</artifactId>
 		<groupId>org.springframework.cloud.stream.app</groupId>
-		<version>3.0.0.M1</version>
+		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>stream-apps-metadata-store-common</artifactId>

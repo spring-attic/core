@@ -4,7 +4,7 @@
     <parent>
         <artifactId>stream-apps-common</artifactId>
         <groupId>org.springframework.cloud.stream.app</groupId>
-        <version>3.0.0.BUILD-SNAPSHOT</version>
+        <version>3.0.0.M1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

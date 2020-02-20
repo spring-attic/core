@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.springframework.cloud.stream.app</groupId>
     <artifactId>stream-apps-parent</artifactId>
-    <version>3.0.0.BUILD-SNAPSHOT</version>
+    <version>3.0.0.M1</version>
     <name>stream-apps-parent</name>
     <description>Infrastructure for stream apps</description>
     <packaging>pom</packaging>
@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <stream-apps-core.version>3.0.0.BUILD-SNAPSHOT</stream-apps-core.version>
+        <stream-apps-core.version>3.0.0.M1</stream-apps-core.version>
         <spring-boot.version>2.3.0.M2</spring-boot.version>
         <app-metadata-maven-plugin-version>1.0.2.M1</app-metadata-maven-plugin-version>
         <scst-app-maven-plugin.version>2.0.0.M1</scst-app-maven-plugin.version>

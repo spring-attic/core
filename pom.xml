@@ -20,9 +20,9 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.12.RELEASE</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.13.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
 		<app-starters-docs-plugin.version>2.0.1.RELEASE	</app-starters-docs-plugin.version>
-		<app-metadata-maven-plugin-version>1.0.1.RELEASE</app-metadata-maven-plugin-version>
+		<app-metadata-maven-plugin-version>1.0.2.M1</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
 		<app-starters-core-dependencies.version>2.1.3.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>
@@ -212,25 +212,10 @@
 										<artifactId>prometheus-rsocket-spring</artifactId>
 									</dependency>
 								</additionalGlobalDependencies>
-								<additionalPlugins>
-									<plugin>
-										<groupId>org.springframework.cloud</groupId>
-										<artifactId>spring-cloud-app-starter-metadata-maven-plugin</artifactId>
-										<version>${app-metadata-maven-plugin-version}</version>
-										<executions>
-											<execution>
-												<id>aggregate-metadata</id>
-												<phase>compile</phase>
-												<goals>
-													<goal>aggregate-metadata</goal>
-												</goals>
-											</execution>
-										</executions>
-									</plugin>
-								</additionalPlugins>
 								<globalAppProperties>
 									<globalAppProperty>spring.cloud.stream.propagateOriginalContentType=false</globalAppProperty>
 								</globalAppProperties>
+								<metadataPluginVersion>${app-metadata-maven-plugin-version}</metadataPluginVersion>
                             </configuration>
                         </plugin>
                     </plugins>

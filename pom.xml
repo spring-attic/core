@@ -22,7 +22,7 @@
 	<properties>
 		<scs-app-maven-plugin.version>1.2.13.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
 		<app-starters-docs-plugin.version>2.0.1.RELEASE	</app-starters-docs-plugin.version>
-		<app-metadata-maven-plugin-version>1.0.2.BUILD-SNAPSHOT</app-metadata-maven-plugin-version>
+		<app-metadata-maven-plugin-version>2.0.0.BUILD-SNAPSHOT</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
 		<app-starters-core-dependencies.version>2.1.3.BUILD-SNAPSHOT</app-starters-core-dependencies.version>
 	</properties>

@@ -27,6 +27,7 @@
         <spring-cloud-stream-dependencies.version>Horsham.SR2</spring-cloud-stream-dependencies.version>
         <java-cfenv-boot.version>2.1.1.RELEASE</java-cfenv-boot.version>
         <java-functions.version>1.0.0.BUILD-SNAPSHOT</java-functions.version>
+        <prometheus-rsocket.version>0.9.0</prometheus-rsocket.version>
     </properties>
 
     <modules>
@@ -236,6 +237,11 @@
                             <dependency>
                                 <groupId>io.micrometer</groupId>
                                 <artifactId>micrometer-registry-prometheus</artifactId>
+                            </dependency>
+                            <dependency>
+                                <groupId>io.micrometer.prometheus</groupId>
+                                <artifactId>prometheus-rsocket-spring</artifactId>
+                                <version>${prometheus-rsocket.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>io.micrometer</groupId>

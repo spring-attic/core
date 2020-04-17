@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.springframework.cloud.stream.app</groupId>
     <artifactId>stream-apps-parent</artifactId>
-    <version>3.0.0.M2</version>
+    <version>3.0.0.BUILD-SNAPSHOT</version>
     <name>stream-apps-parent</name>
     <description>Infrastructure for stream apps</description>
     <packaging>pom</packaging>

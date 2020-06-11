@@ -68,6 +68,7 @@ public class SpringCloudStreamMicrometerEnvironmentPostProcessorTest {
 			"management.metrics.export.prometheus.enabled=true",
 			"management.metrics.export.prometheus.rsocket.enabled=true",
 			"management.metrics.export.datadog.enabled=true",
+			"management.metrics.export.wavefront.enabled=true",
 			"management.endpoints.web.exposure.include=info,health"})
 	public static class TestOverrideMetricsEnabledProperties extends AbstractMicrometerTagTest {
 

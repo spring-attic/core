@@ -196,6 +196,14 @@
 										<artifactId>micrometer-registry-prometheus</artifactId>
 									</dependency>
 									<dependency>
+										<groupId>io.micrometer.prometheus</groupId>
+										<artifactId>prometheus-rsocket-spring</artifactId>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-registry-datadog</artifactId>
+									</dependency>
+									<dependency>
 										<groupId>io.micrometer</groupId>
 										<artifactId>micrometer-registry-wavefront</artifactId>
 									</dependency>
@@ -205,12 +213,6 @@
 									<dependency>
 										<groupId>com.wavefront</groupId>
 										<artifactId>wavefront-sdk-java</artifactId>
-										<version>2.6.0</version>
-									</dependency>
-
-									<dependency>
-										<groupId>io.micrometer</groupId>
-										<artifactId>micrometer-registry-datadog</artifactId>
 									</dependency>
 									<dependency>
 										<groupId>org.springframework.cloud</groupId>
@@ -219,10 +221,6 @@
 									<dependency>
 										<groupId>org.springframework.cloud</groupId>
 										<artifactId>spring-cloud-spring-service-connector</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer.prometheus</groupId>
-										<artifactId>prometheus-rsocket-spring</artifactId>
 									</dependency>
 								</additionalGlobalDependencies>
 								<globalAppProperties>

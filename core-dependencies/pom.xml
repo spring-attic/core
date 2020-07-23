@@ -23,6 +23,10 @@
 		<spring-cloud-services-config-client.version>2.1.1.RELEASE</spring-cloud-services-config-client.version>
 		<java-cfenv-boot.version>1.0.1.RELEASE</java-cfenv-boot.version>
 		<prometheus-rsocket.version>0.9.0</prometheus-rsocket.version>
+		<!-- Override the WF SDK dependency to resolve the https://github.com/wavefrontHQ/wavefront-sdk-java/pull/152
+	         TODO: removed this dependency when Micrometer and Boot catch up with WF SDC 2.6.+ (likely Micrometer 1.5.3+).
+	    -->
+		<wavefront-sdk-java.version>2.6.0</wavefront-sdk-java.version>
 	</properties>
 
 	<dependencyManagement>
@@ -135,6 +139,15 @@
 				<artifactId>prometheus-rsocket-spring</artifactId>
 				<version>${prometheus-rsocket.version}</version>
 			</dependency>
+			<!-- Override the WF SDK dependency to resolve the https://github.com/wavefrontHQ/wavefront-sdk-java/pull/152
+				 TODO: removed this dependency when Micrometer and Boot catch up with WF SDC 2.6.+ (likely Micrometer 1.5.3+).
+				 -->
+			<dependency>
+				<groupId>com.wavefront</groupId>
+				<artifactId>wavefront-sdk-java</artifactId>
+				<version>${wavefront-sdk-java.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

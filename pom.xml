@@ -100,10 +100,6 @@
 			<artifactId>spring-cloud-stream-test-support</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.pivotal.spring.cloud</groupId>
-			<artifactId>spring-cloud-services-starter-config-client</artifactId>
-		</dependency>
 	</dependencies>
 
     <build>
@@ -221,6 +217,10 @@
 									<dependency>
 										<groupId>org.springframework.cloud</groupId>
 										<artifactId>spring-cloud-spring-service-connector</artifactId>
+									</dependency>
+									<dependency>
+										<groupId>io.pivotal.spring.cloud</groupId>
+										<artifactId>spring-cloud-services-starter-config-client</artifactId>
 									</dependency>
 								</additionalGlobalDependencies>
 								<globalAppProperties>

@@ -20,7 +20,7 @@
 	</scm>
 
 	<properties>
-		<scs-app-maven-plugin.version>1.2.13.RELEASE</scs-app-maven-plugin.version>
+		<scs-app-maven-plugin.version>1.2.14.BUILD-SNAPSHOT</scs-app-maven-plugin.version>
 		<app-starters-docs-plugin.version>2.0.1.RELEASE	</app-starters-docs-plugin.version>
 		<app-metadata-maven-plugin-version>2.0.1.RELEASE</app-metadata-maven-plugin-version>
 		<bomsWithHigherPrecedence/>
@@ -170,6 +170,68 @@
                                     <kafka/>
                                     <rabbit/>
                                 </binders>
+								<overrideParentDependencies>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-core</artifactId>
+										<version>1.2.1</version>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-registry-datadog</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+										<version>1.2.1</version>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-registry-influx</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+										<version>1.2.1</version>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-registry-prometheus</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+										<version>1.2.1</version>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer</groupId>
+										<artifactId>micrometer-registry-wavefront</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+										<version>1.2.1</version>
+									</dependency>
+									<dependency>
+										<groupId>io.micrometer.prometheus</groupId>
+										<artifactId>prometheus-rsocket-spring</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+										<version>1.2.1</version>
+									</dependency>
+								</overrideParentDependencies>
 								<additionalGlobalDependencies>
 									<dependency>
 										<groupId>org.springframework.cloud.stream.app</groupId>
@@ -182,26 +244,6 @@
 									<dependency>
 										<groupId>org.springframework.cloud.stream.app</groupId>
 										<artifactId>app-starters-micrometer-common</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer</groupId>
-										<artifactId>micrometer-registry-influx</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer</groupId>
-										<artifactId>micrometer-registry-prometheus</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer.prometheus</groupId>
-										<artifactId>prometheus-rsocket-spring</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer</groupId>
-										<artifactId>micrometer-registry-datadog</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>io.micrometer</groupId>
-										<artifactId>micrometer-registry-wavefront</artifactId>
 									</dependency>
 									<!-- Override the WF SDK dependency to resolve the https://github.com/wavefrontHQ/wavefront-sdk-java/pull/152
 									     TODO: removed this dependency when Micrometer and Boot catch up with WF SDC 2.6.+ (likely Micrometer 1.5.3+).

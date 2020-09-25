@@ -82,6 +82,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>io.micrometer</groupId>
+					<artifactId>micrometer-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -172,6 +178,17 @@
                                 </binders>
 								<overrideParentDependencies>
 									<dependency>
+										<groupId>org.springframework.boot</groupId>
+										<artifactId>spring-boot-starter-actuator</artifactId>
+										<exclusions>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-core</artifactId>
+											</exclusion>
+										</exclusions>
+									</dependency>
+
+									<dependency>
 										<groupId>io.micrometer</groupId>
 										<artifactId>micrometer-core</artifactId>
 										<version>1.2.1</version>
@@ -228,8 +245,22 @@
 												<groupId>io.micrometer</groupId>
 												<artifactId>micrometer-core</artifactId>
 											</exclusion>
+											<exclusion>
+												<groupId>io.micrometer</groupId>
+												<artifactId>micrometer-registry-prometheus</artifactId>
+											</exclusion>
 										</exclusions>
-										<version>1.2.1</version>
+										<version>0.10.3</version>
+									</dependency>
+									<dependency>
+										<groupId>org.springframework.cloud.stream.app</groupId>
+										<artifactId>app-starters-micrometer-common</artifactId>
+										<exclusions>
+											<exclusion>
+												<artifactId>micrometer-core</artifactId>
+												<groupId>io.micrometer</groupId>
+											</exclusion>
+										</exclusions>
 									</dependency>
 								</overrideParentDependencies>
 								<additionalGlobalDependencies>
@@ -240,10 +271,6 @@
 									<dependency>
 										<groupId>org.springframework.cloud</groupId>
 										<artifactId>spring-cloud-starter-config</artifactId>
-									</dependency>
-									<dependency>
-										<groupId>org.springframework.cloud.stream.app</groupId>
-										<artifactId>app-starters-micrometer-common</artifactId>
 									</dependency>
 									<!-- Override the WF SDK dependency to resolve the https://github.com/wavefrontHQ/wavefront-sdk-java/pull/152
 									     TODO: removed this dependency when Micrometer and Boot catch up with WF SDC 2.6.+ (likely Micrometer 1.5.3+).

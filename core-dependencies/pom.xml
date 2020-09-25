@@ -22,7 +22,7 @@
 		<spring-cloud-stream-dependencies.version>Fishtown.SR4</spring-cloud-stream-dependencies.version>
 		<spring-cloud-services-config-client.version>2.1.1.RELEASE</spring-cloud-services-config-client.version>
 		<java-cfenv-boot.version>1.0.1.RELEASE</java-cfenv-boot.version>
-		<prometheus-rsocket.version>0.9.0</prometheus-rsocket.version>
+		<prometheus-rsocket.version>0.10.3</prometheus-rsocket.version>
 		<!-- Override the WF SDK dependency to resolve the https://github.com/wavefrontHQ/wavefront-sdk-java/pull/152
 	         TODO: removed this dependency when Micrometer and Boot catch up with WF SDC 2.6.+ (likely Micrometer 1.5.3+).
 	    -->
